@@ -21,16 +21,28 @@ static vector<Function*> functions;
 
 static int totalProbabilityWeight;
 
-static int numberOfIterations=10000000;
+static int numberOfIterations=3000000;
 
 Point *points;
 
 static void initFunctions()
 {
     functions.push_back(new FunctionSin());
-    functions.push_back(new Function2());
-    functions.push_back(new Function3());
-    functions.push_back(new Function4());
+    //functions.push_back(new Function2());
+    /*functions.push_back(new Function3());
+    functions.push_back(new Function4());*/
+    
+    //functions.push_back(new FunctionSpherical());
+    //functions.push_back(new FunctionSwirl());
+    //functions.push_back(new FunctionHorseshoe());
+    //functions.push_back(new FunctionPolar());
+    //functions.push_back(new FunctionHandkerchief());
+    //functions.push_back(new FunctionHeart());
+    functions.push_back(new FunctionDisk());
+    //functions.push_back(new FunctionSpiral());
+    functions.push_back(new FunctionHyperbolic());
+    //functions.push_back(new FunctionDiamond());
+    functions.push_back(new FunctionJulia());
     
     Function *pFun;
     
@@ -38,9 +50,9 @@ static void initFunctions()
     pFun->probabilityWeight=5;
     functions.push_back(pFun);*/
 
-    pFun = new FunctionMirror();
+    /*pFun = new FunctionMirror();
     pFun->probabilityWeight=2;
-    functions.push_back(pFun);
+    functions.push_back(pFun);*/
     
     
     totalProbabilityWeight=0;
@@ -158,24 +170,11 @@ void plot(double mathX, double mathY, Function *pFun)
 }
 
 void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
-{
-    /*minOutput=intermediateOutput[0];
-    maxOutput=intermediateOutput[0];
-    
-    for(int i=1;i<outputSize;i++)
-    {
-        if(intermediateOutput[i]<minOutput)
-        {
-            minOutput=intermediateOutput[i];    
-        }
-        else if(intermediateOutput[i]>maxOutput)
-        {
-            maxOutput=intermediateOutput[i];
-        }
-    }*/
-    
+{    
     minOutput=points[0].count;
     maxOutput=points[0].count;
+    
+    int maxIndex=-1;
     
     for(int i=1;i<outputSize;i++)
     {
@@ -186,8 +185,11 @@ void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
         else if(points[i].count>maxOutput)
         {
             maxOutput=points[i].count;
+            maxIndex=i;
         }
     }    
+    
+    cout <<"max index: "<<maxIndex % pictureWidth<<","<<maxIndex/pictureWidth<<endl;
 }
 
 void createOutput()
@@ -195,7 +197,7 @@ void createOutput()
     unsigned int maxCounter, minCounter;
     findMinMaxOutput(minCounter, maxCounter);
     
-    cout << ">>>" << maxCounter <<endl;
+    cout << "max count: " << maxCounter <<endl;
     
     double counterRange=maxCounter-minCounter;
     
@@ -204,7 +206,7 @@ void createOutput()
         double v = (points[i].count - minCounter) / counterRange;
         
         //v = sqrt (v);
-        v = pow(v, 0.4);
+        v = pow(v, 0.2);
         
         //unsigned int color = (unsigned int)(v * 255.0);
  

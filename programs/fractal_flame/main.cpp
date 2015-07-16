@@ -11,8 +11,8 @@ using namespace std;
 #define PICTURE_WIDTH_BIG 1024
 #define PICTURE_HEIGHT_BIG 768
 
-#define PICTURE_WIDTH_SMALL 1200
-#define PICTURE_HEIGHT_SMALL 1000
+#define PICTURE_WIDTH_SMALL 800
+#define PICTURE_HEIGHT_SMALL 500
 
 
 unsigned int pictureWidth=PICTURE_WIDTH_BIG, pictureHeight=PICTURE_HEIGHT_BIG;

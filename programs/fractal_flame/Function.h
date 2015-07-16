@@ -16,9 +16,31 @@ public:
     virtual void calculate(double x, double y, double &xOut, double &yOut)=0;
     
 protected:
-    double radius(double x, double y)
+    inline double radius(double x, double y)
     {
         return sqrt(x*x + y*y);
+    }
+    
+    inline double theta(double x, double y)
+    {
+        return atan(x/y);    
+    }
+    
+    inline double fi(double x, double y)
+    {
+        return atan(y/x);    
+    }
+    
+    inline double omega()
+    {
+        if(rand() % 2==0)
+        {
+            return M_PI;    
+        }
+        else
+        {
+            return 0.0;    
+        }
     }
 };
 
@@ -86,6 +108,7 @@ public:
         }
         else
         {
+            //y = atan(y);
             y = y* y;
             //cout <<"h";
             //yOut = sqrt(-y); //y*0.8; //
@@ -126,22 +149,190 @@ public:
     }
 };
 
-    /*virtual void calculate(double x, double y, double &xOut, double &yOut)//horseshoe
-    {
-        double r = sqrt(x*x + y*y);
+class FunctionSpherical:public Function{
+public:
+    FunctionSpherical()
+    {     
+        g=220;
+        b=180;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r = radius(x,y);
         
-        if(r>0.01)
-        {
-            xOut = (1.0 / r) * ((x-y)*(x+y));
-        }
-        else
-        {
-            xOut = 0.0;
-        }
+        xOut=(1.0/(r*r)) * x;
+        yOut=(1.0/(r*r)) * y;        
+    }
+};
+
+class FunctionSwirl:public Function{
+public:
+    FunctionSwirl()
+    {     
+        r=220;
+        g=180;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r = radius(x,y);
+        double r2 = r*r;
         
-        yOut = 2.0*x*y;
-    }*/
-        /*double r = sqrt(x*x + y*y);
+        xOut=x*sin(r2)-y*cos(r2);
+        yOut=x*cos(r2)+y*sin(r2);        
+    }
+};
+
+class FunctionHorseshoe:public Function{
+public:
+    FunctionHorseshoe()
+    {     
+        r=150;
+        g=200;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r = radius(x,y);
         
-        xOut = x * sin(r*r) - y * cos(r*r);
-        yOut = x * cos(r*r) + y * sin(r*r);*/
+        xOut=(1.0/r)*(x-y)*(x+y);
+        yOut=(1.0/r)*2.0*x*y;        
+    }
+};
+
+class FunctionPolar:public Function{
+public:
+    FunctionPolar()
+    {     
+        r=150;
+        b=220;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        xOut = theta(x,y) / M_PI;
+        yOut = radius(x,y)-1.0;
+    }
+};
+
+class FunctionHandkerchief:public Function{
+public:
+    FunctionHandkerchief()
+    {     
+        r=200;
+        g=200;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r=radius(x,y);
+        double th=theta(x,y);
+        
+        xOut = r*sin(th+r);
+        yOut = r*cos(th-r);
+    }
+};
+
+class FunctionHeart:public Function{
+public:
+    FunctionHeart()
+    {     
+        g=230;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r=radius(x,y);
+        double th=theta(x,y);
+        
+        xOut = r*sin(th*r);
+        yOut = r*(-cos(th*r));
+    }
+};
+
+class FunctionDisk:public Function{
+public:
+    FunctionDisk()
+    {     
+        r=230;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r=radius(x,y);
+        double th=theta(x,y);
+        
+        xOut = (th/M_PI) * sin(M_PI*r);
+        yOut = (th/M_PI) * cos(M_PI*r);
+    }
+};
+
+class FunctionSpiral:public Function{
+public:
+    FunctionSpiral()
+    {     
+        b=230;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r=radius(x,y);
+        double th=theta(x,y);
+        
+        xOut = (1.0/r) * (cos(th)+sin(r));
+        yOut = (1.0/r) * (sin(th)-cos(r));
+    }
+};
+
+class FunctionHyperbolic:public Function{
+public:
+    FunctionHyperbolic()
+    {     
+        r=190;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r=radius(x,y);
+        double th=theta(x,y);
+        
+        xOut = sin(th)/r;
+        yOut = r*cos(th);
+    }
+};
+
+class FunctionDiamond:public Function{
+public:
+    FunctionDiamond()
+    {     
+        g=190;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r=radius(x,y);
+        double th=theta(x,y);
+        
+        xOut = sin(th)*cos(r);
+        yOut = cos(th)*sin(r);
+    }
+};
+
+class FunctionJulia:public Function{
+public:
+    FunctionJulia()
+    {     
+        b=190;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r=radius(x,y);
+        double th=theta(x,y);
+        double om=omega();
+        
+        xOut = sqrt(r)*cos(th/2+om);
+        yOut = sqrt(r)*sin(th/2+om);
+    }
+};
