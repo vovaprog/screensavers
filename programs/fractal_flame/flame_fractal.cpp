@@ -43,6 +43,8 @@ static void initFunctions()
     functions.push_back(new FunctionHyperbolic());
     //functions.push_back(new FunctionDiamond());
     functions.push_back(new FunctionJulia());
+    functions.push_back(new FunctionEx());
+    functions.push_back(new FunctionBent());
     
     Function *pFun;
     

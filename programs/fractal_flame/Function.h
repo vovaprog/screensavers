@@ -336,3 +336,60 @@ public:
         yOut = sqrt(r)*sin(th/2+om);
     }
 };
+
+class FunctionEx:public Function{
+public:
+    FunctionEx()
+    {
+        r=210;
+        b=190;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        double r=radius(x,y);
+        double th=theta(x,y);
+        
+        double p0=sin(th+r);
+        double p1=cos(th-r);
+        
+        double p0_3=p0*p0*p0;
+        double p1_3=p1*p1*p1;
+        
+        xOut=r*(p0_3+p1_3);
+        yOut=r*(p0_3-p1_3);
+    }
+};
+
+class FunctionBent:public Function{
+public:
+    FunctionBent()
+    {
+        r=190;
+        b=210;
+    }    
+    
+    virtual void calculate(double x, double y, double &xOut, double &yOut)
+    {       
+        if(x>=0 && y>=0)
+        {
+            xOut=x;
+            yOut=y;            
+        }
+        else if(x<0 && y>=0)
+        {
+            xOut=2*x;
+            yOut=y;
+        }
+        else if(x>=0 && y<0)
+        {
+            xOut=x;
+            yOut=y/2;
+        }
+        else
+        {
+            xOut=2*x;
+            yOut=y/2;
+        }
+    }
+};
