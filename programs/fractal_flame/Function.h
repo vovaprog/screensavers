@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cmath>
+#include <cstdlib>
 
 using namespace std;
 
@@ -11,7 +12,18 @@ public:
     
     unsigned int r,g,b;
     
-    Function():probabilityWeight(1.0),r(255),g(255),b(255){}
+    double postTransformKoef[2][3];
+    
+    Function():probabilityWeight(1.0),r(255),g(255),b(255)
+    {
+        postTransformKoef[0][0]=1.0;
+        postTransformKoef[0][1]=0.3;
+        postTransformKoef[0][2]=0.0;
+        
+        postTransformKoef[1][0]=0.2;
+        postTransformKoef[1][1]=1.0;
+        postTransformKoef[1][2]=0.0;        
+    }
         
     virtual void calculate(double x, double y, double &xOut, double &yOut)=0;
     

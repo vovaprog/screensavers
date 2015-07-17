@@ -25,46 +25,7 @@ static int numberOfIterations=3000000;
 
 Point *points;
 
-static void initFunctions()
-{
-    functions.push_back(new FunctionSin());
-    //functions.push_back(new Function2());
-    /*functions.push_back(new Function3());
-    functions.push_back(new Function4());*/
-    
-    //functions.push_back(new FunctionSpherical());
-    //functions.push_back(new FunctionSwirl());
-    //functions.push_back(new FunctionHorseshoe());
-    //functions.push_back(new FunctionPolar());
-    //functions.push_back(new FunctionHandkerchief());
-    //functions.push_back(new FunctionHeart());
-    functions.push_back(new FunctionDisk());
-    //functions.push_back(new FunctionSpiral());
-    functions.push_back(new FunctionHyperbolic());
-    //functions.push_back(new FunctionDiamond());
-    functions.push_back(new FunctionJulia());
-    functions.push_back(new FunctionEx());
-    functions.push_back(new FunctionBent());
-    
-    Function *pFun;
-    
-    /*pFun = new FunctionFisheye();
-    pFun->probabilityWeight=5;
-    functions.push_back(pFun);*/
-
-    /*pFun = new FunctionMirror();
-    pFun->probabilityWeight=2;
-    functions.push_back(pFun);*/
-    
-    
-    totalProbabilityWeight=0;
-    
-    for(auto funIter : functions)
-    {
-        totalProbabilityWeight += funIter->probabilityWeight;
-        funIter->probabilityUpBorder=totalProbabilityWeight;
-    }
-}
+void initFunctions(vector<Function*> &functions, int totalProbabilityWeight);
 
 /*static void destroyFunctions()
 {
@@ -87,7 +48,7 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
     
     srand(time(NULL));
     
-    initFunctions();
+    initFunctions(functions,totalProbabilityWeight);
     
     points=new Point[outputSize];
 }
@@ -230,16 +191,26 @@ void calculateFractal()
     
     getInitialPoint(x,y);
     
+    int noPlotCounter=0;
+    
     for(int i=0;i<numberOfIterations;i++)
     {
         Function* pFun=getRandomFunction();
         
         pFun->calculate(x,y,xOut,yOut);
         
-        x=xOut;
-        y=yOut;
+        x=pFun->postTransformKoef[0][0] * xOut + pFun->postTransformKoef[0][1] * yOut + pFun->postTransformKoef[0][2];
+        y=pFun->postTransformKoef[1][0] * xOut + pFun->postTransformKoef[1][1] * yOut + pFun->postTransformKoef[1][2];        
+
+        /*if(x<=-1.0 || y<=-1.0 || x>=1.0 || y>=1.0)
+        {
+            cout << "!!!"<<x<<"   "<<y<<endl;
+            getInitialPoint(x,y);
+            
+            //noPlotCounter=0;
+        }*/
         
-        if(i>20)
+        if(++noPlotCounter>20)
         {
             plot(x,y,pFun);    
         }        
