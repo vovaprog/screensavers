@@ -25,7 +25,7 @@ static int numberOfIterations=3000000;
 
 Point *points;
 
-void initFunctions(vector<Function*> &functions, int totalProbabilityWeight);
+void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight);
 
 /*static void destroyFunctions()
 {
@@ -169,7 +169,7 @@ void createOutput()
         double v = (points[i].count - minCounter) / counterRange;
         
         //v = sqrt (v);
-        v = pow(v, 0.2);
+        v = pow(v, 0.3);
         
         //unsigned int color = (unsigned int)(v * 255.0);
  

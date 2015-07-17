@@ -1,7 +1,11 @@
 #pragma once
 
-#include <cmath>
 #include <cstdlib>
+
+#include <cmath>
+#ifndef M_PI
+#    define M_PI 3.14159265358979323846
+#endif
 
 using namespace std;
 
@@ -17,10 +21,10 @@ public:
     Function():probabilityWeight(1.0),r(255),g(255),b(255)
     {
         postTransformKoef[0][0]=1.0;
-        postTransformKoef[0][1]=0.3;
+        postTransformKoef[0][1]=0.0;
         postTransformKoef[0][2]=0.0;
         
-        postTransformKoef[1][0]=0.2;
+        postTransformKoef[1][0]=0.0;
         postTransformKoef[1][1]=1.0;
         postTransformKoef[1][2]=0.0;        
     }

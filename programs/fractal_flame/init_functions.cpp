@@ -4,31 +4,32 @@ using namespace std;
 
 #include "Function.h"
 
-void initFunctions(vector<Function*> &functions, int totalProbabilityWeight)
+void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight)
 {
-    functions.push_back(new FunctionSin());
-    //functions.push_back(new Function2());
-    /*functions.push_back(new Function3());
-    functions.push_back(new Function4());*/
+    Function *pFun;
     
-    //functions.push_back(new FunctionSpherical());
-    //functions.push_back(new FunctionSwirl());
-    //functions.push_back(new FunctionHorseshoe());
-    //functions.push_back(new FunctionPolar());
-    //functions.push_back(new FunctionHandkerchief());
-    //functions.push_back(new FunctionHeart());
-    functions.push_back(new FunctionDisk());
-    //functions.push_back(new FunctionSpiral());
-    functions.push_back(new FunctionHyperbolic());
-    //functions.push_back(new FunctionDiamond());
-    functions.push_back(new FunctionJulia());
-    functions.push_back(new FunctionEx());
-    functions.push_back(new FunctionBent());
+    pFun = new FunctionSin();
+    functions.push_back(pFun);
+
+    pFun = new FunctionJulia();
+    functions.push_back(pFun);
+
+    pFun = new FunctionHyperbolic();
+    functions.push_back(pFun);
     
-    //Function *pFun;
+    pFun = new FunctionDisk();
+    functions.push_back(pFun);
+
+    /*pFun = new FunctionHyperbolic();
+    functions.push_back(pFun);
+
+    pFun = new FunctionJulia();
+    functions.push_back(pFun);
     
-    /*pFun = new FunctionFisheye();
-    pFun->probabilityWeight=5;
+    pFun = new FunctionEx();
+    functions.push_back(pFun);
+    
+    pFun = new FunctionBent();
     functions.push_back(pFun);*/
 
     /*pFun = new FunctionMirror();
@@ -42,6 +43,4 @@ void initFunctions(vector<Function*> &functions, int totalProbabilityWeight)
         totalProbabilityWeight += funIter->probabilityWeight;
         funIter->probabilityUpBorder=totalProbabilityWeight;
     }
-    
-    
 }
