@@ -2,11 +2,23 @@
 
 using namespace std;
 
-#include "Function.h"
+#include "FunctionNew.h"
 
 void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight)
 {
     Function *pFun;
+    
+    pFun = new Function();
+    pFun->variations.push_back(variationSin);
+    functions.push_back(pFun);
+
+    pFun = new Function();    
+    pFun->variations.push_back(variationSwirl);
+    pFun->variations.push_back(variationPolar);
+    pFun->variations.push_back(variationHandkerchief);                
+    functions.push_back(pFun);
+
+/*    Function *pFun;
     
     pFun = new FunctionSin();
     functions.push_back(pFun);
@@ -18,7 +30,7 @@ void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight)
     functions.push_back(pFun);
     
     pFun = new FunctionDisk();
-    functions.push_back(pFun);
+    functions.push_back(pFun);*/
 
     /*pFun = new FunctionHyperbolic();
     functions.push_back(pFun);

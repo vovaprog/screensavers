@@ -9,7 +9,8 @@ using namespace std;
 
 #include "flame_fractal.h"
 
-#include "Function.h"
+//#include "Function.h"
+#include "FunctionNew.h"
 #include "Point.h"
 
 static unsigned int *output;
@@ -169,7 +170,7 @@ void createOutput()
         double v = (points[i].count - minCounter) / counterRange;
         
         //v = sqrt (v);
-        v = pow(v, 0.3);
+        v = pow(v, 0.1);
         
         //unsigned int color = (unsigned int)(v * 255.0);
  
@@ -185,7 +186,7 @@ void createOutput()
 
 void calculateFractal()
 {
-    double x, y, xOut, yOut;
+    double x, y, xOut=0, yOut=0;
     
     memset(intermediateOutput,0,sizeof(unsigned int) * outputSize);
     
@@ -197,7 +198,16 @@ void calculateFractal()
     {
         Function* pFun=getRandomFunction();
         
-        pFun->calculate(x,y,xOut,yOut);
+        xOut=0;
+        yOut=0;
+        
+        for(auto fun : pFun->variations)
+        {            
+            double xo,yo;
+            fun(x,y,xo,yo);
+            xOut+=xo;
+            yOut+=yo;
+        }
         
         x=pFun->postTransformKoef[0][0] * xOut + pFun->postTransformKoef[0][1] * yOut + pFun->postTransformKoef[0][2];
         y=pFun->postTransformKoef[1][0] * xOut + pFun->postTransformKoef[1][1] * yOut + pFun->postTransformKoef[1][2];        
