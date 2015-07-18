@@ -18,7 +18,7 @@ else
 COMMAND=g++ -std=c++11 -O3 -fopenmp -Wall -mstackrealign \
 		-march=native \
 		-I. -I$(MYLIB) -I$(EXTERNAL)/include \
-		./main.cpp ./flame_fractal.cpp \
+		./main.cpp ./flame_fractal.cpp ./init_functions.cpp \
 		-o ./fractal_flame \
 		-lglut -lGL -lGLU
 endif
