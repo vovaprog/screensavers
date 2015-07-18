@@ -21,7 +21,7 @@ static vector<Function*> functions;
 
 static int totalProbabilityWeight;
 
-static int numberOfIterations=3000000;
+static int numberOfIterations=10000000;
 
 static Point *points;
 
@@ -144,13 +144,23 @@ static void createOutput()
     cout << "max count: " << maxCounter <<endl;
     
     double counterRange=maxCounter-minCounter;
+    double counterRangeLimited=counterRange * 0.0005;
     
     for(int i=0;i<outputSize;i++)
     {
-        double v = (points[i].count - minCounter) / counterRange;
+        double v;
         
-        v = pow(v, 0.1);
-                
+        if(points[i].count<minCounter+counterRangeLimited)
+        {        
+            v = (points[i].count - minCounter) / counterRangeLimited;
+            
+            v = pow(v, 0.45);
+        }
+        else
+        {
+            v = 1.0;   
+        }
+            
         points[i].r = (unsigned int)(points[i].r * v);
         points[i].g = (unsigned int)(points[i].g * v);
         points[i].b = (unsigned int)(points[i].b * v);
@@ -207,6 +217,8 @@ void calculateFractal()
 
 unsigned int* fractalStep()
 {
+    //functions[0]->preTransformKoef[0][0]+=0.01;
+    //functions[1]->preTransformKoef[1][1]+=0.01;
     calculateFractal();
     return output;
 }

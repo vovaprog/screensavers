@@ -112,6 +112,14 @@ inline void variationSwirl(double x, double y, double &xOut, double &yOut) //+
     yOut=x*cos(r2)+y*sin(r2);        
 }
 
+inline void variationHorseshoe(double x, double y, double &xOut, double &yOut)
+{       
+    double r = radius(x,y);
+    
+    xOut=(1.0/r)*(x-y)*(x+y);
+    yOut=(1.0/r)*2.0*x*y;        
+}
+
 inline void variationPolar(double x, double y, double &xOut, double &yOut)
 {       
     xOut = theta(x,y) / M_PI;

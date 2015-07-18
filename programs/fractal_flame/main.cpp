@@ -12,7 +12,7 @@ using namespace std;
 #define PICTURE_HEIGHT_BIG 768
 
 #define PICTURE_WIDTH_SMALL 800
-#define PICTURE_HEIGHT_SMALL 500
+#define PICTURE_HEIGHT_SMALL 800
 
 
 unsigned int pictureWidth=PICTURE_WIDTH_BIG, pictureHeight=PICTURE_HEIGHT_BIG;
@@ -39,12 +39,7 @@ void display()
 {
     if(output==0)
     {
-        output=fractalStep();
-        //cout <<"aaa: "<<endl;
-        for(int i=0;i<100;i++)
-        {
-            //cout <<output[i]<<" ";    
-        }
+        output=fractalStep();        
     }
 
 	glClear(GL_COLOR_BUFFER_BIT);
