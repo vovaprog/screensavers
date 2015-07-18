@@ -2,7 +2,7 @@
 
 using namespace std;
 
-#include "FunctionNew.h"
+#include "Function.h"
 
 void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight)
 {
@@ -10,43 +10,18 @@ void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight)
     
     pFun = new Function();
     pFun->variations.push_back(variationSin);
+    pFun->variations.push_back(variationHyperbolic);
+    pFun->r=200;
     functions.push_back(pFun);
 
     pFun = new Function();    
-    pFun->variations.push_back(variationSwirl);
-    pFun->variations.push_back(variationPolar);
-    pFun->variations.push_back(variationHandkerchief);                
+    //pFun->variations.push_back(variationSwirl);
+    //pFun->variations.push_back(variationPolar);
+    pFun->variations.push_back(variationHandkerchief);
+    pFun->variations.push_back(variationDiamond);
+    pFun->b=200;
     functions.push_back(pFun);
 
-/*    Function *pFun;
-    
-    pFun = new FunctionSin();
-    functions.push_back(pFun);
-
-    pFun = new FunctionJulia();
-    functions.push_back(pFun);
-
-    pFun = new FunctionHyperbolic();
-    functions.push_back(pFun);
-    
-    pFun = new FunctionDisk();
-    functions.push_back(pFun);*/
-
-    /*pFun = new FunctionHyperbolic();
-    functions.push_back(pFun);
-
-    pFun = new FunctionJulia();
-    functions.push_back(pFun);
-    
-    pFun = new FunctionEx();
-    functions.push_back(pFun);
-    
-    pFun = new FunctionBent();
-    functions.push_back(pFun);*/
-
-    /*pFun = new FunctionMirror();
-    pFun->probabilityWeight=2;
-    functions.push_back(pFun);*/
     
     totalProbabilityWeight=0;
     

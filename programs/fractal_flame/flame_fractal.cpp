@@ -9,8 +9,7 @@ using namespace std;
 
 #include "flame_fractal.h"
 
-//#include "Function.h"
-#include "FunctionNew.h"
+#include "Function.h"
 #include "Point.h"
 
 static unsigned int *output;
@@ -24,7 +23,7 @@ static int totalProbabilityWeight;
 
 static int numberOfIterations=3000000;
 
-Point *points;
+static Point *points;
 
 void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight);
 
@@ -72,9 +71,6 @@ static void convertMathToScreen(double x, double y,int &xOut,int &yOut)
     else if(yOut<0) yOut=0;
 }
 
-
-
-
 static void getInitialPoint(double &x, double &y)
 {
     x = rand() % pictureWidth;
@@ -98,32 +94,16 @@ static Function* getRandomFunction()
     return nullptr;
 }
 
-
-/*static void calcFunction(FunctionData &funData, double x, double y, double &xOut, double &yOut)
-{    
-    funData.function(x,y,xOut,yOut);
-}
-
-static void calcFinalFunction(double x, double y, double &xOut, double &yOut)
-{
-    if(finalFunctionPointer!=0)
-    {
-        finalFunctionPointer(x,y,xOut,yOut);    
-    }
-}*/
-
-int outputIndex(int screenX,int screenY)
+static inline int outputIndex(int screenX,int screenY)
 {
     return screenY * pictureWidth + screenX;    
 }
 
-void plot(double mathX, double mathY, Function *pFun)
+static void plot(double mathX, double mathY, Function *pFun)
 {
     int screenX,screenY;
     
     convertMathToScreen(mathX,mathY,screenX,screenY);
-    
-    //intermediateOutput[outputIndex(screenX,screenY)]+=1;
     
     int i = outputIndex(screenX,screenY);
     
@@ -133,7 +113,7 @@ void plot(double mathX, double mathY, Function *pFun)
     points[i].b = (points[i].b + pFun->b) / 2;
 }
 
-void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
+static void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
 {    
     minOutput=points[0].count;
     maxOutput=points[0].count;
@@ -156,7 +136,7 @@ void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
     cout <<"max index: "<<maxIndex % pictureWidth<<","<<maxIndex/pictureWidth<<endl;
 }
 
-void createOutput()
+static void createOutput()
 {
     unsigned int maxCounter, minCounter;
     findMinMaxOutput(minCounter, maxCounter);
@@ -169,13 +149,8 @@ void createOutput()
     {
         double v = (points[i].count - minCounter) / counterRange;
         
-        //v = sqrt (v);
         v = pow(v, 0.1);
-        
-        //unsigned int color = (unsigned int)(v * 255.0);
- 
-        //output[i] = (0xff000000 | (color << 16) | (color <<8) | color);
-        
+                
         points[i].r = (unsigned int)(points[i].r * v);
         points[i].g = (unsigned int)(points[i].g * v);
         points[i].b = (unsigned int)(points[i].b * v);
@@ -184,9 +159,30 @@ void createOutput()
     }
 }
 
+static void applyFunction(Function *pFun, double &x, double &y)
+{
+    double xAccum=0, yAccum=0;
+
+    x=pFun->preTransformKoef[0][0] * x + pFun->preTransformKoef[0][1] * y + pFun->preTransformKoef[0][2];
+    y=pFun->preTransformKoef[1][0] * x + pFun->preTransformKoef[1][1] * y + pFun->preTransformKoef[1][2];            
+        
+    for(auto fun : pFun->variations)
+    {            
+        double xOut,yOut;
+        
+        fun(x , y, xOut, yOut);
+        
+        xAccum += xOut;
+        yAccum += yOut;
+    }
+    
+    x=pFun->postTransformKoef[0][0] * xAccum + pFun->postTransformKoef[0][1] * yAccum + pFun->postTransformKoef[0][2];
+    y=pFun->postTransformKoef[1][0] * xAccum + pFun->postTransformKoef[1][1] * yAccum + pFun->postTransformKoef[1][2];            
+}
+
 void calculateFractal()
 {
-    double x, y, xOut=0, yOut=0;
+    double x, y;
     
     memset(intermediateOutput,0,sizeof(unsigned int) * outputSize);
     
@@ -197,28 +193,8 @@ void calculateFractal()
     for(int i=0;i<numberOfIterations;i++)
     {
         Function* pFun=getRandomFunction();
-        
-        xOut=0;
-        yOut=0;
-        
-        for(auto fun : pFun->variations)
-        {            
-            double xo,yo;
-            fun(x,y,xo,yo);
-            xOut+=xo;
-            yOut+=yo;
-        }
-        
-        x=pFun->postTransformKoef[0][0] * xOut + pFun->postTransformKoef[0][1] * yOut + pFun->postTransformKoef[0][2];
-        y=pFun->postTransformKoef[1][0] * xOut + pFun->postTransformKoef[1][1] * yOut + pFun->postTransformKoef[1][2];        
-
-        /*if(x<=-1.0 || y<=-1.0 || x>=1.0 || y>=1.0)
-        {
-            cout << "!!!"<<x<<"   "<<y<<endl;
-            getInitialPoint(x,y);
-            
-            //noPlotCounter=0;
-        }*/
+                
+        applyFunction(pFun, x, y);        
         
         if(++noPlotCounter>20)
         {
