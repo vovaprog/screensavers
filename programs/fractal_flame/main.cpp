@@ -37,7 +37,7 @@ unsigned int* output=0;
 
 void display()
 {
-    if(output==0)
+    //if(output==0)
     {
         output=fractalStep();        
     }

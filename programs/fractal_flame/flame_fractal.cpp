@@ -13,7 +13,7 @@ using namespace std;
 #include "Point.h"
 
 static unsigned int *output;
-static unsigned int *intermediateOutput;
+//static unsigned int *intermediateOutput;
 static int pictureWidth,pictureHeight;
 static int outputSize;
 
@@ -21,21 +21,22 @@ static vector<Function*> functions;
 
 static int totalProbabilityWeight;
 
-static int numberOfIterations=10000000;
+static int numberOfIterations=3000000;
 
 static Point *points;
 
 void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight);
+void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeight);
 
-/*static void destroyFunctions()
+static void destroyFunctions()
 {
     for(auto funIter : functions)
     {
-        delete (*funIter);
+        delete funIter;
     }
     
     functions.clear();
-}*/
+}
 
 void fractalInit(int argPictureWidth, int argPictureHeight)
 {
@@ -44,11 +45,11 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
     outputSize=pictureWidth*pictureHeight;
     
     output=new unsigned int[outputSize];
-    intermediateOutput=new unsigned int[outputSize];
+    //intermediateOutput=new unsigned int[outputSize];
     
     srand(time(NULL));
     
-    initFunctions(functions,totalProbabilityWeight);
+    //initFunctions(functions,totalProbabilityWeight);
     
     points=new Point[outputSize];
 }
@@ -190,11 +191,22 @@ static void applyFunction(Function *pFun, double &x, double &y)
     y=pFun->postTransformKoef[1][0] * xAccum + pFun->postTransformKoef[1][1] * yAccum + pFun->postTransformKoef[1][2];            
 }
 
+void cleanBuffers()
+{
+    for(int i=0;i<outputSize;i++)
+    {
+        points[i].r=0;
+        points[i].g=0;
+        points[i].b=0;
+        points[i].count=0;
+    }
+}
+
 void calculateFractal()
 {
     double x, y;
-    
-    memset(intermediateOutput,0,sizeof(unsigned int) * outputSize);
+        
+    cleanBuffers();    
     
     getInitialPoint(x,y);
     
@@ -217,8 +229,9 @@ void calculateFractal()
 
 unsigned int* fractalStep()
 {
-    //functions[0]->preTransformKoef[0][0]+=0.01;
-    //functions[1]->preTransformKoef[1][1]+=0.01;
+    destroyFunctions();
+    initFunctionsRandom(functions,totalProbabilityWeight);    
+    
     calculateFractal();
     return output;
 }
