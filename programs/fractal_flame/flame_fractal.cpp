@@ -13,7 +13,6 @@ using namespace std;
 #include "Point.h"
 
 static unsigned int *output;
-//static unsigned int *intermediateOutput;
 static int pictureWidth,pictureHeight;
 static int outputSize;
 
@@ -24,6 +23,8 @@ static int totalProbabilityWeight;
 static int numberOfIterations=3000000;
 
 static Point *points;
+
+unsigned int *hist;
 
 void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight);
 void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeight);
@@ -45,13 +46,14 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
     outputSize=pictureWidth*pictureHeight;
     
     output=new unsigned int[outputSize];
-    //intermediateOutput=new unsigned int[outputSize];
     
     srand(time(NULL));
     
     //initFunctions(functions,totalProbabilityWeight);
     
     points=new Point[outputSize];
+    
+    hist =new unsigned int[outputSize];
 }
 
 static void convertScreenToMath(double &x, double &y)
@@ -137,23 +139,75 @@ static void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
     cout <<"max index: "<<maxIndex % pictureWidth<<","<<maxIndex/pictureWidth<<endl;
 }
 
+static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter)
+{        
+    unsigned int counterRange=maxCounter-minCounter;
+    
+    unsigned int l = (unsigned int)log10(counterRange) - 1;
+    
+    cout <<"counterRange: "<<counterRange<<endl;
+    cout <<"log10: "<<l<<endl;
+        
+    unsigned int HIST_BINS = (unsigned int)pow(10, l);
+    
+    cout << "HIST_BINS: "<<HIST_BINS<<endl;
+    
+    if(counterRange < HIST_BINS)
+    {
+        return 0;
+    }
+    
+    memset(hist,0,HIST_BINS*sizeof(unsigned int));
+    
+    
+    unsigned int binSize = counterRange / HIST_BINS;
+        
+    cout << "binSize: "<<binSize << endl;    
+    
+    for(int i=0;i<outputSize;i++)
+    {
+        unsigned int binIndex = (points[i].count - minCounter)/binSize;
+        if(binIndex>=HIST_BINS)
+        {            
+            binIndex=HIST_BINS-1;
+        }
+        hist[binIndex] += 1;        
+    }
+    
+    unsigned int pointSum=0;
+    
+    for(unsigned int i=0;i<HIST_BINS;i++)
+    {
+        cout <<i<<" : "<<hist[i]<<endl;
+        pointSum += hist[i];
+        
+        if(((double)pointSum / (double)outputSize)>0.995)
+        {
+            return minCounter + (i+1) * binSize;
+        }
+    }
+
+    return 0;
+}
+
 static void createOutput()
 {
     unsigned int maxCounter, minCounter;
     findMinMaxOutput(minCounter, maxCounter);
     
-    cout << "max count: " << maxCounter <<endl;
+    cout << "max count: " << maxCounter << "   min count: "<<minCounter << endl;
     
-    double counterRange=maxCounter-minCounter;
-    double counterRangeLimited=counterRange * 0.0005;
-    
+    unsigned int counterUpLimit = histAnalysis(minCounter, maxCounter);
+        
+    cout << "counterUpLimit: " << counterUpLimit <<endl;
+
     for(int i=0;i<outputSize;i++)
     {
         double v;
         
-        if(points[i].count<minCounter+counterRangeLimited)
+        if(points[i].count<counterUpLimit)
         {        
-            v = (points[i].count - minCounter) / counterRangeLimited;
+            v = ((double)points[i].count - (double)minCounter) / ((double)counterUpLimit-(double)minCounter);
             
             v = pow(v, 0.45);
         }
