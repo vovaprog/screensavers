@@ -9,6 +9,8 @@
 #    define M_PI 3.14159265358979323846
 #endif
 
+#include <tinyxml.h>
+
 using namespace std;
 
 typedef void (*VariationPointer)(double x, double y, double &xOut, double &yOut);
@@ -43,6 +45,30 @@ public:
         postTransformKoef[1][0]=0.0;
         postTransformKoef[1][1]=1.0;
         postTransformKoef[1][2]=0.0;        
+    }
+    
+    void save(const char *fileName)
+    {
+    	TiXmlDocument doc;
+		TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
+		doc.LinkEndChild( decl );
+		
+		TiXmlElement *flamesElement = new TiXmlElement( "Flames" );
+		doc.LinkEndChild( flamesElement );
+		
+		TiXmlElement *flameElement = new TiXmlElement( "flame" );
+		flamesElement->LinkEndChild(flameElement);
+
+		for(auto variation : variations)
+		{
+			TiXmlElement *xformElement = new TiXmlElement( "xform" );		
+			flameElement->LinkEndChild(xformElement);
+		
+			xformElement->SetAttribute("polar","1.0");
+			xformElement->SetAttribute("spiral","1.0");
+		}
+		
+		doc.SaveFile( fileName );    	
     }
 };
 

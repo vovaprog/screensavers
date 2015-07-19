@@ -160,6 +160,10 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
                 
         
         functions.push_back(pFun);
+        
+        string fileName="./fractals/fractal_"+to_string(i)+".xml";
+        
+        pFun->save(fileName.c_str());
     }
     
     initFunctionProbabilities(functions,totalProbabilityWeight);
