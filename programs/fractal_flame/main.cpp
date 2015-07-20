@@ -37,14 +37,14 @@ unsigned int* output=0;
 
 void display()
 {
-    if(output==0)
+    /*if(output==0)
     {
         output=fractalStep();        
-    }
+    }*/
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	glDrawPixels(pictureWidth, pictureHeight, GL_RGBA, GL_UNSIGNED_BYTE, output);
+	//glDrawPixels(pictureWidth, pictureHeight, GL_RGBA, GL_UNSIGNED_BYTE, output);
 	
 	glutSwapBuffers();	    
 }
@@ -155,9 +155,7 @@ int main( int argc, char **argv )
 		//====================================================================
 		//====================================================================
 		//====================================================================
-	
-		fractalInit(pictureWidth,pictureHeight);
-	
+		
 		glutMainLoop();	
 	
 		return 0;

@@ -44,7 +44,10 @@ static void destroyFunctions()
 
 void fractalInit(int argPictureWidth, int argPictureHeight)
 {
-    pictureWidth=argPictureWidth;
+	Function f;
+	f.load("./fractals/fractal_1.xml");
+	
+    /*pictureWidth=argPictureWidth;
     pictureHeight=argPictureHeight;    
     outputSize=pictureWidth*pictureHeight;
     
@@ -56,7 +59,7 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
     
     points=new Point[outputSize];
     
-    //hist =new unsigned int[outputSize];
+    //hist =new unsigned int[outputSize];*/
 }
 
 static void convertScreenToMath(double &x, double &y)
@@ -333,10 +336,10 @@ void saveImage()
 
 unsigned int* fractalStep()
 {
-    destroyFunctions();
+    /*destroyFunctions();
     initFunctionsRandom(functions,totalProbabilityWeight);    
     
     calculateFractal();
-    saveImage();
+    saveImage();*/
     return output;
 }

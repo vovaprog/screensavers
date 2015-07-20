@@ -272,30 +272,54 @@ public:
 				throw string("unknown variation!");
 			}
 	
+			string coefs = to_string(preTransformKoef[0][0])+" "+to_string(preTransformKoef[1][0])+" "+
+				to_string(preTransformKoef[0][1])+" "+to_string(preTransformKoef[1][1])+" "+
+				to_string(preTransformKoef[0][2])+" "+to_string(preTransformKoef[1][2]);
+				
+			xformElement->SetAttribute("coefs",coefs);
 
+			string post = to_string(postTransformKoef[0][0])+" "+to_string(postTransformKoef[1][0])+" "+
+				to_string(postTransformKoef[0][1])+" "+to_string(postTransformKoef[1][1])+" "+
+				to_string(postTransformKoef[0][2])+" "+to_string(postTransformKoef[1][2]);
 			
-			/*variations.push_back(variationSin);
-			variations.push_back(variationFisheye);            
-			variations.push_back(variationSpherical);    
-			variations.push_back(variationSwirl);    
-			variations.push_back(variationHorseshoe);    
-			variations.push_back(variationPolar);    
-			variations.push_back(variationHandkerchief);    
-			variations.push_back(variationHeart);    
-			variations.push_back(variationDisk);    
-			variations.push_back(variationSpiral);    
-			variations.push_back(variationHyperbolic);    
-			variations.push_back(variationDiamond);    
-			variations.push_back(variationJulia);    
-			variations.push_back(variationEx);    
-			variations.push_back(variationBent);    
-			//variations.push_back(variationMirror);
-				
-				
-			xformElement->SetAttribute("polar","1.0");
-			xformElement->SetAttribute("spiral","1.0");*/
+			xformElement->SetAttribute("post",post);				
 		}
 		
 		doc.SaveFile( fileName );    	
+    }
+    
+    void load(const char *fileName)
+    {
+    	TiXmlDocument doc(fileName);
+    	if (!doc.LoadFile()) 
+    	{
+    		throw string("can't open file!");
+    	}
+    	
+    	TiXmlHandle hDoc(&doc);
+    	TiXmlElement* xformElem;
+    	
+    	xformElem=hDoc.FirstChild("Flames").FirstChild("flame"	).FirstChild("xform").Element();
+
+    	cout << "+++"<<xformElem->Attribute("coefs")<<endl;    	
+    	
+    	sscanf(xformElem->Attribute("coefs"),"%lf %lf %lf %lf %lf %lf",
+    		&(preTransformKoef[0][0]),&(preTransformKoef[1][0]),
+    		&(preTransformKoef[0][1]),&(preTransformKoef[1][1]),
+    		&(preTransformKoef[0][2]),&(preTransformKoef[1][2]));
+
+    	cout << "---"<<preTransformKoef[0][0]<<preTransformKoef[1][0]<<preTransformKoef[0][1]<<preTransformKoef[1][1]<<endl;
+    	
+    	sscanf(xformElem->Attribute("post"),"%lf %lf %lf %lf %lf %lf",
+    		&(postTransformKoef[0][0]),&(postTransformKoef[1][0]),
+    		&(postTransformKoef[0][1]),&(postTransformKoef[1][1]),
+    		&(postTransformKoef[0][2]),&(postTransformKoef[1][2]));
+
+    	
+
+    	
+    	
+    	
+    	
     }
 };
