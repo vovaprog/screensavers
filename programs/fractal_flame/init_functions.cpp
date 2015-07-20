@@ -124,9 +124,15 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
             pFun->variations.push_back(variations[variationIndex]);
         }
         
+        
         pFun->r = 200 + rand() % 56; 
         pFun->g = 200 + rand() % 56;
         pFun->b = 200 + rand() % 56;        
+        
+        
+        /*pFun->r = 255;
+        pFun->g = 0;
+        pFun->b = 0;*/
         
         /*for(int r=0;r<2;r++)
         {

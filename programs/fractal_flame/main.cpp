@@ -64,100 +64,104 @@ static void resizeGLScene(int Width,int Height)
 
 int main( int argc, char **argv )
 {
-	glutInit(&argc,argv);
-
-	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);	
-
-	//====================================================================
-	//====================================================================
-	//====================================================================
-
-	int screenResolutionWidth= glutGet(GLUT_SCREEN_WIDTH);
-	int screenResolutionHeight= glutGet(GLUT_SCREEN_HEIGHT);
-
-	//====================================================================
-	//====================================================================
-	//====================================================================
-
-	if(isFullScreen)
-	{
-		if(useAllScreen)
+	try{
+		glutInit(&argc,argv);
+	
+		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);	
+	
+		//====================================================================
+		//====================================================================
+		//====================================================================
+	
+		int screenResolutionWidth= glutGet(GLUT_SCREEN_WIDTH);
+		int screenResolutionHeight= glutGet(GLUT_SCREEN_HEIGHT);
+	
+		//====================================================================
+		//====================================================================
+		//====================================================================
+	
+		if(isFullScreen)
 		{
-			pictureWidth=screenResolutionWidth;
-			pictureHeight=screenResolutionHeight;
-		}
-		else
-		{
-			if(screenResolutionWidth>=PICTURE_WIDTH_BIG && screenResolutionHeight>=PICTURE_HEIGHT_BIG)
-			{
-				pictureWidth=PICTURE_WIDTH_BIG;
-				pictureHeight=PICTURE_HEIGHT_BIG;
-			}
-			else if(screenResolutionWidth>=PICTURE_WIDTH_SMALL && screenResolutionHeight>=PICTURE_HEIGHT_SMALL)
-			{
-				pictureWidth=PICTURE_WIDTH_SMALL;
-				pictureHeight=PICTURE_HEIGHT_SMALL;
-			}
-			else
+			if(useAllScreen)
 			{
 				pictureWidth=screenResolutionWidth;
 				pictureHeight=screenResolutionHeight;
 			}
+			else
+			{
+				if(screenResolutionWidth>=PICTURE_WIDTH_BIG && screenResolutionHeight>=PICTURE_HEIGHT_BIG)
+				{
+					pictureWidth=PICTURE_WIDTH_BIG;
+					pictureHeight=PICTURE_HEIGHT_BIG;
+				}
+				else if(screenResolutionWidth>=PICTURE_WIDTH_SMALL && screenResolutionHeight>=PICTURE_HEIGHT_SMALL)
+				{
+					pictureWidth=PICTURE_WIDTH_SMALL;
+					pictureHeight=PICTURE_HEIGHT_SMALL;
+				}
+				else
+				{
+					pictureWidth=screenResolutionWidth;
+					pictureHeight=screenResolutionHeight;
+				}
+			}
 		}
-	}
-	else
-	{
-		pictureWidth=PICTURE_WIDTH_SMALL;
-		pictureHeight=PICTURE_HEIGHT_SMALL;
-	}
-
-	fractalInit(pictureWidth,pictureHeight);
+		else
+		{
+			pictureWidth=PICTURE_WIDTH_SMALL;
+			pictureHeight=PICTURE_HEIGHT_SMALL;
+		}
 	
-	//====================================================================
-	//====================================================================
-	//====================================================================
-
-	glutInitWindowSize(pictureWidth,pictureHeight);  
-
-	if(isFullScreen)
-	{
-		glutInitWindowPosition(0, 0); 
+		fractalInit(pictureWidth,pictureHeight);
+		
+		//====================================================================
+		//====================================================================
+		//====================================================================
+	
+		glutInitWindowSize(pictureWidth,pictureHeight);  
+	
+		if(isFullScreen)
+		{
+			glutInitWindowPosition(0, 0); 
+		}
+		else
+		{	
+			glutInitWindowPosition((screenResolutionWidth - pictureWidth)/2, (screenResolutionHeight-pictureHeight)/2); 
+		}
+	
+		//====================================================================
+		//====================================================================
+		//====================================================================
+	
+		window=glutCreateWindow("opengl");	
+	
+		glutDisplayFunc(&display);  
+	
+		glutIdleFunc(&display);
+	
+		glutReshapeFunc(&resizeGLScene);
+	
+		glutKeyboardFunc(&keyPressed);
+	
+		//====================================================================
+		//====================================================================
+		//====================================================================
+	
+		if(isFullScreen)
+		{
+			glutFullScreen();
+		}
+	
+		//====================================================================
+		//====================================================================
+		//====================================================================
+	
+		fractalInit(pictureWidth,pictureHeight);
+	
+		glutMainLoop();	
+	
+		return 0;
+	}catch(string ex){
+		cout << "exception thrown: " << ex <<endl;
 	}
-	else
-	{	
-		glutInitWindowPosition((screenResolutionWidth - pictureWidth)/2, (screenResolutionHeight-pictureHeight)/2); 
-	}
-
-	//====================================================================
-	//====================================================================
-	//====================================================================
-
-	window=glutCreateWindow("opengl");	
-
-	glutDisplayFunc(&display);  
-
-	glutIdleFunc(&display);
-
-	glutReshapeFunc(&resizeGLScene);
-
-	glutKeyboardFunc(&keyPressed);
-
-	//====================================================================
-	//====================================================================
-	//====================================================================
-
-	if(isFullScreen)
-	{
-		glutFullScreen();
-	}
-
-	//====================================================================
-	//====================================================================
-	//====================================================================
-
-	fractalInit(pictureWidth,pictureHeight);
-
-	glutMainLoop();	
-
-	return 0;
 }

@@ -20,7 +20,7 @@ COMMAND=g++ -std=c++11 -O3 -fopenmp -Wall -mstackrealign \
 		-I. -I$(MYLIB) -I$(EXTERNAL)/include \
 		./main.cpp ./flame_fractal.cpp ./init_functions.cpp \
 		-o ./fractal_flame \
-		-lglut -lGL -lGLU -ltinyxml
+		-lglut -lGL -lGLU -ltinyxml -lfreeimage
 endif
 
 all:

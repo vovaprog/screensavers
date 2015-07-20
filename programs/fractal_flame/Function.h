@@ -15,62 +15,7 @@ using namespace std;
 
 typedef void (*VariationPointer)(double x, double y, double &xOut, double &yOut);
 
-class Function{
-public:        
-    int probabilityWeight;
-    int probabilityUpBorder;
-    
-    unsigned int r,g,b;
-    
-    double preTransformKoef[2][3];
-    double postTransformKoef[2][3];
 
-    vector<VariationPointer> variations;
-    
-    Function():probabilityWeight(1.0),r(255),g(255),b(255)
-    {
-        preTransformKoef[0][0]=1.0;
-        preTransformKoef[0][1]=0.0;
-        preTransformKoef[0][2]=0.0;
-        
-        preTransformKoef[1][0]=0.0;
-        preTransformKoef[1][1]=1.0;
-        preTransformKoef[1][2]=0.0;        
-        
-        
-        postTransformKoef[0][0]=1.0;
-        postTransformKoef[0][1]=0.0;
-        postTransformKoef[0][2]=0.0;
-        
-        postTransformKoef[1][0]=0.0;
-        postTransformKoef[1][1]=1.0;
-        postTransformKoef[1][2]=0.0;        
-    }
-    
-    void save(const char *fileName)
-    {
-    	TiXmlDocument doc;
-		TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
-		doc.LinkEndChild( decl );
-		
-		TiXmlElement *flamesElement = new TiXmlElement( "Flames" );
-		doc.LinkEndChild( flamesElement );
-		
-		TiXmlElement *flameElement = new TiXmlElement( "flame" );
-		flamesElement->LinkEndChild(flameElement);
-
-		for(auto variation : variations)
-		{
-			TiXmlElement *xformElement = new TiXmlElement( "xform" );		
-			flameElement->LinkEndChild(xformElement);
-		
-			xformElement->SetAttribute("polar","1.0");
-			xformElement->SetAttribute("spiral","1.0");
-		}
-		
-		doc.SaveFile( fileName );    	
-    }
-};
 
 //=================================================================
 
@@ -255,4 +200,102 @@ inline void variationBent(double x, double y, double &xOut, double &yOut)
     }
 }
 
+//====================================================================================
 
+class Function{
+public:        
+    int probabilityWeight;
+    int probabilityUpBorder;
+    
+    unsigned int r,g,b;
+    
+    double preTransformKoef[2][3];
+    double postTransformKoef[2][3];
+
+    vector<VariationPointer> variations;
+    
+    Function():probabilityWeight(1.0),r(255),g(255),b(255)
+    {
+        preTransformKoef[0][0]=1.0;
+        preTransformKoef[0][1]=0.0;
+        preTransformKoef[0][2]=0.0;
+        
+        preTransformKoef[1][0]=0.0;
+        preTransformKoef[1][1]=1.0;
+        preTransformKoef[1][2]=0.0;        
+        
+        
+        postTransformKoef[0][0]=1.0;
+        postTransformKoef[0][1]=0.0;
+        postTransformKoef[0][2]=0.0;
+        
+        postTransformKoef[1][0]=0.0;
+        postTransformKoef[1][1]=1.0;
+        postTransformKoef[1][2]=0.0;        
+    }
+    
+    void save(const char *fileName)
+    {
+    	TiXmlDocument doc;
+		TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
+		doc.LinkEndChild( decl );
+		
+		TiXmlElement *flamesElement = new TiXmlElement( "Flames" );
+		doc.LinkEndChild( flamesElement );
+		
+		TiXmlElement *flameElement = new TiXmlElement( "flame" );
+		flamesElement->LinkEndChild(flameElement);
+
+		for(auto variation : variations)
+		{
+			TiXmlElement *xformElement = new TiXmlElement( "xform" );		
+			flameElement->LinkEndChild(xformElement);
+		
+			if(variation == variationSin) xformElement->SetAttribute("sinusoidal","1.0");
+			else if(variation == variationFisheye) xformElement->SetAttribute("eyefish","1.0");
+			else if(variation == variationSpherical) xformElement->SetAttribute("spherical","1.0");
+			else if(variation == variationSwirl) xformElement->SetAttribute("swirl","1.0");						
+			else if(variation == variationHorseshoe) xformElement->SetAttribute("horseshoe","1.0");
+			else if(variation == variationPolar) xformElement->SetAttribute("polar","1.0");
+			else if(variation == variationHandkerchief) xformElement->SetAttribute("handkerchief","1.0");
+			else if(variation == variationHeart) xformElement->SetAttribute("heart","1.0");
+			else if(variation == variationDisk) xformElement->SetAttribute("disk","1.0");
+			else if(variation == variationSpiral) xformElement->SetAttribute("spiral","1.0");
+			else if(variation == variationHyperbolic) xformElement->SetAttribute("hyperbolic","1.0");
+			else if(variation == variationDiamond) xformElement->SetAttribute("diamond","1.0");
+			else if(variation == variationJulia) xformElement->SetAttribute("julia","1.0");
+			else if(variation == variationEx) xformElement->SetAttribute("ex","1.0");
+			else if(variation == variationBent) xformElement->SetAttribute("bent","1.0");
+			else if(variation == variationMirror) xformElement->SetAttribute("mirror","1.0");
+			else
+			{
+				throw string("unknown variation!");
+			}
+	
+
+			
+			/*variations.push_back(variationSin);
+			variations.push_back(variationFisheye);            
+			variations.push_back(variationSpherical);    
+			variations.push_back(variationSwirl);    
+			variations.push_back(variationHorseshoe);    
+			variations.push_back(variationPolar);    
+			variations.push_back(variationHandkerchief);    
+			variations.push_back(variationHeart);    
+			variations.push_back(variationDisk);    
+			variations.push_back(variationSpiral);    
+			variations.push_back(variationHyperbolic);    
+			variations.push_back(variationDiamond);    
+			variations.push_back(variationJulia);    
+			variations.push_back(variationEx);    
+			variations.push_back(variationBent);    
+			//variations.push_back(variationMirror);
+				
+				
+			xformElement->SetAttribute("polar","1.0");
+			xformElement->SetAttribute("spiral","1.0");*/
+		}
+		
+		doc.SaveFile( fileName );    	
+    }
+};

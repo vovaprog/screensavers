@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <FreeImage.h>
+
 using namespace std;
 
 #include "flame_fractal.h"
@@ -24,7 +26,8 @@ static int numberOfIterations=3000000;
 
 static Point *points;
 
-unsigned int *hist;
+unsigned int *hist=nullptr;
+unsigned int histSize=0;
 
 void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight);
 void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeight);
@@ -53,7 +56,7 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
     
     points=new Point[outputSize];
     
-    hist =new unsigned int[outputSize];
+    //hist =new unsigned int[outputSize];
 }
 
 static void convertScreenToMath(double &x, double &y)
@@ -157,6 +160,17 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
         return 0;
     }
     
+    if(histSize < HIST_BINS)
+    {
+    	if(hist==nullptr)
+    	{
+    		delete[] hist;	
+    	}
+    	
+    	hist = new unsigned int[HIST_BINS];
+    	histSize = HIST_BINS;
+    }
+    
     memset(hist,0,HIST_BINS*sizeof(unsigned int));
     
     
@@ -174,6 +188,8 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
         hist[binIndex] += 1;        
     }
     
+    
+    
     unsigned int pointSum=0;
     
     for(unsigned int i=0;i<HIST_BINS;i++)
@@ -187,6 +203,7 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
         }
     }
 
+           
     return 0;
 }
 
@@ -196,6 +213,17 @@ static void createOutput()
     findMinMaxOutput(minCounter, maxCounter);
     
     cout << "max count: " << maxCounter << "   min count: "<<minCounter << endl;
+    
+    double maxCounterDivAll = (double)maxCounter / (double)numberOfIterations;
+    cout <<"maxCounterToAll: "<<maxCounterDivAll<<endl;
+    
+    if(maxCounterDivAll>=0.5)
+    {
+    	cout <<"bad picture!"<<endl;
+    	memset(output,0,outputSize * sizeof(unsigned int));
+    	return;
+    }
+    
     
     unsigned int counterUpLimit = histAnalysis(minCounter, maxCounter);
         
@@ -220,7 +248,7 @@ static void createOutput()
         points[i].g = (unsigned int)(points[i].g * v);
         points[i].b = (unsigned int)(points[i].b * v);
         
-        output[i] = (0xff000000 | (points[i].r << 16) | (points[i].g <<8) | points[i].b);
+        output[i] = (0xff000000 | (points[i].b << 16) | (points[i].g <<8) | points[i].r);
     }
 }
 
@@ -281,11 +309,34 @@ void calculateFractal()
     createOutput();
 }
 
+unsigned int *saveOutput=nullptr;
+
+void saveImage()
+{
+	if(saveOutput==nullptr)
+	{
+		saveOutput=new unsigned int[outputSize];	
+	}
+	
+	for(int i=0;i<outputSize;i++)
+	{
+		saveOutput[i]=(0xff000000 | ((output[i] & 0xff) << 16) | (output[i] & 0xff00) | ((output[i] & 0xff0000) >>16)); 
+	}
+	
+	//BYTE pixels [3*WIDTH*HEIGHT];
+	//glReadPixels(0,0,WIDTH,HEIGHT, GL_RGB, GL_BYTE, pixels);
+	FIBITMAP* Image = FreeImage_ConvertFromRawBits((BYTE*)saveOutput, pictureWidth, pictureHeight, pictureWidth * sizeof(unsigned int), 32,
+		//FI_RGBA_GREEN_MASK,FI_RGBA_GREEN_MASK,FI_RGBA_RED_MASK,false); 
+		0x0F0000, 0x00000F, 0x000F00, false); 
+	FreeImage_Save(FIF_BMP, Image, "./test.bmp", 0);	
+}
+
 unsigned int* fractalStep()
 {
     destroyFunctions();
     initFunctionsRandom(functions,totalProbabilityWeight);    
     
     calculateFractal();
+    saveImage();
     return output;
 }
