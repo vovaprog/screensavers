@@ -1,6 +1,7 @@
 //#include <math.h>
 //#include <vector>
 #include <iostream>
+#include <string.h>
 
 #include <GL/freeglut.h>
 
@@ -65,6 +66,39 @@ static void resizeGLScene(int Width,int Height)
 int main( int argc, char **argv )
 {
 	try{
+		
+		if(argc>1)
+		{
+			if(strcmp(argv[1],"preview")==0)
+			{
+				pictureWidth=800;
+				pictureHeight=800;
+				fractalInit(pictureWidth,pictureHeight);
+				fractalPreview();
+				return 0;
+			}
+			else if(strcmp(argv[1],"render")==0)
+			{
+				if(argc>=3)
+				{
+					pictureWidth=800;
+					pictureHeight=800;
+					fractalInit(pictureWidth,pictureHeight);
+					fractalRender(argv[2]);
+					return 0;					
+				}
+				else
+				{
+					return -1;	
+				}
+			}
+		}
+		else
+		{
+			return -1;	
+		}
+		
+		
 		glutInit(&argc,argv);
 	
 		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);	

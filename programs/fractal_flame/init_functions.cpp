@@ -212,11 +212,7 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
         functions.push_back(pFun);
     }
     
-    initFunctionProbabilities(functions,totalProbabilityWeight);
-    
-    string fileName="./fractals/fractal.xml";
-            
-    saveFunctions(fileName.c_str(),functions);
+    initFunctionProbabilities(functions,totalProbabilityWeight);    
 }
 
 void loadFunctions(const char *fileName,vector<Function*> &functions, int &totalProbabilityWeight)

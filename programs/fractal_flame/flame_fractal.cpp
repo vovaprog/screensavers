@@ -7,6 +7,10 @@
 
 #include <FreeImage.h>
 
+//for directoryExists
+#include <sys/types.h>
+#include <sys/stat.h>
+
 using namespace std;
 
 #include "flame_fractal.h"
@@ -32,6 +36,7 @@ unsigned int histSize=0;
 void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight);
 void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeight);
 void loadFunctions(const char *fileName,vector<Function*> &functions, int &totalProbabilityWeight);
+void saveFunctions(const char *fileName,vector<Function*> &functions);
 
 static void destroyFunctions()
 {
@@ -312,7 +317,7 @@ void calculateFractal()
 
 unsigned int *saveOutput=nullptr;
 
-void saveImage()
+void saveImage(const char *fileName)
 {
 	if(saveOutput==nullptr)
 	{
@@ -324,12 +329,63 @@ void saveImage()
 		saveOutput[i]=(0xff000000 | ((output[i] & 0xff) << 16) | (output[i] & 0xff00) | ((output[i] & 0xff0000) >>16)); 
 	}
 	
-	//BYTE pixels [3*WIDTH*HEIGHT];
-	//glReadPixels(0,0,WIDTH,HEIGHT, GL_RGB, GL_BYTE, pixels);
-	FIBITMAP* Image = FreeImage_ConvertFromRawBits((BYTE*)saveOutput, pictureWidth, pictureHeight, pictureWidth * sizeof(unsigned int), 32,
-		//FI_RGBA_GREEN_MASK,FI_RGBA_GREEN_MASK,FI_RGBA_RED_MASK,false); 
-		0x0F0000, 0x00000F, 0x000F00, false); 
-	FreeImage_Save(FIF_BMP, Image, "./fractals/fractal.bmp", 0);	
+	FIBITMAP* Image = FreeImage_ConvertFromRawBits((BYTE*)saveOutput, pictureWidth, pictureHeight, pictureWidth * sizeof(unsigned int), 32, 
+		0xFF0000, 0x00FF00, 0x0000FF, false); 
+	FreeImage_Save(FIF_BMP, Image, fileName, 0);	
+}
+
+int directoryExists(const char *path)
+{
+    struct stat info;
+
+    if(stat( path, &info ) != 0)
+        return 0;
+    else if(info.st_mode & S_IFDIR)
+        return 1;
+    else
+        return 0;
+}
+
+void fractalPreview()
+{
+	string dirName;
+	
+	for(int i=0;i<500;i++)
+	{
+		dirName="./fractals/"+to_string(i);
+		
+		if(!directoryExists(dirName.c_str()))
+		{
+			mkdir(dirName.c_str(), 0700);
+			break;
+		}
+	}
+
+	for(int i=0;i<30;i++)
+	{
+		destroyFunctions();
+		initFunctionsRandom(functions,totalProbabilityWeight);
+		calculateFractal();
+		string fileName=dirName+"/fractal_"+to_string(i)+".xml";            
+		saveFunctions(fileName.c_str(),functions);
+		fileName=dirName + "/fractal_"+to_string(i)+".bmp";
+		saveImage(fileName.c_str());
+	}	
+}
+
+void fractalRender(const char *fileName)
+{
+	destroyFunctions();
+	loadFunctions(fileName,functions,totalProbabilityWeight);
+	
+	numberOfIterations = 30000000;
+	
+	calculateFractal();
+	
+	string outputFileName(fileName);
+	outputFileName += "_render.bmp";
+	
+	saveImage(outputFileName.c_str());
 }
 
 unsigned int* fractalStep()
