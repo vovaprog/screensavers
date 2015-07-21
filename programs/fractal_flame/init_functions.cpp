@@ -1,11 +1,14 @@
 #include <vector>
 #include <cstdlib>
 
-using namespace std;
+#include <tinyxml.h>
 
 #include "Function.h"
+#include "init_functions.h"
 
-void initFunctionProbabilities(vector<Function*> &functions, int &totalProbabilityWeight)
+using namespace std;
+
+static void initFunctionProbabilities(vector<Function*> &functions, int &totalProbabilityWeight)
 {
     totalProbabilityWeight=0;
     
@@ -17,74 +20,18 @@ void initFunctionProbabilities(vector<Function*> &functions, int &totalProbabili
 }
 
 
-void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight)
-{
-    Function *pFun;
-    
-    /*
-    pFun = new Function();
-    pFun->variations.push_back(variationSin);
-    pFun->variations.push_back(variationHyperbolic);
-    pFun->r=200;
-    functions.push_back(pFun);
-
-    pFun = new Function();    
-    //pFun->variations.push_back(variationSwirl);
-    //pFun->variations.push_back(variationPolar);
-    pFun->variations.push_back(variationHandkerchief);
-    pFun->variations.push_back(variationDiamond);
-    pFun->b=200;
-    functions.push_back(pFun);*/
-    
-    
-    
-    
-    
-    /* good picture
-    pFun = new Function();
-    //pFun->variations.push_back(variationSin);
-    pFun->variations.push_back(variationHyperbolic);    
-    pFun->r=200;
-    functions.push_back(pFun);
-
-    pFun = new Function();    
-    pFun->variations.push_back(variationSwirl);
-    pFun->variations.push_back(variationHorseshoe);    
-    pFun->b=200;
-    
-    functions.push_back(pFun);    
-    */
-    
-
-    pFun = new Function();
-    //pFun->variations.push_back(variationSin);
-    pFun->variations.push_back(variationHyperbolic);    
-    pFun->r=200;
-    functions.push_back(pFun);
-
-    pFun = new Function();    
-    pFun->variations.push_back(variationSwirl);
-    pFun->variations.push_back(variationHorseshoe);    
-    pFun->b=200;
-    
-    functions.push_back(pFun);    
-    
-    
-    initFunctionProbabilities(functions,totalProbabilityWeight);
-}
-
-const int MIN_NUMBER_OF_FUNCTIONS = 2;
-const int MAX_NUMBER_OF_FUNCTIONS = 3;
-const int MIN_NUMBER_OF_VARIATIONS = 1;
-const int MAX_NUMBER_OF_VARIATIONS = 3;
+static const int MIN_NUMBER_OF_FUNCTIONS = 2;
+static const int MAX_NUMBER_OF_FUNCTIONS = 3;
+static const int MIN_NUMBER_OF_VARIATIONS = 1;
+static const int MAX_NUMBER_OF_VARIATIONS = 3;
 
 
-double getRandom01()
+static inline double getRandom01()
 {
     return ((double)(rand() % 1000))/1000.0;
 }
 
-double getRandomValue(double start, double end)
+static inline double getRandomValue(double start, double end)
 {
     return start + getRandom01() * (end - start);
 }
@@ -233,21 +180,16 @@ void loadFunctions(const char *fileName,vector<Function*> &functions, int &total
 		Function *pFun=new Function();
 		functions.push_back(pFun);
 		
-		//cout << "+++"<<xformElem->Attribute("coefs")<<endl;    	
-		
 		sscanf(xformElem->Attribute("coefs"),"%lf %lf %lf %lf %lf %lf",
 			&(pFun->preTransformKoef[0][0]),&(pFun->preTransformKoef[1][0]),
 			&(pFun->preTransformKoef[0][1]),&(pFun->preTransformKoef[1][1]),
 			&(pFun->preTransformKoef[0][2]),&(pFun->preTransformKoef[1][2]));
-	
-		//cout << "---"<<preTransformKoef[0][0]<<preTransformKoef[1][0]<<preTransformKoef[0][1]<<preTransformKoef[1][1]<<endl;
 		
 		sscanf(xformElem->Attribute("post"),"%lf %lf %lf %lf %lf %lf",
 			&(pFun->postTransformKoef[0][0]),&(pFun->postTransformKoef[1][0]),
 			&(pFun->postTransformKoef[0][1]),&(pFun->postTransformKoef[1][1]),
 			&(pFun->postTransformKoef[0][2]),&(pFun->postTransformKoef[1][2]));
-		
-    
+		    
 		if(xformElem->Attribute("sinusoidal")) pFun->variations.push_back(variationSin);
 		if(xformElem->Attribute("eyefish")) pFun->variations.push_back(variationFisheye);
 		if(xformElem->Attribute("spherical")) pFun->variations.push_back(variationSpherical);

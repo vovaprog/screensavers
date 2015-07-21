@@ -4,12 +4,9 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
+#include <cmath>
 
 #include <FreeImage.h>
-
-//for directoryExists
-#include <sys/types.h>
-#include <sys/stat.h>
 
 using namespace std;
 
@@ -17,6 +14,8 @@ using namespace std;
 
 #include "Function.h"
 #include "Point.h"
+#include "init_functions.h"
+#include "filesystem_utils.h"
 
 static unsigned int *output;
 static int pictureWidth,pictureHeight;
@@ -33,10 +32,6 @@ static Point *points;
 unsigned int *hist=nullptr;
 unsigned int histSize=0;
 
-void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight);
-void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeight);
-void loadFunctions(const char *fileName,vector<Function*> &functions, int &totalProbabilityWeight);
-void saveFunctions(const char *fileName,vector<Function*> &functions);
 
 static void destroyFunctions()
 {
@@ -55,14 +50,9 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
     outputSize=pictureWidth*pictureHeight;
     
     output=new unsigned int[outputSize];
-    
-    srand(time(NULL));
-    
-    //initFunctions(functions,totalProbabilityWeight);
-    
     points=new Point[outputSize];
     
-    //hist =new unsigned int[outputSize];*/
+    srand(time(NULL));    
 }
 
 static void convertScreenToMath(double &x, double &y)
@@ -213,7 +203,7 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
     return 0;
 }
 
-static void createOutput()
+static bool createOutput()
 {
     unsigned int maxCounter, minCounter;
     findMinMaxOutput(minCounter, maxCounter);
@@ -227,7 +217,7 @@ static void createOutput()
     {
     	cout <<"bad picture!"<<endl;
     	memset(output,0,outputSize * sizeof(unsigned int));
-    	return;
+    	return false;
     }
     
     
@@ -256,6 +246,8 @@ static void createOutput()
         
         output[i] = (0xff000000 | (points[i].b << 16) | (points[i].g <<8) | points[i].r);
     }
+    
+    return true;
 }
 
 static void applyFunction(Function *pFun, double &x, double &y)
@@ -279,7 +271,7 @@ static void applyFunction(Function *pFun, double &x, double &y)
     y=pFun->postTransformKoef[1][0] * xAccum + pFun->postTransformKoef[1][1] * yAccum + pFun->postTransformKoef[1][2];            
 }
 
-void cleanBuffers()
+static void cleanBuffers()
 {
     for(int i=0;i<outputSize;i++)
     {
@@ -290,7 +282,7 @@ void cleanBuffers()
     }
 }
 
-void calculateFractal()
+static bool calculateFractal()
 {
     double x, y;
         
@@ -312,12 +304,12 @@ void calculateFractal()
         }        
     }
     
-    createOutput();
+    return createOutput();
 }
 
-unsigned int *saveOutput=nullptr;
+static unsigned int *saveOutput=nullptr;
 
-void saveImage(const char *fileName)
+static void saveImage(const char *fileName)
 {
 	if(saveOutput==nullptr)
 	{
@@ -331,22 +323,14 @@ void saveImage(const char *fileName)
 	
 	FIBITMAP* Image = FreeImage_ConvertFromRawBits((BYTE*)saveOutput, pictureWidth, pictureHeight, pictureWidth * sizeof(unsigned int), 32, 
 		0xFF0000, 0x00FF00, 0x0000FF, false); 
-	FreeImage_Save(FIF_BMP, Image, fileName, 0);	
+	FreeImage_Save(FIF_BMP, Image, fileName, 0);
+	
+	FreeImage_Unload(Image);
 }
 
-int directoryExists(const char *path)
-{
-    struct stat info;
 
-    if(stat( path, &info ) != 0)
-        return 0;
-    else if(info.st_mode & S_IFDIR)
-        return 1;
-    else
-        return 0;
-}
 
-void fractalPreview()
+void fractalPreview(int numberOfPreviews)
 {
 	string dirName;
 	
@@ -355,21 +339,28 @@ void fractalPreview()
 		dirName="./fractals/"+to_string(i);
 		
 		if(!directoryExists(dirName.c_str()))
-		{
-			mkdir(dirName.c_str(), 0700);
+		{			
+			createDirectory(dirName.c_str());
 			break;
 		}
 	}
 
-	for(int i=0;i<30;i++)
+	for(int i=0;i<numberOfPreviews;i++)
 	{
 		destroyFunctions();
 		initFunctionsRandom(functions,totalProbabilityWeight);
-		calculateFractal();
-		string fileName=dirName+"/fractal_"+to_string(i)+".xml";            
-		saveFunctions(fileName.c_str(),functions);
-		fileName=dirName + "/fractal_"+to_string(i)+".bmp";
-		saveImage(fileName.c_str());
+		
+		if(calculateFractal())
+		{
+            string fileName=dirName+"/fractal_"+to_string(i)+".xml";            
+            saveFunctions(fileName.c_str(),functions);
+            fileName=dirName + "/fractal_"+to_string(i)+".bmp";
+            saveImage(fileName.c_str());		    
+		}
+		else
+		{
+		    i-=1;    
+		}		
 	}	
 }
 

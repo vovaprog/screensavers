@@ -74,7 +74,15 @@ int main( int argc, char **argv )
 				pictureWidth=800;
 				pictureHeight=800;
 				fractalInit(pictureWidth,pictureHeight);
-				fractalPreview();
+				
+				int numberOfPreviews = 10;
+				
+				if(argc>=3)
+				{
+				    numberOfPreviews = stoi(string(argv[2]));    
+				}
+				
+				fractalPreview(numberOfPreviews);
 				return 0;
 			}
 			else if(strcmp(argv[1],"render")==0)

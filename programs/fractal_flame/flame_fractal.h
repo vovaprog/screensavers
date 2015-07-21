@@ -6,6 +6,6 @@ void fractalInit(int argPictureWidth, int argPictureHeight);
 
 unsigned int* fractalStep();
 
-void fractalPreview();
+void fractalPreview(int numberOfPreviews);
 
 void fractalRender(const char *fileName);
