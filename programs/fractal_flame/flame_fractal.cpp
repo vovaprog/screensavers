@@ -31,6 +31,7 @@ unsigned int histSize=0;
 
 void initFunctions(vector<Function*> &functions, int &totalProbabilityWeight);
 void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeight);
+void loadFunctions(const char *fileName,vector<Function*> &functions, int &totalProbabilityWeight);
 
 static void destroyFunctions()
 {
@@ -43,11 +44,8 @@ static void destroyFunctions()
 }
 
 void fractalInit(int argPictureWidth, int argPictureHeight)
-{
-	Function f;
-	f.load("./fractals/fractal_1.xml");
-	
-    /*pictureWidth=argPictureWidth;
+{	
+    pictureWidth=argPictureWidth;
     pictureHeight=argPictureHeight;    
     outputSize=pictureWidth*pictureHeight;
     
@@ -331,15 +329,16 @@ void saveImage()
 	FIBITMAP* Image = FreeImage_ConvertFromRawBits((BYTE*)saveOutput, pictureWidth, pictureHeight, pictureWidth * sizeof(unsigned int), 32,
 		//FI_RGBA_GREEN_MASK,FI_RGBA_GREEN_MASK,FI_RGBA_RED_MASK,false); 
 		0x0F0000, 0x00000F, 0x000F00, false); 
-	FreeImage_Save(FIF_BMP, Image, "./test.bmp", 0);	
+	FreeImage_Save(FIF_BMP, Image, "./fractals/fractal.bmp", 0);	
 }
 
 unsigned int* fractalStep()
 {
-    /*destroyFunctions();
-    initFunctionsRandom(functions,totalProbabilityWeight);    
+    destroyFunctions();
+    //initFunctionsRandom(functions,totalProbabilityWeight);
+    loadFunctions("./fractals/fractal.xml",functions,totalProbabilityWeight);
     
     calculateFractal();
-    saveImage();*/
+    //saveImage();
     return output;
 }
