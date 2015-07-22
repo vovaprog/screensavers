@@ -11,7 +11,7 @@ private:
     const unsigned int SHOW_MILLIS = 5 * 1000;
     
     unsigned int startMillis;
-    unsigned int *output0,*output1,*outputBlend;
+    unsigned int *output0=nullptr,*output1=nullptr,*outputBlend=nullptr;
     
     int pictureWidth,pictureHeight,outputSize;
     
@@ -96,11 +96,11 @@ private:
         
         //double 
         
-        double blendD=2.0 / ((TRANSIT_MILLIS / 1000.0) * fps);
-        blendKoef=2.0-blendD;
+        double blendD=1.0 / ((TRANSIT_MILLIS / 1000.0) * fps);
+        blendKoef=1.0-blendD;
         
         
-        //cout << "blendKoef: " <<blendKoef<<"   blendD: "<<blendD<<endl<<flush;
+        cout << "1 blendKoef: " <<blendKoef<<"   blendD: "<<blendD<<endl<<flush;
         
         blend(output0,output1,outputBlend,blendKoef);
      
@@ -113,7 +113,7 @@ private:
     {
         unsigned int millisPassed = getMilliseconds() - startMillis;
         
-        cout << "passed: "<<millisPassed<<endl;
+        //cout << "passed: "<<millisPassed<<endl;
         
         if(millisPassed >= TRANSIT_MILLIS)
         {
@@ -149,9 +149,9 @@ private:
     {
         for(int i=0;i<outputSize;i++)
         {
-            unsigned int r = (unsigned int)((k*GetRed(p0[i]) + (2.0-k)*GetRed(p1[i])) / 2.0);
-            unsigned int g = (unsigned int)((k*GetGreen(p0[i]) + (2.0-k)*GetGreen(p1[i])) / 2.0);
-            unsigned int b = (unsigned int)((k*GetBlue(p0[i]) + (2.0-k)*GetBlue(p1[i])) / 2.0);
+            unsigned int r = (unsigned int)(k*GetRed(p0[i]) + (1.0-k)*GetRed(p1[i]));
+            unsigned int g = (unsigned int)(k*GetGreen(p0[i]) + (1.0-k)*GetGreen(p1[i]));
+            unsigned int b = (unsigned int)(k*GetBlue(p0[i]) + (1.0-k)*GetBlue(p1[i]));
             
             output[i] = CreateColor(r,g,b);            
         }        

@@ -29,7 +29,7 @@ static int outputSize;
 
 static int totalProbabilityWeight;
 
-static int numberOfIterations=3000000;
+static int numberOfIterations=1000000;
 
 unsigned int histSize=0;
 
