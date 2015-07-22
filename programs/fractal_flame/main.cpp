@@ -7,6 +7,7 @@
 
 using namespace std;
 
+#include "ConstantFps.h"
 #include "flame_fractal.h"
 #include "ScreensaverAutomat.h"
 
@@ -16,6 +17,8 @@ using namespace std;
 #define PICTURE_WIDTH_SMALL 800
 #define PICTURE_HEIGHT_SMALL 800
 
+#define CONSTANT_FPS_VALUE 30
+
 
 unsigned int pictureWidth=PICTURE_WIDTH_BIG, pictureHeight=PICTURE_HEIGHT_BIG;
 static int window;
@@ -23,7 +26,9 @@ static int window;
 static bool isFullScreen=false;
 static bool useAllScreen=false;
 
-static ScreensaverAutomat screensaver;
+static ScreensaverAutomat *screensaver;
+
+static ConstantFps constFps(CONSTANT_FPS_VALUE);
 
 #define ESCAPE 27
 static void keyPressed(unsigned char key, int x, int y) 
@@ -41,13 +46,15 @@ unsigned int* output=0;
 void display()
 {
     //output=fractalRandom();
-    output=screensaver.nextFrame();
+    output=screensaver->nextFrame();
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	glDrawPixels(pictureWidth, pictureHeight, GL_RGBA, GL_UNSIGNED_BYTE, output);
 	
-	glutSwapBuffers();	    
+	glutSwapBuffers();	  
+	
+	constFps.step();
 }
 
 static void resizeGLScene(int Width,int Height)
@@ -88,7 +95,7 @@ int main( int argc, char **argv )
 				
 				if(argc>=3)
 				{
-				    numberOfPreviews = stoi(string(argv[2]));    
+				    //numberOfPreviews = stoi(string(argv[2]));    
 				}
 				
 				fractalPreview(numberOfPreviews);
@@ -165,6 +172,7 @@ int main( int argc, char **argv )
 		}
 	
 		//fractalInit(pictureWidth,pictureHeight);
+		screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
 		
 		//====================================================================
 		//====================================================================

@@ -7,7 +7,7 @@ COMMAND=g++ -std=c++11 -O3 -fopenmp -mstackrealign \
 		-mfpmath=sse -msse -msse2 -msse3 \
 		-Wl,-s -Wall \
 		-I. -I$(MYLIB) -I$(EXTERNAL)/include -I$(EXTERNAL)/vectorclass -I$(EXTERNAL)/inc \
-		./main.cpp ./flame_fractal.cpp  \
+		./main.cpp ./flame_fractal.cpp $(MYLIB)/small_utils.cpp ./init_functions.cpp ./Variation.cpp \
 		-o C:\files\programs\flame_fractal.exe \
 		-L$(EXTERNAL)/lib -lfreeglut -lopengl32 -lglu32 -lgdi32
 
