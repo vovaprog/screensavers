@@ -8,6 +8,7 @@
 using namespace std;
 
 #include "flame_fractal.h"
+#include "ScreensaverAutomat.h"
 
 #define PICTURE_WIDTH_BIG 1024
 #define PICTURE_HEIGHT_BIG 768
@@ -22,6 +23,7 @@ static int window;
 static bool isFullScreen=false;
 static bool useAllScreen=false;
 
+static ScreensaverAutomat screensaver;
 
 #define ESCAPE 27
 static void keyPressed(unsigned char key, int x, int y) 
@@ -38,7 +40,8 @@ unsigned int* output=0;
 
 void display()
 {
-    output=fractalRandom();        
+    //output=fractalRandom();
+    output=screensaver.nextFrame();
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	
@@ -161,7 +164,7 @@ int main( int argc, char **argv )
 			pictureHeight=PICTURE_HEIGHT_SMALL;
 		}
 	
-		fractalInit(pictureWidth,pictureHeight);
+		//fractalInit(pictureWidth,pictureHeight);
 		
 		//====================================================================
 		//====================================================================
