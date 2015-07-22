@@ -1,6 +1,5 @@
 #pragma once
 
-bool directoryExists(const char *path);
+bool directoryExists(const char *dirName);
 
 void createDirectory(const char *dirName);
-

@@ -17,19 +17,20 @@ using namespace std;
 #include "init_functions.h"
 #include "filesystem_utils.h"
 
-static unsigned int *output;
-static int pictureWidth,pictureHeight;
-static int outputSize;
+static unsigned int *output=nullptr;
+static unsigned int *saveOutput=nullptr;
+static Point *points=nullptr;
+unsigned int *hist=nullptr;
 
 static vector<Function*> functions;
+
+static int pictureWidth,pictureHeight;
+static int outputSize;
 
 static int totalProbabilityWeight;
 
 static int numberOfIterations=3000000;
 
-static Point *points;
-
-unsigned int *hist=nullptr;
 unsigned int histSize=0;
 
 
@@ -43,8 +44,35 @@ static void destroyFunctions()
     functions.clear();
 }
 
+void fractalDestroy()
+{
+	if(output!=nullptr)
+	{
+		delete[] output;
+		output=nullptr;
+	}
+	if(points!=nullptr)
+	{
+		delete[] points;
+		points=nullptr;
+	}
+	if(hist!=nullptr)
+	{
+		delete[] hist;
+		hist=nullptr;
+	}
+	if(saveOutput!=nullptr)
+	{
+		delete[] saveOutput;
+		saveOutput=nullptr;
+	}
+}
+
 void fractalInit(int argPictureWidth, int argPictureHeight)
 {	
+	fractalDestroy();
+	destroyFunctions();
+	
     pictureWidth=argPictureWidth;
     pictureHeight=argPictureHeight;    
     outputSize=pictureWidth*pictureHeight;
@@ -54,6 +82,8 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
     
     srand(time(NULL));    
 }
+
+
 
 static void convertScreenToMath(double &x, double &y)
 {
@@ -307,9 +337,9 @@ static bool calculateFractal()
     return createOutput();
 }
 
-static unsigned int *saveOutput=nullptr;
 
-static void saveImage(const char *fileName)
+
+static void saveImage(const char *fileName,const char *fileType)
 {
 	if(saveOutput==nullptr)
 	{
@@ -323,12 +353,18 @@ static void saveImage(const char *fileName)
 	
 	FIBITMAP* Image = FreeImage_ConvertFromRawBits((BYTE*)saveOutput, pictureWidth, pictureHeight, pictureWidth * sizeof(unsigned int), 32, 
 		0xFF0000, 0x00FF00, 0x0000FF, false); 
-	FreeImage_Save(FIF_BMP, Image, fileName, 0);
+	
+	if(strcmp(fileType,"png")==0)
+	{
+		FreeImage_Save(FIF_PNG, Image, fileName, 0);
+	}
+	else
+	{
+		FreeImage_Save(FIF_BMP, Image, fileName, 0);
+	}
 	
 	FreeImage_Unload(Image);
 }
-
-
 
 void fractalPreview(int numberOfPreviews)
 {
@@ -354,8 +390,8 @@ void fractalPreview(int numberOfPreviews)
 		{
             string fileName=dirName+"/fractal_"+to_string(i)+".xml";            
             saveFunctions(fileName.c_str(),functions);
-            fileName=dirName + "/fractal_"+to_string(i)+".bmp";
-            saveImage(fileName.c_str());		    
+            fileName=dirName + "/fractal_"+to_string(i)+".png";
+            saveImage(fileName.c_str(),"png");		    
 		}
 		else
 		{
@@ -376,16 +412,26 @@ void fractalRender(const char *fileName)
 	string outputFileName(fileName);
 	outputFileName += "_render.bmp";
 	
-	saveImage(outputFileName.c_str());
+	saveImage(outputFileName.c_str(),"bmp");
 }
 
-unsigned int* fractalStep()
+unsigned int* fractalRandom()
 {
-    destroyFunctions();
-    //initFunctionsRandom(functions,totalProbabilityWeight);
-    loadFunctions("./fractals/fractal.xml",functions,totalProbabilityWeight);
-    
-    calculateFractal();
-    //saveImage();
-    return output;
+	destroyFunctions();
+	initFunctionsRandom(functions,totalProbabilityWeight);
+	
+	for(int i=0;i<50;i++)
+	{
+		if(calculateFractal())
+		{
+			break;
+		}
+		else
+		{
+			initFunctionsRandom(functions,totalProbabilityWeight);
+		}
+	}
+	
+	return output;
 }
+

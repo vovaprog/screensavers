@@ -38,10 +38,7 @@ unsigned int* output=0;
 
 void display()
 {
-    if(output==0)
-    {
-        output=fractalStep();        
-    }
+    output=fractalRandom();        
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	
@@ -63,10 +60,19 @@ static void resizeGLScene(int Width,int Height)
 	}
 }
 
+const char *USAGE="USAGE:\r\n"
+"generate previews of random fractals:\r\n"
+"fractal_flame preview number_of_previews\r\n"
+"\r\n"
+"render fractal image (xml_file_name generated with preview command):\r\n"
+"fractal_flame render xml_file_name\r\n"
+"\r\n"
+"screensaver mode - show random fractals:\r\n"
+"fractal_flame screensaver\r\n";
+
 int main( int argc, char **argv )
 {
-	try{
-		
+	try{		
 		if(argc>1)
 		{
 			if(strcmp(argv[1],"preview")==0)
@@ -97,13 +103,14 @@ int main( int argc, char **argv )
 				}
 				else
 				{
+					cout <<USAGE;
 					return -1;	
 				}
 			}
 		}
 		else
 		{
-			return -1;	
+			cout <<USAGE;
 		}
 		
 		

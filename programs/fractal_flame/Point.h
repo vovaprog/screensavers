@@ -6,6 +6,4 @@ public:
     unsigned int count;
     
     Point():r(0),g(0),b(0),count(0){}
-    
-    
 };
