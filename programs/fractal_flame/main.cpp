@@ -9,7 +9,8 @@ using namespace std;
 
 #include "ConstantFps.h"
 #include "flame_fractal.h"
-#include "ScreensaverAutomat.h"
+//#include "ScreensaverAutomat.h"
+#include "ScreensaverAutomatMt.h"
 
 #define PICTURE_WIDTH_BIG 1024
 #define PICTURE_HEIGHT_BIG 768
@@ -26,7 +27,7 @@ static int window;
 static bool isFullScreen=false;
 static bool useAllScreen=false;
 
-static ScreensaverAutomat *screensaver;
+static ScreensaverAutomatMt *screensaver;
 
 static ConstantFps constFps(CONSTANT_FPS_VALUE);
 
@@ -172,7 +173,8 @@ int main( int argc, char **argv )
 		}
 	
 		//fractalInit(pictureWidth,pictureHeight);
-		screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
+		//screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
+		screensaver=new ScreensaverAutomatMt(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
 		
 		//====================================================================
 		//====================================================================

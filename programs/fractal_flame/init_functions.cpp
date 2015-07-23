@@ -38,7 +38,7 @@ static inline double getRandomValue(double start, double end)
 
 
 void saveFunctions(const char *fileName,vector<Function*> &functions)
-{
+{    
 	TiXmlDocument doc;
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
 	doc.LinkEndChild( decl );
@@ -91,7 +91,7 @@ void saveFunctions(const char *fileName,vector<Function*> &functions)
 		xformElement->SetAttribute("post",post);				
 	}
 	
-	doc.SaveFile( fileName );    	
+	doc.SaveFile( fileName );    
 }
 
 void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeight)
@@ -215,6 +215,6 @@ void loadFunctions(const char *fileName,vector<Function*> &functions, int &total
 		xformElem=xformElem->NextSiblingElement();
 	}
 	
-	initFunctionProbabilities(functions,totalProbabilityWeight);
+	initFunctionProbabilities(functions,totalProbabilityWeight);	
 }
 

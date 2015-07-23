@@ -340,7 +340,7 @@ static bool calculateFractal()
 
 
 static void saveImage(const char *fileName,const char *fileType)
-{
+{ 
 	if(saveOutput==nullptr)
 	{
 		saveOutput=new unsigned int[outputSize];	
@@ -367,7 +367,7 @@ static void saveImage(const char *fileName,const char *fileType)
 }
 
 void fractalPreview(int numberOfPreviews)
-{
+{    
 	string dirName;
 	
 	for(int i=0;i<500;i++)
@@ -397,7 +397,7 @@ void fractalPreview(int numberOfPreviews)
 		{
 		    i-=1;    
 		}		
-	}	
+	}		
 }
 
 void fractalRender(const char *fileName)
