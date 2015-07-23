@@ -5,12 +5,14 @@
 
 #include <GL/freeglut.h>
 
-using namespace std;
+#include <Semaphore.h>
 
 #include "ConstantFps.h"
 #include "flame_fractal.h"
 //#include "ScreensaverAutomat.h"
 #include "ScreensaverAutomatMt.h"
+
+using namespace std;
 
 #define PICTURE_WIDTH_BIG 1024
 #define PICTURE_HEIGHT_BIG 768
@@ -27,6 +29,7 @@ static int window;
 static bool isFullScreen=false;
 static bool useAllScreen=false;
 
+//static ScreensaverAutomat *screensaver;
 static ScreensaverAutomatMt *screensaver;
 
 static ConstantFps constFps(CONSTANT_FPS_VALUE);

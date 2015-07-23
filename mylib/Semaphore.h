@@ -1,13 +1,13 @@
 #pragma once
 
-#include <condition_variable>
 #include <mutex>
+#include <condition_variable>
 
 class Semaphore{
 private:    
     std::mutex mtx;
     std::condition_variable cv;
-    std::atomic<int> counter;
+    int counter;
 public:
     Semaphore()
     {
@@ -27,7 +27,7 @@ public:
     {
         std::unique_lock<std::mutex> lock(mtx);
         
-        while(counter.load()<=0)
+        while(counter<=0)
         {
             cv.wait(lock);
         }

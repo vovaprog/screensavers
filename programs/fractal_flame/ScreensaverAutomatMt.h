@@ -52,6 +52,8 @@ public:
 private:    
     unsigned int* handleFirst()
     {
+        cout <<"first"<<endl;
+        
         output0=new unsigned int[outputSize];
         output1=new unsigned int[outputSize];
         outputBlend=new unsigned int[outputSize];
@@ -62,9 +64,14 @@ private:
                 
         threadController.beginCalculateFractal();
         unsigned int *p = threadController.getResult();
+        cout <<"q1: "<<(unsigned int)p<<endl<<flush;
+        cout <<"q11"<<(int)p<<endl<<flush;
         memcpy(output0,p,sizeof(unsigned int) * outputSize);
+        cout <<"q2"<<endl<<flush;
         
         threadController.beginCalculateFractal();
+        
+        cout <<"q3"<<endl<<flush;
         
         state=AutomatState::SHOW_IDLE;        
         return output0;
@@ -82,6 +89,8 @@ private:
     
     unsigned int* handleShowIdle()
     {
+        cout <<"idle"<<endl<<flush;
+        
         unsigned int millisPassed = getMilliseconds() - startMillis;
         
         if(millisPassed>=SHOW_MILLIS)
@@ -98,6 +107,8 @@ private:
     
     unsigned int* handleTransitStart()
     {
+        cout <<"transit start"<<endl<<flush;
+        
         startMillis=getMilliseconds();
         
          
@@ -122,6 +133,8 @@ private:
     
     unsigned int* handleTransitProcess()
     {
+        cout <<"transit process"<<endl<<flush;
+        
         unsigned int millisPassed = getMilliseconds() - startMillis;
         
         if(millisPassed >= TRANSIT_MILLIS)

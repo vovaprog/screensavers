@@ -432,6 +432,8 @@ unsigned int* fractalRandom()
 		}
 	}
 	
+	cout <<"output 1:"<<(unsigned int)output<<endl<<flush;
+	
 	return output;
 }
 

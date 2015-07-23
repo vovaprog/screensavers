@@ -1,46 +1,52 @@
 #pragma once
 
 #include <thread>
+#include <atomic>
 
 #include "Semaphore.h"
 
 using namespace std;
 
+void fractalThreadEntry();
+
 class FractalThreadController{
 private:
     thread *t=nullptr;
-    Semaphore semResult, semStartWork;
-    atomic<bool> stopThreadFlag=false;
-    unsigned int *output;
+    
+    //atomic<bool> stopThreadFlag;
+    
 public:
-    void beginCalculateFractal()
+    FractalThreadController()
     {
-        if(t==nullptr)
-        {
-            t=new thread(&FractalThreadController::threadEntry,*this);
-        }
-        
-        semStartWork.increment();
+        //stopThreadFlag.store(false);   
+        //output=0;
     }
     
-    unsigned int* getResult()
-    {
-        semResult.wait();
-        
-        return output;
-    }
+    void beginCalculateFractal();
     
-private:
+    unsigned int* getResult();
+    
+/*private:
     
     void threadEntry()
     {
-        while(!stopThreadFlag.load())
+        cout <<"threadEntry"<<endl;
+        
+        while(!stopThreadFlag.load() true)
         {
-            semStartWork.wait();
+            cout <<"threadEntry while"<<endl;
+            
+            semStartWork->wait();
+            
+            cout <<"te 2"<<endl<<flush;
             
             output = fractalRandom();
+            cout <<"output 2"
+            cout <<"te 3"<<endl<<flush;
             
-            semResult.increment();
+            semResult->increment();
+            
+            cout <<"te 4"<<endl<<flush;
         }        
-    }    
+    }*/    
 };
