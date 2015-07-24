@@ -146,7 +146,7 @@ static inline int outputIndex(int screenX,int screenY)
     return screenY * pictureWidth + screenX;    
 }
 
-static void plot(double mathX, double mathY, Function *pFun)
+static CalculateFractalResult plot(double mathX, double mathY, Function *pFun,int currentIteration)
 {
     int screenX,screenY;
     
@@ -154,11 +154,20 @@ static void plot(double mathX, double mathY, Function *pFun)
     {    
         int i = outputIndex(screenX,screenY);
         
+        if(currentIteration > numberOfIterations / 4 &&
+            points[i].count > currentIteration / 2)
+        {
+            cout <<"early rec BAD_PICTURE!"<<endl;
+            return CalculateFractalResult::BAD_PICTURE;    
+        }
+        
         points[i].count += 1;    
         points[i].r = (points[i].r + pFun->r) / 2;
         points[i].g = (points[i].g + pFun->g) / 2;
         points[i].b = (points[i].b + pFun->b) / 2;
     }
+    
+    return CalculateFractalResult::SUCCESS;
 }
 
 static void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
@@ -346,7 +355,10 @@ static CalculateFractalResult calculateFractal()
         
         if(i>20)
         {
-            plot(x,y,pFun);    
+            if(plot(x,y,pFun,i)==CalculateFractalResult::BAD_PICTURE)
+            {
+                return CalculateFractalResult::BAD_PICTURE;   
+            }
         }        
         
         if((i & 0xff)==0)
