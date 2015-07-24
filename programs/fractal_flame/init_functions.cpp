@@ -130,9 +130,13 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
         }
         
         
-        pFun->r = 200 + rand() % 56; 
+        /*pFun->r = 200 + rand() % 56; 
         pFun->g = 200 + rand() % 56;
-        pFun->b = 200 + rand() % 56;        
+        pFun->b = 200 + rand() % 56;*/
+        
+        pFun->r = 150 + rand() % 106; 
+        pFun->g = 150 + rand() % 106;
+        pFun->b = 150 + rand() % 106;        
                
         
         const double KDEV = 0.2;        
@@ -207,9 +211,9 @@ void loadFunctions(const char *fileName,vector<Function*> &functions, int &total
 		if(xformElem->Attribute("bent")) pFun->variations.push_back(variationBent);
 		if(xformElem->Attribute("mirror")) pFun->variations.push_back(variationMirror);
 
-        pFun->r = 200 + rand() % 56; 
-        pFun->g = 200 + rand() % 56;
-        pFun->b = 200 + rand() % 56;        
+        pFun->r = 150 + rand() % 106; 
+        pFun->g = 150 + rand() % 106;
+        pFun->b = 150 + rand() % 106;        
 		
 		
 		xformElem=xformElem->NextSiblingElement();

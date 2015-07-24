@@ -32,7 +32,7 @@ static int outputSize;
 
 static int totalProbabilityWeight;
 
-static int numberOfIterations=10000000;
+static unsigned int numberOfIterations=30000000;
 
 static unsigned int histSize=0;
 
@@ -146,7 +146,7 @@ static inline int outputIndex(int screenX,int screenY)
     return screenY * pictureWidth + screenX;    
 }
 
-static CalculateFractalResult plot(double mathX, double mathY, Function *pFun,int currentIteration)
+static CalculateFractalResult plot(double mathX, double mathY, Function *pFun,unsigned int currentIteration)
 {
     int screenX,screenY;
     
@@ -154,7 +154,7 @@ static CalculateFractalResult plot(double mathX, double mathY, Function *pFun,in
     {    
         int i = outputIndex(screenX,screenY);
         
-        if(currentIteration > numberOfIterations / 4 &&
+        if(currentIteration > numberOfIterations / 8 &&
             points[i].count > currentIteration / 2)
         {
             cout <<"early rec BAD_PICTURE!"<<endl;
@@ -197,7 +197,12 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
 {        
     unsigned int counterRange=maxCounter-minCounter;
     
-    unsigned int l = (unsigned int)log10(counterRange) - 1;
+    int l = (int)log10(counterRange) - 1;
+    
+    if(l<1)
+    {
+        return 0;
+    }
     
     cout <<"counterRange: "<<counterRange<<endl;
     cout <<"log10: "<<l<<endl;
@@ -206,7 +211,7 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
     
     cout << "HIST_BINS: "<<HIST_BINS<<endl;
     
-    if(counterRange < HIST_BINS)
+    if(counterRange < HIST_BINS || HIST_BINS<2)
     {
         return 0;
     }
@@ -268,7 +273,7 @@ static CalculateFractalResult createOutput()
     double maxCounterDivAll = (double)maxCounter / (double)numberOfIterations;
     cout <<"maxCounterToAll: "<<maxCounterDivAll<<endl;
     
-    if(maxCounter==0 || maxCounter<=minCounter+5 || maxCounterDivAll>=0.5)
+    if(maxCounter==0 || maxCounter<=minCounter+10 || maxCounterDivAll>=0.5)
     {
     	cout <<"bad picture!"<<endl;
     	memset(output,0,outputSize * sizeof(unsigned int));
@@ -347,7 +352,7 @@ static CalculateFractalResult calculateFractal()
     
     getInitialPoint(x,y);
     
-    for(int i=0;i<numberOfIterations;i++)
+    for(unsigned int i=0;i<numberOfIterations;i++)
     {
         Function* pFun=getRandomFunction();
                 
