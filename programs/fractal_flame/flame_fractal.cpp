@@ -29,7 +29,7 @@ static int outputSize;
 
 static int totalProbabilityWeight;
 
-static int numberOfIterations=1000000;
+static int numberOfIterations=10000000;
 
 unsigned int histSize=0;
 
@@ -84,23 +84,31 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
 }
 
 
-
 static void convertScreenToMath(double &x, double &y)
 {
     x = -1.0 + (x / (pictureWidth/2.0));
     y = -1.0 + (y / (pictureHeight/2.0));
 }
 
-static void convertMathToScreen(double x, double y,int &xOut,int &yOut)
+static bool convertMathToScreen(double x, double y,int &xOut,int &yOut)
 {
     xOut = (int)(((x+1.0)/2.0) * pictureWidth);
     yOut = (int)(((y+1.0)/2.0) * pictureHeight);
     
+    if(xOut<0 || yOut<0 || xOut>=pictureWidth || yOut>=pictureHeight)
+    {
+        return false;
+    }
+    else
+    {
+        return true;
+    }
+/*    
     if(xOut>=pictureWidth) xOut=pictureWidth-1;
     else if(xOut<0) xOut=0;
     
     if(yOut>=pictureHeight) yOut=pictureHeight-1;
-    else if(yOut<0) yOut=0;
+    else if(yOut<0) yOut=0;*/
 }
 
 static void getInitialPoint(double &x, double &y)
@@ -135,14 +143,15 @@ static void plot(double mathX, double mathY, Function *pFun)
 {
     int screenX,screenY;
     
-    convertMathToScreen(mathX,mathY,screenX,screenY);
-    
-    int i = outputIndex(screenX,screenY);
-    
-    points[i].count += 1;    
-    points[i].r = (points[i].r + pFun->r) / 2;
-    points[i].g = (points[i].g + pFun->g) / 2;
-    points[i].b = (points[i].b + pFun->b) / 2;
+    if(convertMathToScreen(mathX,mathY,screenX,screenY))
+    {    
+        int i = outputIndex(screenX,screenY);
+        
+        points[i].count += 1;    
+        points[i].r = (points[i].r + pFun->r) / 2;
+        points[i].g = (points[i].g + pFun->g) / 2;
+        points[i].b = (points[i].b + pFun->b) / 2;
+    }
 }
 
 static void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
@@ -243,7 +252,7 @@ static bool createOutput()
     double maxCounterDivAll = (double)maxCounter / (double)numberOfIterations;
     cout <<"maxCounterToAll: "<<maxCounterDivAll<<endl;
     
-    if(maxCounterDivAll>=0.5)
+    if(maxCounter==0 || maxCounter<=minCounter+5 || maxCounterDivAll>=0.5)
     {
     	cout <<"bad picture!"<<endl;
     	memset(output,0,outputSize * sizeof(unsigned int));
@@ -432,8 +441,11 @@ unsigned int* fractalRandom()
 		}
 	}
 	
-	cout <<"output 1:"<<(unsigned int)output<<endl<<flush;
-	
 	return output;
+}
+
+void setNumberOfIterations(int argNumberOfIterations)
+{
+    numberOfIterations = argNumberOfIterations;   
 }
 

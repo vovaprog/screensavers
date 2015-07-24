@@ -3,7 +3,7 @@
 #include <small_utils.h>
 #include "FractalThreadController.h"
 
-enum class AutomatState{ FIRST,/*CALC_NEXT_FRACTAL,*/SHOW_IDLE,TRANSIT_START,TRANSIT_PROCESS };
+enum class AutomatState{ FIRST,SHOW_IDLE,TRANSIT_START,TRANSIT_PROCESS };
 
 class ScreensaverAutomatMt{
 private:
@@ -36,8 +36,6 @@ public:
         switch(state){
         case AutomatState::FIRST:
             return handleFirst();
-        /*case AutomatState::CALC_NEXT_FRACTAL:
-            return handleCalcNextFractal();*/
         case AutomatState::SHOW_IDLE:
             return handleShowIdle();
         case AutomatState::TRANSIT_START:
@@ -51,9 +49,7 @@ public:
     
 private:    
     unsigned int* handleFirst()
-    {
-        cout <<"first"<<endl;
-        
+    {        
         output0=new unsigned int[outputSize];
         output1=new unsigned int[outputSize];
         outputBlend=new unsigned int[outputSize];
@@ -64,33 +60,17 @@ private:
                 
         threadController.beginCalculateFractal();
         unsigned int *p = threadController.getResult();
-        cout <<"q1: "<<(unsigned int)p<<endl<<flush;
-        cout <<"q11"<<(int)p<<endl<<flush;
         memcpy(output0,p,sizeof(unsigned int) * outputSize);
-        cout <<"q2"<<endl<<flush;
         
         threadController.beginCalculateFractal();
-        
-        cout <<"q3"<<endl<<flush;
-        
+                
         state=AutomatState::SHOW_IDLE;        
         return output0;
     }
-    
-    /*unsigned int* handleCalcNextFractal()
-    {
-        unsigned int *outputOriginal = fractalRandom();
         
-        memcpy(output1,outputOriginal,sizeof(unsigned int) * outputSize);
-        
-        state=AutomatState::SHOW_IDLE;
-        return output0;
-    }*/
     
     unsigned int* handleShowIdle()
-    {
-        cout <<"idle"<<endl<<flush;
-        
+    {        
         unsigned int millisPassed = getMilliseconds() - startMillis;
         
         if(millisPassed>=SHOW_MILLIS)
@@ -106,35 +86,24 @@ private:
     }       
     
     unsigned int* handleTransitStart()
-    {
-        cout <<"transit start"<<endl<<flush;
-        
-        startMillis=getMilliseconds();
-        
-         
+    {         
         unsigned int *p = threadController.getResult();
         memcpy(output1,p,sizeof(unsigned int) * outputSize);        
         threadController.beginCalculateFractal();
         
-        
-        
         double blendD=1.0 / ((TRANSIT_MILLIS / 1000.0) * fps);
         blendKoef=1.0-blendD;
         
-        
-        cout << "1 blendKoef: " <<blendKoef<<"   blendD: "<<blendD<<endl<<flush;
-        
         blend(output0,output1,outputBlend,blendKoef);
      
-        state=AutomatState::TRANSIT_PROCESS;
+        startMillis=getMilliseconds();
         
+        state=AutomatState::TRANSIT_PROCESS;        
         return outputBlend;        
     }
     
     unsigned int* handleTransitProcess()
-    {
-        cout <<"transit process"<<endl<<flush;
-        
+    {        
         unsigned int millisPassed = getMilliseconds() - startMillis;
         
         if(millisPassed >= TRANSIT_MILLIS)

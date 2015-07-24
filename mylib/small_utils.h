@@ -12,17 +12,17 @@ unsigned int getMilliseconds();
 
 inline unsigned int GetRed(unsigned int x)
 {
-    return (((x) & RED_MASK) >> RED_SHIFT);
+    return ((x & RED_MASK) >> RED_SHIFT);
 }
 
 inline unsigned int GetGreen(unsigned int x)
 {
-    return (((x) & GREEN_MASK) >> GREEN_SHIFT);
+    return ((x & GREEN_MASK) >> GREEN_SHIFT);
 }
 
 inline unsigned int GetBlue(unsigned int x)
 {
-    return (((x) & BLUE_MASK) >> BLUE_SHIFT);
+    return ((x & BLUE_MASK) >> BLUE_SHIFT);
 }
 
 inline unsigned int CreateColor(unsigned int r,unsigned int g,unsigned int b)

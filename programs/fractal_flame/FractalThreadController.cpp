@@ -1,32 +1,39 @@
 #include <iostream>
 
+#include <small_utils.h>
 #include "FractalThreadController.h"
 #include "flame_fractal.h"
 
 using namespace std;
 
-Semaphore *semResult, *semStartWork;
-static unsigned int *output;
+#define FIRST_NUMBER_OF_ITERATIONS 1000000
+#define DEFAULT_NUMBER_OF_ITERATIONS 5000000
 
-void fractalThreadEntry()
-{
-    cout <<"threadEntry"<<endl;
+void FractalThreadController::fractalThreadEntry()
+{    
+    bool firstTime=true;
     
-    while(/*!stopThreadFlag.load()*/ true)
-    {
-        cout <<"threadEntry while"<<endl;
+    while(true)
+    {       
+        semStartWork.wait();
+    
+        if(firstTime)
+        {
+            firstTime=false;
+            setNumberOfIterations(FIRST_NUMBER_OF_ITERATIONS);
+        }
+        else
+        {
+            setNumberOfIterations(DEFAULT_NUMBER_OF_ITERATIONS);
+        }
         
-        semStartWork->wait();
-        
-        cout <<"te 2"<<endl<<flush;
+        unsigned int startMillis=getMilliseconds();
         
         output = fractalRandom();
-        //cout <<"output 2"<<output
-        cout <<"te 3"<<endl<<flush;
         
-        semResult->increment();
+        cout <<"calculate time: "<<(getMilliseconds() - startMillis)<< endl<<flush;
         
-        cout <<"te 4"<<endl<<flush;
+        semResult.increment();       
     }        
 }    
 
@@ -34,21 +41,15 @@ void FractalThreadController::beginCalculateFractal()
 {
     if(t==nullptr)
     {
-        semResult=new Semaphore();
-        semStartWork=new Semaphore();
-        t=new thread(fractalThreadEntry);
+        t=new thread(&FractalThreadController::fractalThreadEntry,this);
     }
             
-    semStartWork->increment();
+    semStartWork.increment();
 }
 
 unsigned int* FractalThreadController::getResult()
-{
-    cout <<"get result 1"<<endl<<flush;
-    
-    semResult->wait();
-    
-    cout <<"get result 2"<<endl<<flush;
+{    
+    semResult.wait();
     
     return output;
 }

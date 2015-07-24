@@ -1,5 +1,3 @@
-//#include <math.h>
-//#include <vector>
 #include <iostream>
 #include <string.h>
 
@@ -9,7 +7,6 @@
 
 #include "ConstantFps.h"
 #include "flame_fractal.h"
-//#include "ScreensaverAutomat.h"
 #include "ScreensaverAutomatMt.h"
 
 using namespace std;
@@ -29,7 +26,6 @@ static int window;
 static bool isFullScreen=false;
 static bool useAllScreen=false;
 
-//static ScreensaverAutomat *screensaver;
 static ScreensaverAutomatMt *screensaver;
 
 static ConstantFps constFps(CONSTANT_FPS_VALUE);
@@ -49,7 +45,6 @@ unsigned int* output=0;
 
 void display()
 {
-    //output=fractalRandom();
     output=screensaver->nextFrame();
 
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -99,7 +94,7 @@ int main( int argc, char **argv )
 				
 				if(argc>=3)
 				{
-				    //numberOfPreviews = stoi(string(argv[2]));    
+				    numberOfPreviews = stoi(string(argv[2]));    
 				}
 				
 				fractalPreview(numberOfPreviews);
@@ -175,8 +170,6 @@ int main( int argc, char **argv )
 			pictureHeight=PICTURE_HEIGHT_SMALL;
 		}
 	
-		//fractalInit(pictureWidth,pictureHeight);
-		//screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
 		screensaver=new ScreensaverAutomatMt(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
 		
 		//====================================================================
