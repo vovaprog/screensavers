@@ -34,7 +34,9 @@ static ConstantFps constFps(CONSTANT_FPS_VALUE);
 static void keyPressed(unsigned char key, int x, int y) 
 {	
 	if(key==ESCAPE) 
-	{ 			
+	{
+	    delete screensaver;
+	    
 		glutDestroyWindow(window); 			
 
 		glutLeaveMainLoop();

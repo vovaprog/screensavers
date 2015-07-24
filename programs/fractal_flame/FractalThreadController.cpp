@@ -9,24 +9,48 @@ using namespace std;
 #define FIRST_NUMBER_OF_ITERATIONS 1000000
 #define DEFAULT_NUMBER_OF_ITERATIONS 5000000
 
+FractalThreadController::FractalThreadController()
+{
+    threadStopFlag.store(false);    
+}
+
+FractalThreadController::~FractalThreadController()
+{
+    if(t!=nullptr)
+    {        
+        threadStopFlag.store(true);
+        fractalSetStopFlag();
+        t->join();
+        t=nullptr;
+    }
+}
+
 void FractalThreadController::fractalThreadEntry()
 {    
     bool firstTime=true;
     
-    while(true)
+    while(!threadStopFlag.load())
     {       
         semStartWork.wait();
     
+        if(threadStopFlag.load())
+        {
+            return;    
+        }
+        
+        
+        
         if(firstTime)
         {
             firstTime=false;
-            setNumberOfIterations(FIRST_NUMBER_OF_ITERATIONS);
+            fractalSetNumberOfIterations(FIRST_NUMBER_OF_ITERATIONS);
         }
         else
         {
-            setNumberOfIterations(DEFAULT_NUMBER_OF_ITERATIONS);
+            fractalSetNumberOfIterations(DEFAULT_NUMBER_OF_ITERATIONS);
         }
         
+                        
         unsigned int startMillis=getMilliseconds();
         
         output = fractalRandom();

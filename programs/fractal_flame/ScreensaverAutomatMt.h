@@ -31,6 +31,22 @@ public:
         this->fps=fps;
     }
     
+    ~ScreensaverAutomatMt()
+    {
+        if(output0!=nullptr)
+        {
+            delete[] output0;    
+        }
+        if(output1!=nullptr)
+        {
+            delete[] output1;    
+        }
+        if(outputBlend!=nullptr)
+        {
+            delete[] outputBlend;    
+        }
+    }
+    
     unsigned int* nextFrame()
     {
         switch(state){
@@ -60,7 +76,14 @@ private:
                 
         threadController.beginCalculateFractal();
         unsigned int *p = threadController.getResult();
-        memcpy(output0,p,sizeof(unsigned int) * outputSize);
+        if(p!=nullptr)
+        {
+            memcpy(output0,p,sizeof(unsigned int) * outputSize);
+        }
+        else
+        {
+            memset(output0,0,sizeof(unsigned int) * outputSize);    
+        }
         
         threadController.beginCalculateFractal();
                 
@@ -88,7 +111,15 @@ private:
     unsigned int* handleTransitStart()
     {         
         unsigned int *p = threadController.getResult();
-        memcpy(output1,p,sizeof(unsigned int) * outputSize);        
+        if(p!=nullptr)
+        {
+            memcpy(output1,p,sizeof(unsigned int) * outputSize);
+        }
+        else
+        {
+            memset(output1,0,sizeof(unsigned int) * outputSize);    
+        }
+        
         threadController.beginCalculateFractal();
         
         double blendD=1.0 / ((TRANSIT_MILLIS / 1000.0) * fps);

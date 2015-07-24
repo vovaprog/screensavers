@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
+#include <atomic>
 
 #include <FreeImage.h>
 
@@ -16,6 +17,8 @@ using namespace std;
 #include "Point.h"
 #include "init_functions.h"
 #include "filesystem_utils.h"
+
+enum class CalculateFractalResult { SUCCESS, BAD_PICTURE, STOP_FLAG };
 
 static unsigned int *output=nullptr;
 static unsigned int *saveOutput=nullptr;
@@ -31,7 +34,9 @@ static int totalProbabilityWeight;
 
 static int numberOfIterations=10000000;
 
-unsigned int histSize=0;
+static unsigned int histSize=0;
+
+static atomic<bool> stopFlag;
 
 
 static void destroyFunctions()
@@ -81,6 +86,8 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
     points=new Point[outputSize];
     
     srand(time(NULL));    
+    
+    stopFlag.store(false);
 }
 
 
@@ -242,7 +249,7 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
     return 0;
 }
 
-static bool createOutput()
+static CalculateFractalResult createOutput()
 {
     unsigned int maxCounter, minCounter;
     findMinMaxOutput(minCounter, maxCounter);
@@ -256,7 +263,7 @@ static bool createOutput()
     {
     	cout <<"bad picture!"<<endl;
     	memset(output,0,outputSize * sizeof(unsigned int));
-    	return false;
+    	return CalculateFractalResult::BAD_PICTURE;
     }
     
     
@@ -286,7 +293,7 @@ static bool createOutput()
         output[i] = (0xff000000 | (points[i].b << 16) | (points[i].g <<8) | points[i].r);
     }
     
-    return true;
+    return CalculateFractalResult::SUCCESS;
 }
 
 static void applyFunction(Function *pFun, double &x, double &y)
@@ -321,7 +328,9 @@ static void cleanBuffers()
     }
 }
 
-static bool calculateFractal()
+
+
+static CalculateFractalResult calculateFractal()
 {
     double x, y;
         
@@ -329,18 +338,24 @@ static bool calculateFractal()
     
     getInitialPoint(x,y);
     
-    int noPlotCounter=0;
-    
     for(int i=0;i<numberOfIterations;i++)
     {
         Function* pFun=getRandomFunction();
                 
         applyFunction(pFun, x, y);        
         
-        if(++noPlotCounter>20)
+        if(i>20)
         {
             plot(x,y,pFun);    
         }        
+        
+        if((i & 0xff)==0)
+        {
+            if(stopFlag.load())
+            {
+                return CalculateFractalResult::STOP_FLAG;   
+            }
+        }
     }
     
     return createOutput();
@@ -395,7 +410,7 @@ void fractalPreview(int numberOfPreviews)
 		destroyFunctions();
 		initFunctionsRandom(functions,totalProbabilityWeight);
 		
-		if(calculateFractal())
+		if(calculateFractal()==CalculateFractalResult::SUCCESS)
 		{
             string fileName=dirName+"/fractal_"+to_string(i)+".xml";            
             saveFunctions(fileName.c_str(),functions);
@@ -431,21 +446,32 @@ unsigned int* fractalRandom()
 	
 	for(int i=0;i<50;i++)
 	{
-		if(calculateFractal())
+	    CalculateFractalResult result=calculateFractal();
+	    
+		if(result==CalculateFractalResult::SUCCESS)
 		{
 			break;
 		}
-		else
+		else if(result==CalculateFractalResult::BAD_PICTURE)
 		{
 			initFunctionsRandom(functions,totalProbabilityWeight);
+		}
+		else if(result==CalculateFractalResult::STOP_FLAG)
+		{
+		    return nullptr;    
 		}
 	}
 	
 	return output;
 }
 
-void setNumberOfIterations(int argNumberOfIterations)
+void fractalSetNumberOfIterations(int argNumberOfIterations)
 {
     numberOfIterations = argNumberOfIterations;   
+}
+
+void fractalSetStopFlag()
+{
+    stopFlag.store(true);    
 }
 

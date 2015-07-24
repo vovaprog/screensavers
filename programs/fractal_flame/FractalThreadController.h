@@ -1,6 +1,7 @@
 #pragma once
 
 #include <thread>
+#include <atomic>
 
 #include "Semaphore.h"
 
@@ -16,8 +17,12 @@ private:
     
     unsigned int *output=nullptr;
 
+    atomic<bool> threadStopFlag;
     
-public:    
+public:  
+    FractalThreadController();
+    ~FractalThreadController();
+    
     void beginCalculateFractal();
     
     unsigned int* getResult();

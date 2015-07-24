@@ -9,4 +9,6 @@ void fractalRender(const char *fileName);
 
 unsigned int* fractalRandom();
 
-void setNumberOfIterations(int numberOfIterations);
+void fractalSetNumberOfIterations(int argNumberOfIterations);
+
+void fractalSetStopFlag();
