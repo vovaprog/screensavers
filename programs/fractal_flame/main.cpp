@@ -23,8 +23,8 @@ using namespace std;
 unsigned int pictureWidth=PICTURE_WIDTH_BIG, pictureHeight=PICTURE_HEIGHT_BIG;
 static int window;
 
-static bool isFullScreen=false;
-static bool useAllScreen=false;
+static bool isFullScreen=true; //false;
+static bool useAllScreen=true; //false;
 
 static ScreensaverAutomatMt *screensaver;
 

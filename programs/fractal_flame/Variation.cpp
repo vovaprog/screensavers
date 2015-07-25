@@ -46,7 +46,7 @@ void variationSin(double x, double y, double &xOut, double &yOut) //+
 }    
 
 void variationFisheye(double x, double y, double &xOut, double &yOut)
-{        
+{         
     xOut = (2.0 / (radius(x,y) +1)) * y; 
     yOut = (2.0 / (radius(x,y) +1)) * x;
 }

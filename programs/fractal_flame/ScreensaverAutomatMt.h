@@ -9,7 +9,7 @@ class ScreensaverAutomatMt{
 private:
     AutomatState state;
     const unsigned int TRANSIT_MILLIS = 3 * 1000;
-    const unsigned int SHOW_MILLIS = 5 * 1000;
+    const unsigned int SHOW_MILLIS = 10 * 1000;
     
     unsigned int startMillis;
     unsigned int *output0=nullptr,*output1=nullptr,*outputBlend=nullptr;
@@ -29,6 +29,8 @@ public:
         this->pictureHeight=pictureHeight;
         this->outputSize = this->pictureWidth * this->pictureHeight;
         this->fps=fps;
+        
+        threadController.setPeriodMilliseconds(SHOW_MILLIS + TRANSIT_MILLIS);
     }
     
     ~ScreensaverAutomatMt()

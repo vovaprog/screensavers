@@ -18,6 +18,9 @@ private:
     unsigned int *output=nullptr;
 
     atomic<bool> threadStopFlag;
+    atomic<unsigned int> periodMilliseconds;
+    
+    unsigned int numberOfIterations;
     
 public:  
     FractalThreadController();
@@ -27,5 +30,7 @@ public:
     
     unsigned int* getResult();
     
-    void fractalThreadEntry();    
+    void fractalThreadEntry();   
+    
+    void setPeriodMilliseconds(unsigned int milliseconds);
 };

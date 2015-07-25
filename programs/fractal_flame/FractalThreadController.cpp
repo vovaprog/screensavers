@@ -36,6 +36,7 @@ void FractalThreadController::fractalThreadEntry()
     
         if(threadStopFlag.load())
         {
+            semResult.increment();
             return;    
         }
         
@@ -44,19 +45,46 @@ void FractalThreadController::fractalThreadEntry()
         if(firstTime)
         {
             firstTime=false;
+            numberOfIterations = FIRST_NUMBER_OF_ITERATIONS;
             fractalSetNumberOfIterations(FIRST_NUMBER_OF_ITERATIONS);
         }
-        else
+        /*else
         {
             fractalSetNumberOfIterations(DEFAULT_NUMBER_OF_ITERATIONS);
-        }
+        }*/
         
                         
         unsigned int startMillis=getMilliseconds();
         
         output = fractalRandom();
         
-        cout <<"calculate time: "<<(getMilliseconds() - startMillis)<< endl<<flush;
+        
+        
+        if(threadStopFlag.load())
+        {
+            semResult.increment();
+            return;    
+        }
+                       
+        
+        
+        unsigned int millisPassed = getMilliseconds() - startMillis; 
+        
+        cout <<"!!!calculate time: "<<millisPassed<< endl<<flush;
+        cout <<"!!!number of iterations: "<<numberOfIterations<< endl<<flush;
+        
+        unsigned int period = periodMilliseconds.load();
+                
+        double d = (double)millisPassed / ((double)period * 0.4);
+                
+        if(d>1.0+0.3 || d<1.0-0.3)
+        {
+            numberOfIterations /= d;
+            fractalSetNumberOfIterations(numberOfIterations);
+            cout << "!!!set number of iterations: "<< numberOfIterations <<endl<<flush;
+        }
+        
+        
         
         semResult.increment();       
     }        
@@ -77,5 +105,10 @@ unsigned int* FractalThreadController::getResult()
     semResult.wait();
     
     return output;
+}
+
+void FractalThreadController::setPeriodMilliseconds(unsigned int milliseconds)
+{
+    periodMilliseconds.store(milliseconds);    
 }
 
