@@ -5,9 +5,9 @@
 #    define M_PI 3.14159265358979323846
 #endif
 
-using namespace std;
-
 #include <Variation.h>
+
+using namespace std;
 
 
 static inline double radius(double x, double y)
@@ -47,8 +47,10 @@ void variationSin(double x, double y, double &xOut, double &yOut) //+
 
 void variationFisheye(double x, double y, double &xOut, double &yOut)
 {         
-    xOut = (2.0 / (radius(x,y) +1)) * y; 
-    yOut = (2.0 / (radius(x,y) +1)) * x;
+    double r = radius(x,y);
+    
+    xOut = (2.0 / (r + 1)) * y; 
+    yOut = (2.0 / (r + 1)) * x;
 }
 
 void variationMirror(double x, double y, double &xOut, double &yOut)
@@ -60,9 +62,10 @@ void variationMirror(double x, double y, double &xOut, double &yOut)
 void variationSpherical(double x, double y, double &xOut, double &yOut) //+
 {       
     double r = radius(x,y);
+    double r2 = r*r;
     
-    xOut=(1.0/(r*r)) * x;
-    yOut=(1.0/(r*r)) * y;        
+    xOut=(1.0/(r2)) * x;
+    yOut=(1.0/(r2)) * y;        
 }
 
 void variationSwirl(double x, double y, double &xOut, double &yOut) //+
@@ -147,9 +150,10 @@ void variationJulia(double x, double y, double &xOut, double &yOut)
     double r=radius(x,y);
     double th=theta(x,y);
     double om=omega();
+    double sqrt_r = sqrt(r); 
     
-    xOut = sqrt(r)*cos(th/2+om);
-    yOut = sqrt(r)*sin(th/2+om);
+    xOut = sqrt_r*cos(th/2+om);
+    yOut = sqrt_r*sin(th/2+om);
 }
 
 void variationEx(double x, double y, double &xOut, double &yOut)

@@ -9,7 +9,7 @@ class ScreensaverAutomatMt{
 private:
     AutomatState state;
     const unsigned int TRANSIT_MILLIS = 3 * 1000;
-    const unsigned int SHOW_MILLIS = 10 * 1000;
+    const unsigned int SHOW_MILLIS = 5 * 1000;
     
     unsigned int startMillis;
     unsigned int *output0=nullptr,*output1=nullptr,*outputBlend=nullptr;
@@ -92,7 +92,6 @@ private:
         state=AutomatState::SHOW_IDLE;        
         return output0;
     }
-        
     
     unsigned int* handleShowIdle()
     {        
@@ -145,6 +144,7 @@ private:
             output0=output1;
             output1=p;
             state=AutomatState::SHOW_IDLE;
+            startMillis=getMilliseconds();
             return output0;
         }
         else
