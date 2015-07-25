@@ -37,6 +37,11 @@ static inline double omega()
     }
 }
 
+static inline double psi()
+{
+    return ((double)(rand() % 10000))/ 10000.0;
+}
+
 //=================================================================
 
 void variationSin(double x, double y, double &xOut, double &yOut) //+
@@ -194,3 +199,75 @@ void variationBent(double x, double y, double &xOut, double &yOut)
         yOut=y/2;
     }
 }
+
+//=======================================================================
+
+void variationExponential(double x, double y, double &xOut, double &yOut)
+{       
+    xOut=exp(x-1)*cos(M_PI * y);
+    yOut=exp(x-1)*sin(M_PI * y);
+}
+
+void variationPower(double x, double y, double &xOut, double &yOut)
+{
+    double r=radius(x,y);
+    double th=theta(x,y);
+    
+    xOut=pow(r,sin(th)) * cos(th);
+    yOut=pow(r,sin(th)) * sin(th);
+}
+
+void variationCosine(double x, double y, double &xOut, double &yOut)
+{
+    xOut=cos(M_PI*x) * cosh(y);
+    yOut=-sin(M_PI*x) * sinh(y);
+}
+
+void variationBubble(double x, double y, double &xOut, double &yOut)
+{
+    double r=radius(x,y);
+    double r2=r*r;
+    
+    xOut = (4.0 / (r2+4.0)) * x;
+    yOut = (4.0 / (r2+4.0)) * y;
+}
+
+void variationCylinder(double x, double y, double &xOut, double &yOut)
+{
+    xOut = sin(x);
+    yOut = y;
+}
+
+void variationNoise(double x, double y, double &xOut, double &yOut)
+{
+    double psi1=psi();
+    double psi2=psi();
+    
+    xOut = psi1 * x * cos(2.0 * M_PI * psi2);
+    yOut = psi1 * y * sin(2.0 * M_PI * psi2);
+}
+
+void variationBlur(double x, double y, double &xOut, double &yOut)
+{
+    double psi1=psi();
+    double psi2=psi();
+
+    xOut = psi1 * cos(2.0 * M_PI * psi2);
+    yOut = psi1 * sin(2.0 * M_PI * psi2);
+}
+
+void variationGaussian(double x, double y, double &xOut, double &yOut)
+{
+    double psi_sum = psi() + psi() + psi() + psi() - 2.0;
+    double psi5=psi();
+    
+    xOut = psi_sum * cos(2.0 * M_PI * psi5);
+    yOut = psi_sum * sin(2.0 * M_PI * psi5);
+}
+
+void variationTangent(double x, double y, double &xOut, double &yOut)
+{
+    xOut = sin(x) / cos(y);
+    yOut = tan(y);    
+}
+

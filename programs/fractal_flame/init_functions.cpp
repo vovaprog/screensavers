@@ -113,6 +113,16 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
     variations.push_back(variationEx);    
     variations.push_back(variationBent);    
     //variations.push_back(variationMirror);
+    //=======================================
+    variations.push_back(variationExponential);
+    variations.push_back(variationPower);
+    variations.push_back(variationCosine);
+    variations.push_back(variationBubble);
+    variations.push_back(variationCylinder);
+    //variations.push_back(variationNoise);
+    //variations.push_back(variationBlur);
+    //variations.push_back(variationGaussian);
+    variations.push_back(variationTangent);    
     
     
     int numberOfFunctions=MIN_NUMBER_OF_FUNCTIONS + rand() % (MAX_NUMBER_OF_FUNCTIONS + 1 - MIN_NUMBER_OF_FUNCTIONS);
