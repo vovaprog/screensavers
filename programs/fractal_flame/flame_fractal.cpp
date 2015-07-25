@@ -407,6 +407,24 @@ static void saveImage(const char *fileName,const char *fileType)
 	FreeImage_Unload(Image);
 }
 
+void saveCurrentFractal(const string &dirName,int index)
+{
+    string fileName=dirName+"/fractal_"+to_string(index)+".xml";    
+    if(fileExists(fileName.c_str()))
+    {
+        deleteFile(fileName.c_str());
+    }        
+    saveFunctions(fileName.c_str(),functions);
+
+    
+    fileName=dirName + "/fractal_"+to_string(index)+".png";
+    if(fileExists(fileName.c_str()))
+    {
+        deleteFile(fileName.c_str());
+    }    
+    saveImage(fileName.c_str(),"png");		        
+}
+
 void fractalPreview(int numberOfPreviews)
 {    
 	string dirName;
@@ -429,10 +447,12 @@ void fractalPreview(int numberOfPreviews)
 		
 		if(calculateFractal()==CalculateFractalResult::SUCCESS)
 		{
-            string fileName=dirName+"/fractal_"+to_string(i)+".xml";            
+            /*string fileName=dirName+"/fractal_"+to_string(i)+".xml";            
             saveFunctions(fileName.c_str(),functions);
             fileName=dirName + "/fractal_"+to_string(i)+".png";
-            saveImage(fileName.c_str(),"png");		    
+            saveImage(fileName.c_str(),"png");*/
+		    
+            saveCurrentFractal(dirName,i);
 		}
 		else
 		{

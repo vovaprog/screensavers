@@ -29,6 +29,7 @@ public:
     void beginCalculateFractal();
     
     unsigned int* getResult();
+    unsigned int* getResultWithTimeout();    
     
     void fractalThreadEntry();   
     

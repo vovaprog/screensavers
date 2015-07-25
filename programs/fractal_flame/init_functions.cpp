@@ -71,7 +71,16 @@ void saveFunctions(const char *fileName,vector<Function*> &functions)
 			else if(variation == variationJulia) xformElement->SetAttribute("julia","1.0");
 			else if(variation == variationEx) xformElement->SetAttribute("ex","1.0");
 			else if(variation == variationBent) xformElement->SetAttribute("bent","1.0");
-			else if(variation == variationMirror) xformElement->SetAttribute("mirror","1.0");
+			else if(variation == variationMirror) xformElement->SetAttribute("mirror","1.0");			
+			else if(variation == variationPower) xformElement->SetAttribute("power","1.0");
+			else if(variation == variationBubble) xformElement->SetAttribute("bubble","1.0");
+			else if(variation == variationCylinder) xformElement->SetAttribute("cylinder","1.0");
+			else if(variation == variationTangent) xformElement->SetAttribute("tangent","1.0");
+			else if(variation == variationNoise) xformElement->SetAttribute("noise","1.0");
+			else if(variation == variationBlur) xformElement->SetAttribute("blur","1.0");
+			else if(variation == variationGaussian) xformElement->SetAttribute("gaussian","1.0");
+			else if(variation == variationExponential) xformElement->SetAttribute("exponential","1.0");
+			else if(variation == variationCosine) xformElement->SetAttribute("cosine","1.0");
 			else
 			{
 				throw string("unknown variation!");
@@ -112,17 +121,20 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
     variations.push_back(variationJulia);    
     variations.push_back(variationEx);    
     variations.push_back(variationBent);    
-    //variations.push_back(variationMirror);
+    variations.push_back(variationMirror);
     //=======================================
-    variations.push_back(variationExponential);
     variations.push_back(variationPower);
-    variations.push_back(variationCosine);
     variations.push_back(variationBubble);
     variations.push_back(variationCylinder);
+    variations.push_back(variationTangent);
+    //=======================================    
     //variations.push_back(variationNoise);
     //variations.push_back(variationBlur);
     //variations.push_back(variationGaussian);
-    variations.push_back(variationTangent);    
+    //=======================================
+    //variations.push_back(variationExponential);//-    
+    //variations.push_back(variationCosine);//-
+    
     
     
     int numberOfFunctions=MIN_NUMBER_OF_FUNCTIONS + rand() % (MAX_NUMBER_OF_FUNCTIONS + 1 - MIN_NUMBER_OF_FUNCTIONS);
@@ -220,7 +232,17 @@ void loadFunctions(const char *fileName,vector<Function*> &functions, int &total
 		if(xformElem->Attribute("ex")) pFun->variations.push_back(variationEx);
 		if(xformElem->Attribute("bent")) pFun->variations.push_back(variationBent);
 		if(xformElem->Attribute("mirror")) pFun->variations.push_back(variationMirror);
+		if(xformElem->Attribute("power")) pFun->variations.push_back(variationPower);
+		if(xformElem->Attribute("bubble")) pFun->variations.push_back(variationBubble);
+		if(xformElem->Attribute("cylinder")) pFun->variations.push_back(variationCylinder);
+		if(xformElem->Attribute("tangent")) pFun->variations.push_back(variationTangent);
+		if(xformElem->Attribute("noise")) pFun->variations.push_back(variationNoise);
+		if(xformElem->Attribute("blur")) pFun->variations.push_back(variationBlur);
+		if(xformElem->Attribute("gaussian")) pFun->variations.push_back(variationGaussian);
+		if(xformElem->Attribute("exponential")) pFun->variations.push_back(variationExponential);
+		if(xformElem->Attribute("cosine")) pFun->variations.push_back(variationCosine);
 
+		
         pFun->r = 150 + rand() % 106; 
         pFun->g = 150 + rand() % 106;
         pFun->b = 150 + rand() % 106;        

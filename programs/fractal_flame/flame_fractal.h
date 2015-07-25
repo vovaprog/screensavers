@@ -12,3 +12,6 @@ unsigned int* fractalRandom();
 void fractalSetNumberOfIterations(int argNumberOfIterations);
 
 void fractalSetStopFlag();
+
+void saveCurrentFractal(const string &dirName,int index);
+

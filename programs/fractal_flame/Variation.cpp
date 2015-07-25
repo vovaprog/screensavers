@@ -202,7 +202,7 @@ void variationBent(double x, double y, double &xOut, double &yOut)
 
 //=======================================================================
 
-void variationExponential(double x, double y, double &xOut, double &yOut)
+void variationExponential(double x, double y, double &xOut, double &yOut) //-
 {       
     xOut=exp(x-1)*cos(M_PI * y);
     yOut=exp(x-1)*sin(M_PI * y);
@@ -217,7 +217,7 @@ void variationPower(double x, double y, double &xOut, double &yOut)
     yOut=pow(r,sin(th)) * sin(th);
 }
 
-void variationCosine(double x, double y, double &xOut, double &yOut)
+void variationCosine(double x, double y, double &xOut, double &yOut) //-
 {
     xOut=cos(M_PI*x) * cosh(y);
     yOut=-sin(M_PI*x) * sinh(y);

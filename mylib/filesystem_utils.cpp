@@ -14,8 +14,29 @@ bool directoryExists(const char *dirName)
 	}
 }
 
+bool fileExists(const char *fileName)
+{
+	if(exists(fileName))
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void createDirectory(const char *dirName)
 {
 	create_directories(dirName);
 }
 
+void deleteDirectory(const char *dirName)
+{
+    remove_all(dirName);
+}
+
+void deleteFile(const char *fileName)
+{
+    remove(fileName);
+}

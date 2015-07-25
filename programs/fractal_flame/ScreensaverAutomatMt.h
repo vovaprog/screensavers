@@ -1,7 +1,13 @@
 #pragma once
 
+#include <string>
+
 #include <small_utils.h>
+#include <filesystem_utils.h>
+#include "flame_fractal.h"
 #include "FractalThreadController.h"
+
+using namespace std;
 
 enum class AutomatState{ FIRST,SHOW_IDLE,TRANSIT_START,TRANSIT_PROCESS };
 
@@ -22,8 +28,12 @@ private:
 
     FractalThreadController threadController;
     
+    string saveDirName;
+    int imageCounter=0;
+    int saveNumberOfImages=10;
+    
 public:
-    ScreensaverAutomatMt(int pictureWidth,int pictureHeight,int fps):state(AutomatState::FIRST)
+    ScreensaverAutomatMt(int pictureWidth,int pictureHeight,int fps):state(AutomatState::FIRST),saveDirName("./fractals/screensaver")
     {
         this->pictureWidth=pictureWidth;
         this->pictureHeight=pictureHeight;
@@ -31,7 +41,18 @@ public:
         this->fps=fps;
         
         threadController.setPeriodMilliseconds(SHOW_MILLIS + TRANSIT_MILLIS);
+        
+        initSaveDirectory();
     }
+    
+    void initSaveDirectory()
+    {		
+		if(directoryExists(saveDirName.c_str()))
+		{	
+		    deleteDirectory(saveDirName.c_str());						
+		}   
+		createDirectory(saveDirName.c_str());
+    }    
     
     ~ScreensaverAutomatMt()
     {
@@ -81,6 +102,9 @@ private:
         if(p!=nullptr)
         {
             memcpy(output0,p,sizeof(unsigned int) * outputSize);
+            
+            saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
+            imageCounter += 1;
         }
         else
         {
@@ -99,7 +123,21 @@ private:
         
         if(millisPassed>=SHOW_MILLIS)
         {
-            state=AutomatState::TRANSIT_START;        
+            unsigned int *p = threadController.getResultWithTimeout();
+            if(p!=nullptr)
+            {
+                memcpy(output1,p,sizeof(unsigned int) * outputSize);
+                
+                saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
+                imageCounter += 1;
+                
+                threadController.beginCalculateFractal();
+                state=AutomatState::TRANSIT_START;
+            }
+            else
+            {
+                state=AutomatState::SHOW_IDLE;
+            }                        
         }
         else
         {
@@ -111,18 +149,6 @@ private:
     
     unsigned int* handleTransitStart()
     {         
-        unsigned int *p = threadController.getResult();
-        if(p!=nullptr)
-        {
-            memcpy(output1,p,sizeof(unsigned int) * outputSize);
-        }
-        else
-        {
-            memset(output1,0,sizeof(unsigned int) * outputSize);    
-        }
-        
-        threadController.beginCalculateFractal();
-        
         double blendD=1.0 / ((TRANSIT_MILLIS / 1000.0) * fps);
         blendKoef=1.0-blendD;
         
