@@ -17,7 +17,7 @@ else
 
 COMMAND=g++ -std=c++11 -O3 -Wall -march=native \
 		-I. -I$(MYLIB) -I$(EXTERNAL)/include \
-		./main.cpp ./flame_fractal.cpp ./init_functions.cpp ./Variation.cpp $(MYLIB)/filesystem_utils.cpp $(MYLIB)/small_utils.cpp ./FractalThreadController.cpp \
+		./main.cpp ./flame_fractal.cpp ./init_functions.cpp ./Variation.cpp $(MYLIB)/filesystem_utils.cpp $(MYLIB)/small_utils.cpp ./FractalThreadController.cpp ./ScreensaverAutomat.cpp \
 		-o ./fractal_flame \
 		-lglut -lGL -lGLU -ltinyxml -lfreeimage -lboost_filesystem -lboost_system -lboost_program_options
 endif

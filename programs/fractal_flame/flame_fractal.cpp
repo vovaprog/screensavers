@@ -9,34 +9,40 @@
 
 #include <FreeImage.h>
 
-using namespace std;
-
-#include "flame_fractal.h"
-
 #include "Function.h"
 #include "Point.h"
 #include "init_functions.h"
 #include "filesystem_utils.h"
 
+#include "flame_fractal.h"
+
+using namespace std;
+
 enum class CalculateFractalResult { SUCCESS, BAD_PICTURE, STOP_FLAG };
 
+
+//=====calculate parameters=====
+static int pictureWidth,pictureHeight;
+static vector<Function*> functions;
+static unsigned int numberOfIterations=30000000;
+static double colorPowerArgument = 0.45;
+//=====calculate parameters=====
+
+
+//=====buffers=====
 static unsigned int *output=nullptr;
 static unsigned int *saveOutput=nullptr;
 static Point *points=nullptr;
 unsigned int *hist=nullptr;
+//=====buffers=====
 
-static vector<Function*> functions;
 
-static int pictureWidth,pictureHeight;
-static int outputSize;
-
-static int totalProbabilityWeight;
-
-static unsigned int numberOfIterations=30000000;
-
-static unsigned int histSize=0;
-
+//=====variables=====
 static atomic<bool> stopFlag;
+static int outputSize;
+static unsigned int histSize=0;
+static int totalProbabilityWeight;
+//=====variables=====
 
 
 static void destroyFunctions()
@@ -51,6 +57,8 @@ static void destroyFunctions()
 
 void fractalDestroy()
 {
+    destroyFunctions();
+    
 	if(output!=nullptr)
 	{
 		delete[] output;
@@ -75,8 +83,7 @@ void fractalDestroy()
 
 void fractalInit(int argPictureWidth, int argPictureHeight)
 {	
-	fractalDestroy();
-	destroyFunctions();
+	fractalDestroy();	
 	
     pictureWidth=argPictureWidth;
     pictureHeight=argPictureHeight;    
@@ -110,12 +117,6 @@ static bool convertMathToScreen(double x, double y,int &xOut,int &yOut)
     {
         return true;
     }
-/*    
-    if(xOut>=pictureWidth) xOut=pictureWidth-1;
-    else if(xOut<0) xOut=0;
-    
-    if(yOut>=pictureHeight) yOut=pictureHeight-1;
-    else if(yOut<0) yOut=0;*/
 }
 
 static void getInitialPoint(double &x, double &y)
@@ -153,14 +154,7 @@ static CalculateFractalResult plot(double mathX, double mathY, Function *pFun,un
     if(convertMathToScreen(mathX,mathY,screenX,screenY))
     {    
         int i = outputIndex(screenX,screenY);
-        
-        if(currentIteration > numberOfIterations / 8 &&
-            points[i].count > currentIteration / 2)
-        {
-            cout <<"early rec BAD_PICTURE!"<<endl;
-            return CalculateFractalResult::BAD_PICTURE;    
-        }
-        
+
         points[i].count += 1;    
         points[i].r = (points[i].r + pFun->r) / 2;
         points[i].g = (points[i].g + pFun->g) / 2;
@@ -173,9 +167,7 @@ static CalculateFractalResult plot(double mathX, double mathY, Function *pFun,un
 static void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
 {    
     minOutput=points[0].count;
-    maxOutput=points[0].count;
-    
-    int maxIndex=-1;
+    maxOutput=points[0].count;    
     
     for(int i=1;i<outputSize;i++)
     {
@@ -186,11 +178,8 @@ static void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
         else if(points[i].count>maxOutput)
         {
             maxOutput=points[i].count;
-            maxIndex=i;
         }
     }    
-    
-    cout <<"max index: "<<maxIndex % pictureWidth<<","<<maxIndex/pictureWidth<<endl;
 }
 
 static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter)
@@ -203,13 +192,10 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
     {
         return 0;
     }
-    
-    cout <<"counterRange: "<<counterRange<<endl;
-    cout <<"log10: "<<l<<endl;
-        
+
     unsigned int HIST_BINS = (unsigned int)pow(10, l);
     
-    cout << "HIST_BINS: "<<HIST_BINS<<endl;
+    cout << "histogram bins: "<<HIST_BINS<<endl;
     
     if(counterRange < HIST_BINS || HIST_BINS<2)
     {
@@ -232,7 +218,7 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
     
     unsigned int binSize = counterRange / HIST_BINS;
         
-    cout << "binSize: "<<binSize << endl;    
+    cout << "bin size: "<<binSize << endl;    
     
     for(int i=0;i<outputSize;i++)
     {
@@ -244,13 +230,11 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
         hist[binIndex] += 1;        
     }
     
-    
-    
+        
     unsigned int pointSum=0;
     
     for(unsigned int i=0;i<HIST_BINS;i++)
     {
-        cout <<i<<" : "<<hist[i]<<endl;
         pointSum += hist[i];
         
         if(((double)pointSum / (double)outputSize)>0.995)
@@ -271,7 +255,6 @@ static CalculateFractalResult createOutput()
     cout << "max count: " << maxCounter << "   min count: "<<minCounter << endl;
     
     double maxCounterDivAll = (double)maxCounter / (double)numberOfIterations;
-    cout <<"maxCounterToAll: "<<maxCounterDivAll<<endl;
     
     if(maxCounter==0 || maxCounter<=minCounter+10 || maxCounterDivAll>=0.5)
     {
@@ -279,11 +262,8 @@ static CalculateFractalResult createOutput()
     	memset(output,0,outputSize * sizeof(unsigned int));
     	return CalculateFractalResult::BAD_PICTURE;
     }
-    
-    
-    unsigned int counterUpLimit = histAnalysis(minCounter, maxCounter);
         
-    cout << "counterUpLimit: " << counterUpLimit <<endl;
+    unsigned int counterUpLimit = histAnalysis(minCounter, maxCounter);        
 
     for(int i=0;i<outputSize;i++)
     {
@@ -293,7 +273,7 @@ static CalculateFractalResult createOutput()
         {        
             v = ((double)points[i].count - (double)minCounter) / ((double)counterUpLimit-(double)minCounter);
             
-            v = pow(v, 0.45);
+            v = pow(v, colorPowerArgument);
         }
         else
         {
@@ -448,12 +428,7 @@ void fractalPreview(int numberOfPreviews)
 		initFunctionsRandom(functions,totalProbabilityWeight);
 		
 		if(calculateFractal()==CalculateFractalResult::SUCCESS)
-		{
-            /*string fileName=dirName+"/fractal_"+to_string(i)+".xml";            
-            saveFunctions(fileName.c_str(),functions);
-            fileName=dirName + "/fractal_"+to_string(i)+".png";
-            saveImage(fileName.c_str(),"png");*/
-		    
+		{		    
             saveCurrentFractal(dirName.c_str(),i);
 		}
 		else

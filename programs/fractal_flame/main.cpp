@@ -6,10 +6,9 @@
 #include <boost/program_options.hpp>
 
 #include <Semaphore.h>
-
-#include "ConstantFps.h"
+#include <ConstantFps.h>
 #include "flame_fractal.h"
-#include "ScreensaverAutomatMt.h"
+#include "ScreensaverAutomat.h"
 
 using namespace std;
 using namespace boost::program_options;
@@ -22,7 +21,7 @@ static int window;
 
 static bool isFullScreen=true;
 
-static ScreensaverAutomatMt *screensaver;
+static ScreensaverAutomat *screensaver;
 
 static ConstantFps constFps(CONSTANT_FPS_VALUE);
 
@@ -84,7 +83,7 @@ static void startScreensaver(int argc, char **argv)
         pictureHeight = glutGet(GLUT_SCREEN_HEIGHT);
     }
 
-    screensaver=new ScreensaverAutomatMt(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
+    screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
     
     //====================================================================
     //====================================================================

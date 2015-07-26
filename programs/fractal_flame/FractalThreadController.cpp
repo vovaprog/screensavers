@@ -65,8 +65,7 @@ void FractalThreadController::fractalThreadEntry()
         
         unsigned int millisPassed = getMilliseconds() - startMillis; 
         
-        cout <<"!!!calculate time: "<<millisPassed<< endl<<flush;
-        cout <<"!!!number of iterations: "<<numberOfIterations<< endl<<flush;
+        cout <<"calculate time: "<<millisPassed<<"   number of iterations: "<<numberOfIterations<< endl<<flush;
         
         unsigned int period = periodMilliseconds.load();
                 
@@ -76,7 +75,6 @@ void FractalThreadController::fractalThreadEntry()
         {
             numberOfIterations /= d;
             fractalSetNumberOfIterations(numberOfIterations);
-            cout << "!!!set number of iterations: "<< numberOfIterations <<endl<<flush;
         }
         
         
