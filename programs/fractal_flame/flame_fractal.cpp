@@ -407,8 +407,10 @@ static void saveImage(const char *fileName,const char *fileType)
 	FreeImage_Unload(Image);
 }
 
-void saveCurrentFractal(const string &dirName,int index)
+void saveCurrentFractal(const char *argDirName,int index)
 {
+    string dirName(argDirName);
+    
     string fileName=dirName+"/fractal_"+to_string(index)+".xml";    
     if(fileExists(fileName.c_str()))
     {
@@ -452,7 +454,7 @@ void fractalPreview(int numberOfPreviews)
             fileName=dirName + "/fractal_"+to_string(i)+".png";
             saveImage(fileName.c_str(),"png");*/
 		    
-            saveCurrentFractal(dirName,i);
+            saveCurrentFractal(dirName.c_str(),i);
 		}
 		else
 		{
@@ -465,8 +467,6 @@ void fractalRender(const char *fileName)
 {
 	destroyFunctions();
 	loadFunctions(fileName,functions,totalProbabilityWeight);
-	
-	numberOfIterations = 30000000;
 	
 	calculateFractal();
 	

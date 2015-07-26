@@ -13,5 +13,5 @@ void fractalSetNumberOfIterations(int argNumberOfIterations);
 
 void fractalSetStopFlag();
 
-void saveCurrentFractal(const string &dirName,int index);
+void saveCurrentFractal(const char *dirName,int index);
 

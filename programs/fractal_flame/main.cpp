@@ -3,6 +3,8 @@
 
 #include <GL/freeglut.h>
 
+#include <boost/program_options.hpp>
+
 #include <Semaphore.h>
 
 #include "ConstantFps.h"
@@ -10,30 +12,23 @@
 #include "ScreensaverAutomatMt.h"
 
 using namespace std;
-
-#define PICTURE_WIDTH_BIG 1024
-#define PICTURE_HEIGHT_BIG 768
-
-#define PICTURE_WIDTH_SMALL 800
-#define PICTURE_HEIGHT_SMALL 800
+using namespace boost::program_options;
 
 #define CONSTANT_FPS_VALUE 30
+#define ESCAPE_KEY 27
 
-
-unsigned int pictureWidth=PICTURE_WIDTH_BIG, pictureHeight=PICTURE_HEIGHT_BIG;
+static unsigned int pictureWidth=600, pictureHeight=600;
 static int window;
 
-static bool isFullScreen=true; //false;
-static bool useAllScreen=true; //false;
+static bool isFullScreen=true;
 
 static ScreensaverAutomatMt *screensaver;
 
 static ConstantFps constFps(CONSTANT_FPS_VALUE);
 
-#define ESCAPE 27
 static void keyPressed(unsigned char key, int x, int y) 
 {	
-	if(key==ESCAPE) 
+	if(key==ESCAPE_KEY) 
 	{
 	    delete screensaver;
 	    
@@ -45,7 +40,7 @@ static void keyPressed(unsigned char key, int x, int y)
 
 unsigned int* output=0;
 
-void display()
+static void display()
 {
     output=screensaver->nextFrame();
 
@@ -61,164 +56,154 @@ void display()
 static void resizeGLScene(int Width,int Height)
 {
 	glViewport(0,0,Width,Height);
-
-	if(isFullScreen && !useAllScreen)
-	{
-		float w = (float)pictureWidth * 2.0/(float)glutGet(GLUT_SCREEN_WIDTH);
-		float h = (float)pictureHeight * 2.0/(float)glutGet(GLUT_SCREEN_HEIGHT);
-
-		glRasterPos2f(-1+(2-w)/2,-1+(2-h)/2);
-	}
 }
 
-const char *USAGE="USAGE:\r\n"
-"generate previews of random fractals:\r\n"
-"fractal_flame preview number_of_previews\r\n"
-"\r\n"
-"render fractal image (xml_file_name generated with preview command):\r\n"
-"fractal_flame render xml_file_name\r\n"
-"\r\n"
-"screensaver mode - show random fractals:\r\n"
-"fractal_flame screensaver\r\n";
 
-int main( int argc, char **argv )
+static void startScreensaver(int argc, char **argv)
+{
+    glutInit(&argc,argv);
+    
+
+    glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);	
+
+    //====================================================================
+    //====================================================================
+    //====================================================================
+
+
+    //====================================================================
+    //====================================================================
+    //====================================================================
+
+    unsigned int screenResolutionWidth = glutGet(GLUT_SCREEN_WIDTH);
+    unsigned int screenResolutionHeight = glutGet(GLUT_SCREEN_HEIGHT);
+        
+    if(isFullScreen)
+    {
+        pictureWidth = glutGet(GLUT_SCREEN_WIDTH);
+        pictureHeight = glutGet(GLUT_SCREEN_HEIGHT);
+    }
+
+    screensaver=new ScreensaverAutomatMt(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
+    
+    //====================================================================
+    //====================================================================
+    //====================================================================
+
+    glutInitWindowSize(pictureWidth,pictureHeight);  
+
+    if(isFullScreen)
+    {
+        glutInitWindowPosition(0, 0); 
+    }
+    else
+    {	
+        glutInitWindowPosition((screenResolutionWidth - pictureWidth)/2, (screenResolutionHeight-pictureHeight)/2); 
+    }
+
+    //====================================================================
+    //====================================================================
+    //====================================================================
+
+    window=glutCreateWindow("opengl");	
+
+    glutDisplayFunc(&display);  
+
+    glutIdleFunc(&display);
+
+    glutReshapeFunc(&resizeGLScene);
+
+    glutKeyboardFunc(&keyPressed);
+
+    //====================================================================
+    //====================================================================
+    //====================================================================
+
+    if(isFullScreen)
+    {
+        glutFullScreen();
+    }
+
+    //====================================================================
+    //====================================================================
+    //====================================================================
+    
+    glutMainLoop();	    
+}
+
+static void startRender(const string &fileName, int numberOfIterations)
+{
+    fractalInit(pictureWidth,pictureHeight);
+    
+    fractalSetNumberOfIterations(numberOfIterations);
+    
+    fractalRender(fileName.c_str());
+}
+
+static void startPreview(int numberOfPreviews)
+{
+    fractalInit(pictureWidth,pictureHeight);
+    
+    fractalPreview(numberOfPreviews);    
+}
+
+int main(int argc, char **argv)
 {
 	try{		
-		if(argc>1)
-		{
-			if(strcmp(argv[1],"preview")==0)
-			{
-				pictureWidth=800;
-				pictureHeight=800;
-				fractalInit(pictureWidth,pictureHeight);
-				
-				int numberOfPreviews = 10;
-				
-				if(argc>=3)
-				{
-				    numberOfPreviews = stoi(string(argv[2]));    
-				}
-				
-				fractalPreview(numberOfPreviews);
-				return 0;
-			}
-			else if(strcmp(argv[1],"render")==0)
-			{
-				if(argc>=3)
-				{
-					pictureWidth=800;
-					pictureHeight=800;
-					fractalInit(pictureWidth,pictureHeight);
-					fractalRender(argv[2]);
-					return 0;					
-				}
-				else
-				{
-					cout <<USAGE;
-					return -1;	
-				}
-			}
-		}
-		else
-		{
-			cout <<USAGE;
-		}
+		string mode, fileName;
+		int iterations,numberOfPreviews;
+		bool windowMode;
 		
+		options_description desc("program options");
+        desc.add_options()
+            ("help,h", "print help message")
+            ("mode", value(&mode)->default_value("screensaver"), "program mode (screensaver, render, preview)")
+            ("width",value(&pictureWidth)->default_value(600),"width")
+            ("height",value(&pictureHeight)->default_value(600),"height")
+            ("iterations",value(&iterations)->default_value(30000000),"number of iterations for render mode")
+            ("input-file",value(&fileName),"file with fractal parameters (for render mode)")
+            ("number-of-previews", value(&numberOfPreviews)->default_value(30),"number of previews (for preview mode)")
+            ("window",bool_switch(&windowMode), "show in window mode")
+            ;
+        
+        variables_map vm;
+        store(parse_command_line(argc, argv, desc), vm);
+        notify(vm);    
+        
+        if (vm.count("help")) 
+        {
+            cout << desc << endl;
+            return 0;
+        }        
+                
+        isFullScreen = !windowMode;
+        
+        if(mode == "screensaver")
+        {
+            startScreensaver(argc,argv);
+        }
+        else if(mode=="render")
+        {
+            if(fileName.size()==0)
+            {
+                cout <<"input-file parameter not specified!"<<endl;
+                return -1;
+            }
+
+            startRender(fileName, iterations);
+        }
+        else if(mode=="preview")
+        {
+            startPreview(numberOfPreviews);
+        }
+        else
+        {
+            cout <<"unknown mode!"<<endl;
+            return -1;
+        }
+            
+        return 0;
 		
-		glutInit(&argc,argv);
-	
-		glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);	
-	
-		//====================================================================
-		//====================================================================
-		//====================================================================
-	
-		int screenResolutionWidth= glutGet(GLUT_SCREEN_WIDTH);
-		int screenResolutionHeight= glutGet(GLUT_SCREEN_HEIGHT);
-	
-		//====================================================================
-		//====================================================================
-		//====================================================================
-	
-		if(isFullScreen)
-		{
-			if(useAllScreen)
-			{
-				pictureWidth=screenResolutionWidth;
-				pictureHeight=screenResolutionHeight;
-			}
-			else
-			{
-				if(screenResolutionWidth>=PICTURE_WIDTH_BIG && screenResolutionHeight>=PICTURE_HEIGHT_BIG)
-				{
-					pictureWidth=PICTURE_WIDTH_BIG;
-					pictureHeight=PICTURE_HEIGHT_BIG;
-				}
-				else if(screenResolutionWidth>=PICTURE_WIDTH_SMALL && screenResolutionHeight>=PICTURE_HEIGHT_SMALL)
-				{
-					pictureWidth=PICTURE_WIDTH_SMALL;
-					pictureHeight=PICTURE_HEIGHT_SMALL;
-				}
-				else
-				{
-					pictureWidth=screenResolutionWidth;
-					pictureHeight=screenResolutionHeight;
-				}
-			}
-		}
-		else
-		{
-			pictureWidth=PICTURE_WIDTH_SMALL;
-			pictureHeight=PICTURE_HEIGHT_SMALL;
-		}
-	
-		screensaver=new ScreensaverAutomatMt(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
-		
-		//====================================================================
-		//====================================================================
-		//====================================================================
-	
-		glutInitWindowSize(pictureWidth,pictureHeight);  
-	
-		if(isFullScreen)
-		{
-			glutInitWindowPosition(0, 0); 
-		}
-		else
-		{	
-			glutInitWindowPosition((screenResolutionWidth - pictureWidth)/2, (screenResolutionHeight-pictureHeight)/2); 
-		}
-	
-		//====================================================================
-		//====================================================================
-		//====================================================================
-	
-		window=glutCreateWindow("opengl");	
-	
-		glutDisplayFunc(&display);  
-	
-		glutIdleFunc(&display);
-	
-		glutReshapeFunc(&resizeGLScene);
-	
-		glutKeyboardFunc(&keyPressed);
-	
-		//====================================================================
-		//====================================================================
-		//====================================================================
-	
-		if(isFullScreen)
-		{
-			glutFullScreen();
-		}
-	
-		//====================================================================
-		//====================================================================
-		//====================================================================
-		
-		glutMainLoop();	
-	
-		return 0;
 	}catch(string ex){
 		cout << "exception thrown: " << ex <<endl;
 	}

@@ -28,12 +28,12 @@ private:
 
     FractalThreadController threadController;
     
-    string saveDirName;
+    const char *saveDirName="./fractals/screensaver";
     int imageCounter=0;
     int saveNumberOfImages=10;
     
 public:
-    ScreensaverAutomatMt(int pictureWidth,int pictureHeight,int fps):state(AutomatState::FIRST),saveDirName("./fractals/screensaver")
+    ScreensaverAutomatMt(int pictureWidth,int pictureHeight,int fps):state(AutomatState::FIRST)
     {
         this->pictureWidth=pictureWidth;
         this->pictureHeight=pictureHeight;
@@ -47,11 +47,11 @@ public:
     
     void initSaveDirectory()
     {		
-		if(directoryExists(saveDirName.c_str()))
+		if(directoryExists(saveDirName))
 		{	
-		    deleteDirectory(saveDirName.c_str());						
+		    deleteDirectory(saveDirName);						
 		}   
-		createDirectory(saveDirName.c_str());
+		createDirectory(saveDirName);
     }    
     
     ~ScreensaverAutomatMt()
