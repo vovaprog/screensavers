@@ -1,6 +1,7 @@
 #include <vector>
 #include <cstdlib>
 #include <string>
+#include <ctime>
 
 #include <tinyxml.h>
 
@@ -137,6 +138,8 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
     //variations.push_back(variationCosine);//-
     
     
+    srand(time(NULL));
+
     
     int numberOfFunctions=MIN_NUMBER_OF_FUNCTIONS + rand() % (MAX_NUMBER_OF_FUNCTIONS + 1 - MIN_NUMBER_OF_FUNCTIONS);
     
