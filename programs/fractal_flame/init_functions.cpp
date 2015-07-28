@@ -1,5 +1,6 @@
 #include <vector>
 #include <cstdlib>
+#include <string>
 
 #include <tinyxml.h>
 
@@ -91,13 +92,13 @@ void saveFunctions(const char *fileName,vector<Function*> &functions)
 			to_string(pFun->preTransformKoef[0][1])+" "+to_string(pFun->preTransformKoef[1][1])+" "+
 			to_string(pFun->preTransformKoef[0][2])+" "+to_string(pFun->preTransformKoef[1][2]);
 			
-		xformElement->SetAttribute("coefs",coefs);
+		xformElement->SetAttribute("coefs",coefs.c_str());
 
 		string post = to_string(pFun->postTransformKoef[0][0])+" "+to_string(pFun->postTransformKoef[1][0])+" "+
 			to_string(pFun->postTransformKoef[0][1])+" "+to_string(pFun->postTransformKoef[1][1])+" "+
 			to_string(pFun->postTransformKoef[0][2])+" "+to_string(pFun->postTransformKoef[1][2]);
 		
-		xformElement->SetAttribute("post",post);				
+		xformElement->SetAttribute("post",post.c_str());				
 	}
 	
 	doc.SaveFile( fileName );    
