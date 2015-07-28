@@ -1,7 +1,5 @@
-#include <vector>
 #include <string>
-#include <climits>
-#include <cstring>
+#include <string.h>
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
@@ -14,7 +12,6 @@
 #include "Point.h"
 #include "init_functions.h"
 #include "filesystem_utils.h"
-
 #include "flame_fractal.h"
 
 using namespace std;

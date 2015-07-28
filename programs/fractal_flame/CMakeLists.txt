@@ -4,6 +4,8 @@ set(MYLIB ../../mylib)
 
 include_directories("." ${MYLIB})
 
+set(SOURCE main.cpp flame_fractal.cpp init_functions.cpp Variation.cpp init_functions.cpp 
+        ScreensaverAutomat.cpp FractalThreadController.cpp ${MYLIB}/filesystem_utils.cpp ${MYLIB}/small_utils.cpp) 
 
 if(MSVC)
 
@@ -15,6 +17,8 @@ if(MSVC)
 
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Ox")
 
+    set(SOURCE ${SOURCE_TINYXML} ${SOURCE})
+    
     link_directories(${CPPLIBS}/lib ${BOOST}/stage/lib)
 
 else()
@@ -24,17 +28,14 @@ else()
 endif()
 
 
-if(MSVC)
+add_executable(fractal_flame ${SOURCE})
 
-    add_executable(fractal_flame ${SOURCE_TINYXML} main.cpp flame_fractal.cpp init_functions.cpp Variation.cpp init_functions.cpp 
-        ScreensaverAutomat.cpp FractalThreadController.cpp ${MYLIB}/filesystem_utils.cpp ${MYLIB}/small_utils.cpp)
+
+if(MSVC)
 
     target_link_libraries(fractal_flame opengl32 glu32 freeglut freeimage boost_system boost_filesystem boost_program_options)
 
 else()
-
-    add_executable(fractal_flame main.cpp flame_fractal.cpp init_functions.cpp Variation.cpp init_functions.cpp 
-        ScreensaverAutomat.cpp FractalThreadController.cpp ${MYLIB}/filesystem_utils.cpp ${MYLIB}/small_utils.cpp)
 
     target_link_libraries(fractal_flame GL GLU glut tinyxml freeimage boost_system boost_filesystem boost_program_options pthread)
 
