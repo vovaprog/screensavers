@@ -105,6 +105,8 @@ void saveFunctions(const char *fileName,vector<Function*> &functions)
 	doc.SaveFile( fileName );    
 }
 
+static bool firstTimeInitFunctionsRandom=true;
+
 void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeight)
 {
     vector<VariationPointer> variations;
@@ -138,11 +140,14 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
     //variations.push_back(variationCosine);//-
     
     
-    srand(time(NULL));
+    if(firstTimeInitFunctionsRandom)
+    {        
+        srand(time(NULL)); 
+    }
 
     
     int numberOfFunctions=MIN_NUMBER_OF_FUNCTIONS + rand() % (MAX_NUMBER_OF_FUNCTIONS + 1 - MIN_NUMBER_OF_FUNCTIONS);
-    
+    cout <<"------------"<<endl;
     for(int i=0;i<numberOfFunctions;i++)
     {
         Function *pFun = new Function();
@@ -153,7 +158,9 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
         {        
             int variationIndex = rand() % variations.size();                    
             pFun->variations.push_back(variations[variationIndex]);
+            cout <<variationIndex<<"   ";
         }
+        cout<<endl;
         
                 
         pFun->r = 150 + rand() % 106; 
@@ -184,6 +191,7 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
         
         functions.push_back(pFun);
     }
+    cout <<"------------"<<endl;
     
     initFunctionProbabilities(functions,totalProbabilityWeight);    
 }

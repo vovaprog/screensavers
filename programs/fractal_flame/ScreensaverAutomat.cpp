@@ -47,8 +47,12 @@ unsigned int* ScreensaverAutomat::nextFrame()
     switch(state){
     case AutomatState::FIRST:
         return handleFirst();
+    case AutomatState::SECOND:
+        return handleSecond();        
     case AutomatState::SHOW_IDLE:
         return handleShowIdle();
+    case AutomatState::WAIT_RESULT:
+        return handleWaitResult();
     case AutomatState::TRANSIT_START:
         return handleTransitStart();
     case AutomatState::TRANSIT_PROCESS:
@@ -65,34 +69,60 @@ unsigned int* ScreensaverAutomat::handleFirst()
     outputBlend=new unsigned int[outputSize];
     
     fractalInit(pictureWidth,pictureHeight);
-            
-    startMillis=getMilliseconds();
-            
+
     threadController.beginCalculateFractal();
-    unsigned int *p = threadController.getResult();
-    if(p!=nullptr)
-    {
-        memcpy(output0,p,sizeof(unsigned int) * outputSize);
-        
-        saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
-        imageCounter += 1;
-    }
-    else
-    {
-        memset(output0,0,sizeof(unsigned int) * outputSize);    
-    }
+            
+    memset(output0,0,sizeof(unsigned int) * outputSize);
     
-    threadController.beginCalculateFractal();
-            
-    state=AutomatState::SHOW_IDLE;        
+    startMillis=getMilliseconds();
+    
+    
+    state=AutomatState::SECOND;        
     return output0;
 }
     
+unsigned int* ScreensaverAutomat::handleSecond()
+{        
+    unsigned int millisPassed = getMilliseconds() - startMillis;
+    
+    if(millisPassed>=SECOND_MILLIS)
+    {
+        fractalSetStopFlag();
+        startMillis=getMilliseconds();
+        state=AutomatState::WAIT_RESULT;        
+    }
+    else
+    {
+        state=AutomatState::SECOND;
+    }
+    
+    return output0;
+}
+
+
 unsigned int* ScreensaverAutomat::handleShowIdle()
 {        
     unsigned int millisPassed = getMilliseconds() - startMillis;
     
     if(millisPassed>=SHOW_MILLIS)
+    {
+        fractalSetStopFlag();
+        startMillis=getMilliseconds();
+        state=AutomatState::WAIT_RESULT;
+    }
+    else
+    {
+        state=AutomatState::SHOW_IDLE;
+    }        
+    
+    return output0;
+}       
+    
+unsigned int* ScreensaverAutomat::handleWaitResult()
+{
+    unsigned int millisPassed = getMilliseconds() - startMillis;
+    
+    if(millisPassed>=WAIT_RESULT_MILLIS)
     {
         unsigned int *p = threadController.getResultWithTimeout();
         if(p!=nullptr)
@@ -107,17 +137,16 @@ unsigned int* ScreensaverAutomat::handleShowIdle()
         }
         else
         {
-            state=AutomatState::SHOW_IDLE;
-        }                        
+            state=AutomatState::WAIT_RESULT;
+        }
     }
     else
     {
-        state=AutomatState::SHOW_IDLE;
-    }        
-    
+        state=AutomatState::WAIT_RESULT;
+    }
     return output0;
-}       
-    
+}
+
 unsigned int* ScreensaverAutomat::handleTransitStart()
 {         
     double blendD=1.0 / ((TRANSIT_MILLIS / 1000.0) * fps);

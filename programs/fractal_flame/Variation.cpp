@@ -54,8 +54,8 @@ void variationFisheye(double x, double y, double &xOut, double &yOut)
 {         
     double r = radius(x,y);
     
-    xOut = (2.0 / (r + 1)) * y; 
-    yOut = (2.0 / (r + 1)) * x;
+    xOut = (2.0 / (r + 1.0)) * y; 
+    yOut = (2.0 / (r + 1.0)) * x;
 }
 
 void variationMirror(double x, double y, double &xOut, double &yOut)

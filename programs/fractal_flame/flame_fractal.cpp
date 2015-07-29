@@ -23,7 +23,7 @@ enum class CalculateFractalResult { SUCCESS, BAD_PICTURE, STOP_FLAG };
 static int pictureWidth,pictureHeight;
 static vector<Function*> functions;
 static unsigned int numberOfIterations=30000000;
-static double colorPowerArgument = 0.45;
+static double colorPowerArgument = 0.5; //0.45;
 //=====calculate parameters=====
 
 
@@ -235,7 +235,7 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
     {
         pointSum += hist[i];
         
-        if(((double)pointSum / (double)outputSize)>0.995)
+        if(((double)pointSum / (double)outputSize)>0.999)//0.995)
         {
             return minCounter + (i+1) * binSize;
         }
@@ -261,7 +261,8 @@ static CalculateFractalResult createOutput()
     	return CalculateFractalResult::BAD_PICTURE;
     }
         
-    unsigned int counterUpLimit = histAnalysis(minCounter, maxCounter);        
+    unsigned int counterUpLimit = histAnalysis(minCounter, maxCounter);
+    //unsigned int counterUpLimit = maxCounter;
 
     for(int i=0;i<outputSize;i++)
     {
@@ -348,7 +349,9 @@ static CalculateFractalResult calculateFractal()
         {
             if(stopFlag.load())
             {
-                return CalculateFractalResult::STOP_FLAG;   
+                //return CalculateFractalResult::STOP_FLAG;
+                cout <<"iterations: "<<i<<endl;
+                break;
             }
         }
     }
@@ -449,12 +452,14 @@ void fractalRender(const char *fileName)
 	saveImage(outputFileName.c_str(),"bmp");
 }
 
-unsigned int* fractalRandom()
+unsigned int* fractalScreensaver()
 {
 	destroyFunctions();
 	initFunctionsRandom(functions,totalProbabilityWeight);
+	stopFlag.store(false);
+	numberOfIterations=100000000;
 	
-	for(int i=0;i<50;i++)
+	for(int i=0;i<30;i++)
 	{
 	    CalculateFractalResult result=calculateFractal();
 	    
@@ -464,11 +469,19 @@ unsigned int* fractalRandom()
 		}
 		else if(result==CalculateFractalResult::BAD_PICTURE)
 		{
-			initFunctionsRandom(functions,totalProbabilityWeight);
+		    if(!stopFlag.load())
+		    {
+                destroyFunctions();		    
+                initFunctionsRandom(functions,totalProbabilityWeight);
+			}
+			else
+			{
+			    break;
+			}
 		}
 		else if(result==CalculateFractalResult::STOP_FLAG)
 		{
-		    return nullptr;    
+		    break;    
 		}
 	}
 	

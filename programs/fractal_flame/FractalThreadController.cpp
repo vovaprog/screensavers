@@ -6,7 +6,6 @@
 
 using namespace std;
 
-#define FIRST_NUMBER_OF_ITERATIONS 1000000
 
 FractalThreadController::FractalThreadController()
 {
@@ -27,8 +26,6 @@ FractalThreadController::~FractalThreadController()
 
 void FractalThreadController::fractalThreadEntry()
 {    
-    bool firstTime=true;
-    
     while(!threadStopFlag.load())
     {       
         semStartWork.wait();
@@ -38,20 +35,12 @@ void FractalThreadController::fractalThreadEntry()
             semResult.increment();
             return;    
         }
-        
-        
-        
-        if(firstTime)
-        {
-            firstTime=false;
-            numberOfIterations = FIRST_NUMBER_OF_ITERATIONS;
-            fractalSetNumberOfIterations(FIRST_NUMBER_OF_ITERATIONS);
-        }
+
         
                         
         unsigned int startMillis=getMilliseconds();
         
-        output = fractalRandom();
+        output = fractalScreensaver();
         
         
         
@@ -65,19 +54,8 @@ void FractalThreadController::fractalThreadEntry()
         
         unsigned int millisPassed = getMilliseconds() - startMillis; 
         
-        cout <<"calculate time: "<<millisPassed<<"   number of iterations: "<<numberOfIterations<< endl<<flush;
-        
-        unsigned int period = periodMilliseconds.load();
-                
-        double d = (double)millisPassed / ((double)period * 0.4);
-                
-        if(d>1.0+0.3 || d<1.0-0.3)
-        {
-            numberOfIterations /= d;
-            fractalSetNumberOfIterations(numberOfIterations);
-        }
-        
-        
+        cout <<"calculate time: "<<millisPassed<<endl;
+                       
         
         semResult.increment();       
     }        
