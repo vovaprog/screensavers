@@ -40,6 +40,9 @@ static atomic<bool> stopFlag;
 static int outputSize;
 static unsigned int histSize=0;
 static int totalProbabilityWeight;
+
+static unsigned int goodPointCounter=0;
+static unsigned int badPointCounter=0;
 //=====variables=====
 
 
@@ -77,6 +80,13 @@ void fractalDestroy()
 		delete[] saveOutput;
 		saveOutput=nullptr;
 	}
+}
+
+static void resetVariables()
+{
+    destroyFunctions();
+    goodPointCounter=0;
+    badPointCounter=0;
 }
 
 void fractalInit(int argPictureWidth, int argPictureHeight)
@@ -157,6 +167,18 @@ static CalculateFractalResult plot(double mathX, double mathY, Function *pFun,un
         points[i].r = (points[i].r + pFun->r) / 2;
         points[i].g = (points[i].g + pFun->g) / 2;
         points[i].b = (points[i].b + pFun->b) / 2;
+        
+        goodPointCounter++;
+    }
+    else
+    {
+        badPointCounter++;
+        
+        if(badPointCounter>300000 && badPointCounter/4>goodPointCounter)
+        {
+            cout <<"plot BAD PICTURE! good: "<<goodPointCounter<<"   bad: "<<badPointCounter<<endl;
+            return CalculateFractalResult::BAD_PICTURE;
+        }
     }
     
     return CalculateFractalResult::SUCCESS;
@@ -341,6 +363,7 @@ static CalculateFractalResult calculateFractal()
         {
             if(plot(x,y,pFun,i)==CalculateFractalResult::BAD_PICTURE)
             {
+                memset(output,0,outputSize * sizeof(unsigned int));
                 return CalculateFractalResult::BAD_PICTURE;   
             }
         }        
@@ -349,7 +372,6 @@ static CalculateFractalResult calculateFractal()
         {
             if(stopFlag.load())
             {
-                //return CalculateFractalResult::STOP_FLAG;
                 cout <<"iterations: "<<i<<endl;
                 break;
             }
@@ -454,7 +476,7 @@ void fractalRender(const char *fileName)
 
 unsigned int* fractalScreensaver()
 {
-	destroyFunctions();
+	resetVariables();
 	initFunctionsRandom(functions,totalProbabilityWeight);
 	stopFlag.store(false);
 	numberOfIterations=100000000;
@@ -470,8 +492,8 @@ unsigned int* fractalScreensaver()
 		else if(result==CalculateFractalResult::BAD_PICTURE)
 		{
 		    if(!stopFlag.load())
-		    {
-                destroyFunctions();		    
+		    {		 
+                resetVariables();
                 initFunctionsRandom(functions,totalProbabilityWeight);
 			}
 			else
