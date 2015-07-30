@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <string>
 #include <ctime>
+#include <iostream>
 
 #include <tinyxml.h>
 
