@@ -30,7 +30,6 @@ public:
     
     void beginCalculateFractal();
     
-    //unsigned int* getResult();
     CalculateFractalResult getResultWithTimeout(unsigned int **ppOutput);    
     
     void fractalThreadEntry();   

@@ -71,11 +71,6 @@ void FractalThreadController::beginCalculateFractal()
     semStartWork.increment();
 }
 
-/*unsigned int* FractalThreadController::getResult()
-{    
-    semResult.wait();
-    return output;
-}*/
 
 CalculateFractalResult FractalThreadController::getResultWithTimeout(unsigned int **ppOutput)
 {    
