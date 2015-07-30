@@ -144,7 +144,7 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
     if(firstTimeInitFunctionsRandom)
     {        
         firstTimeInitFunctionsRandom=false;
-        srand(time(NULL)); 
+        srand((unsigned int)time(NULL)); 
     }
 
     

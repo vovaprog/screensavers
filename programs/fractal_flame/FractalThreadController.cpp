@@ -40,7 +40,7 @@ void FractalThreadController::fractalThreadEntry()
                         
         unsigned int startMillis=getMilliseconds();
         
-        output = fractalScreensaver();
+        result = fractalScreensaver(&output);
         
         
         
@@ -71,21 +71,22 @@ void FractalThreadController::beginCalculateFractal()
     semStartWork.increment();
 }
 
-unsigned int* FractalThreadController::getResult()
+/*unsigned int* FractalThreadController::getResult()
 {    
     semResult.wait();
     return output;
-}
+}*/
 
-unsigned int* FractalThreadController::getResultWithTimeout()
+CalculateFractalResult FractalThreadController::getResultWithTimeout(unsigned int **ppOutput)
 {    
     if(semResult.waitMilliseconds(100))
-    {    
-        return output;
+    {   
+        *ppOutput=output;
+        return result;
     }
     else
     {
-        return 0;
+        return CalculateFractalResult::TIMEOUT;
     }
 }
 

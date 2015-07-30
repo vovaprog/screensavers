@@ -16,8 +16,6 @@
 
 using namespace std;
 
-enum class CalculateFractalResult { SUCCESS, BAD_PICTURE, STOP_FLAG };
-
 
 //=====calculate parameters=====
 static int pictureWidth,pictureHeight;
@@ -100,7 +98,7 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
     output=new unsigned int[outputSize];
     points=new Point[outputSize];
     
-    srand(time(NULL));    
+    srand((unsigned int)time(NULL));    
     
     stopFlag.store(false);
 }
@@ -174,7 +172,7 @@ static CalculateFractalResult plot(double mathX, double mathY, Function *pFun,un
     {
         badPointCounter++;
         
-        if(badPointCounter>300000 && badPointCounter/4>goodPointCounter)
+        if(badPointCounter>300000 && badPointCounter/8 > goodPointCounter)
         {
             cout <<"plot BAD PICTURE! good: "<<goodPointCounter<<"   bad: "<<badPointCounter<<endl;
             return CalculateFractalResult::BAD_PICTURE;
@@ -284,7 +282,6 @@ static CalculateFractalResult createOutput()
     }
         
     unsigned int counterUpLimit = histAnalysis(minCounter, maxCounter);
-    //unsigned int counterUpLimit = maxCounter;
 
     for(int i=0;i<outputSize;i++)
     {
@@ -474,16 +471,18 @@ void fractalRender(const char *fileName)
 	saveImage(outputFileName.c_str(),"bmp");
 }
 
-unsigned int* fractalScreensaver()
+CalculateFractalResult fractalScreensaver(unsigned int **ppOutput)
 {
 	resetVariables();
 	initFunctionsRandom(functions,totalProbabilityWeight);
 	stopFlag.store(false);
-	numberOfIterations=100000000;
+	numberOfIterations=300000000;
+	
+	CalculateFractalResult result=CalculateFractalResult::BAD_PICTURE;
 	
 	for(int i=0;i<30;i++)
 	{
-	    CalculateFractalResult result=calculateFractal();
+	    result=calculateFractal();
 	    
 		if(result==CalculateFractalResult::SUCCESS)
 		{
@@ -501,13 +500,10 @@ unsigned int* fractalScreensaver()
 			    break;
 			}
 		}
-		else if(result==CalculateFractalResult::STOP_FLAG)
-		{
-		    break;    
-		}
 	}
 	
-	return output;
+	*ppOutput=output;
+	return result;
 }
 
 void fractalSetNumberOfIterations(int argNumberOfIterations)

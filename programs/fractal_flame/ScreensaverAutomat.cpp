@@ -124,8 +124,9 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
     
     if(millisPassed>=WAIT_RESULT_MILLIS)
     {
-        unsigned int *p = threadController.getResultWithTimeout();
-        if(p!=nullptr)
+        unsigned int *p;
+        CalculateFractalResult result = threadController.getResultWithTimeout(&p);
+        if(result==CalculateFractalResult::SUCCESS)
         {
             memcpy(output1,p,sizeof(unsigned int) * outputSize);
             
@@ -135,9 +136,15 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
             threadController.beginCalculateFractal();
             state=AutomatState::TRANSIT_START;
         }
-        else
+        else if(result==CalculateFractalResult::TIMEOUT)
         {
             state=AutomatState::WAIT_RESULT;
+        }
+        else if(result==CalculateFractalResult::BAD_PICTURE)
+        {
+            threadController.beginCalculateFractal();
+            startMillis=getMilliseconds();
+            state=AutomatState::SHOW_IDLE;
         }
     }
     else

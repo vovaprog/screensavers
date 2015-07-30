@@ -18,7 +18,7 @@ public:
 
     vector<VariationPointer> variations;
     
-    Function():probabilityWeight(1.0),r(255),g(255),b(255)
+    Function():probabilityWeight(1),r(255),g(255),b(255)
     {
         preTransformKoef[0][0]=1.0;
         preTransformKoef[0][1]=0.0;

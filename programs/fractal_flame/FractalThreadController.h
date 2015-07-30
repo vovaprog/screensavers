@@ -4,6 +4,7 @@
 #include <atomic>
 
 #include "Semaphore.h"
+#include "flame_fractal.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ private:
     Semaphore semResult, semStartWork;
     
     unsigned int *output=nullptr;
+    CalculateFractalResult result;
 
     atomic<bool> threadStopFlag;
     atomic<unsigned int> periodMilliseconds;
@@ -28,8 +30,8 @@ public:
     
     void beginCalculateFractal();
     
-    unsigned int* getResult();
-    unsigned int* getResultWithTimeout();    
+    //unsigned int* getResult();
+    CalculateFractalResult getResultWithTimeout(unsigned int **ppOutput);    
     
     void fractalThreadEntry();   
     

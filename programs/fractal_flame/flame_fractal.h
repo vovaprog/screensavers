@@ -1,13 +1,16 @@
 #pragma once
 
 
+enum class CalculateFractalResult { SUCCESS, BAD_PICTURE, TIMEOUT };
+
+
 void fractalInit(int argPictureWidth, int argPictureHeight);
 
 void fractalPreview(int numberOfPreviews);
 
 void fractalRender(const char *fileName);
 
-unsigned int* fractalScreensaver();
+CalculateFractalResult fractalScreensaver(unsigned int **ppOutput);
 
 void fractalSetNumberOfIterations(int argNumberOfIterations);
 
