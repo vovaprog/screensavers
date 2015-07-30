@@ -11,7 +11,7 @@ class ScreensaverAutomat{
 private:
     AutomatState state;
     const unsigned int TRANSIT_MILLIS = 3 * 1000;
-    const unsigned int SHOW_MILLIS = 1 * 1000;
+    const unsigned int SHOW_MILLIS = 5 * 1000;
     const unsigned int WAIT_RESULT_MILLIS = 1 * 1000;
     const unsigned int SECOND_MILLIS = 1 * 1000;
     

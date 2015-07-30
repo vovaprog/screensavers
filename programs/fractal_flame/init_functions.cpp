@@ -24,9 +24,9 @@ static void initFunctionProbabilities(vector<Function*> &functions, int &totalPr
 
 
 static const int MIN_NUMBER_OF_FUNCTIONS = 2;
-static const int MAX_NUMBER_OF_FUNCTIONS = 4;//3;
+static const int MAX_NUMBER_OF_FUNCTIONS = 3;
 static const int MIN_NUMBER_OF_VARIATIONS = 1;
-static const int MAX_NUMBER_OF_VARIATIONS = 4;//3;
+static const int MAX_NUMBER_OF_VARIATIONS = 3;
 
 
 static inline double getRandom01()
