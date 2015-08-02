@@ -17,9 +17,11 @@ public:
     
     void increment()
     {
-        std::unique_lock<std::mutex> lock(mtx);
+        {
+            std::unique_lock<std::mutex> lock(mtx);
         
-        counter++;
+            counter++;
+        }
         
         cv.notify_one();        
     }
