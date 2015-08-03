@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <atomic>
+#include <memory>
 
 #include "Function.h"
 #include "Point.h"
@@ -20,10 +21,10 @@ private:
 
 
     //=====buffers=====
-    unsigned int *output=nullptr;
-    unsigned int *saveOutput=nullptr;
-    Point *points=nullptr;
-    unsigned int *hist=nullptr;
+    unique_ptr<unsigned int[]> output;
+    unique_ptr<unsigned int[]> saveOutput;
+    unique_ptr<Point[]> points;
+    unique_ptr<unsigned int[]> hist;    
     //=====buffers=====
 
 
@@ -49,12 +50,11 @@ public:
     void fractalSetNumberOfIterations(int argNumberOfIterations);
     
     void fractalSetStopFlag();
-    void fractalSetExitFlag();
     
     void saveCurrentFractal(const char *dirName,int index);
+    
 private:
     void destroyFunctions();
-    void fractalDestroy();
     void resetVariables();
     void convertScreenToMath(double &x, double &y);
     bool convertMathToScreen(double x, double y,int &xOut,int &yOut);

@@ -15,7 +15,6 @@
 using namespace std;
 
 
-
 void FractalFlame::destroyFunctions()
 {
     for(auto funIter : functions)
@@ -24,32 +23,6 @@ void FractalFlame::destroyFunctions()
     }
     
     functions.clear();
-}
-
-void FractalFlame::fractalDestroy()
-{
-    destroyFunctions();
-    
-	if(output!=nullptr)
-	{
-		delete[] output;
-		output=nullptr;
-	}
-	if(points!=nullptr)
-	{
-		delete[] points;
-		points=nullptr;
-	}
-	if(hist!=nullptr)
-	{
-		delete[] hist;
-		hist=nullptr;
-	}
-	if(saveOutput!=nullptr)
-	{
-		delete[] saveOutput;
-		saveOutput=nullptr;
-	}
 }
 
 void FractalFlame::resetVariables()
@@ -61,14 +34,14 @@ void FractalFlame::resetVariables()
 
 void FractalFlame::fractalInit(int argPictureWidth, int argPictureHeight)
 {	
-	fractalDestroy();	
+	destroyFunctions();	
 	
     pictureWidth=argPictureWidth;
     pictureHeight=argPictureHeight;    
     outputSize=pictureWidth*pictureHeight;
-    
-    output=new unsigned int[outputSize];
-    points=new Point[outputSize];
+
+    output=unique_ptr<unsigned int[]>(new unsigned int[outputSize]);
+    points=unique_ptr<Point[]>(new Point[outputSize]);
     
     srand((unsigned int)time(NULL));    
     
@@ -194,16 +167,11 @@ unsigned int FractalFlame::histAnalysis(unsigned int minCounter,unsigned int max
     
     if(histSize < HIST_BINS)
     {
-    	if(hist==nullptr)
-    	{
-    		delete[] hist;	
-    	}
-    	
-    	hist = new unsigned int[HIST_BINS];
+    	hist=unique_ptr<unsigned int[]>(new unsigned int[HIST_BINS]);
     	histSize = HIST_BINS;
     }
     
-    memset(hist,0,HIST_BINS*sizeof(unsigned int));
+    memset(hist.get(),0,HIST_BINS*sizeof(unsigned int));
     
     
     unsigned int binSize = counterRange / HIST_BINS;
@@ -249,7 +217,7 @@ CalculateFractalResult FractalFlame::createOutput()
     if(maxCounter==0 || maxCounter<=minCounter+10 || maxCounterDivAll>=0.5)
     {
     	cout <<"bad picture!"<<endl;
-    	memset(output,0,outputSize * sizeof(unsigned int));
+    	memset(output.get(),0,outputSize * sizeof(unsigned int));
     	return CalculateFractalResult::BAD_PICTURE;
     }
         
@@ -332,7 +300,7 @@ CalculateFractalResult FractalFlame::calculateFractal()
         {
             if(plot(x,y,pFun,i)==CalculateFractalResult::BAD_PICTURE)
             {
-                memset(output,0,outputSize * sizeof(unsigned int));
+                memset(output.get(),0,outputSize * sizeof(unsigned int));
                 return CalculateFractalResult::BAD_PICTURE;   
             }
         }        
@@ -354,9 +322,9 @@ CalculateFractalResult FractalFlame::calculateFractal()
 
 void FractalFlame::saveImage(const char *fileName,const char *fileType)
 { 
-	if(saveOutput==nullptr)
+	if(!saveOutput)
 	{
-		saveOutput=new unsigned int[outputSize];	
+		saveOutput=unique_ptr<unsigned int[]>(new unsigned int[outputSize]);	
 	}
 	
 	for(int i=0;i<outputSize;i++)
@@ -364,7 +332,7 @@ void FractalFlame::saveImage(const char *fileName,const char *fileType)
 		saveOutput[i]=(0xff000000 | ((output[i] & 0xff) << 16) | (output[i] & 0xff00) | ((output[i] & 0xff0000) >>16)); 
 	}
 	
-	FIBITMAP* Image = FreeImage_ConvertFromRawBits((BYTE*)saveOutput, pictureWidth, pictureHeight, pictureWidth * sizeof(unsigned int), 32, 
+	FIBITMAP* Image = FreeImage_ConvertFromRawBits((BYTE*)saveOutput.get(), pictureWidth, pictureHeight, pictureWidth * sizeof(unsigned int), 32, 
 		0xFF0000, 0x00FF00, 0x0000FF, false); 
 	
 	if(strcmp(fileType,"png")==0)
@@ -474,7 +442,7 @@ CalculateFractalResult FractalFlame::fractalScreensaver(unsigned int **ppOutput)
 		}
 	}
 	
-	*ppOutput=output;
+	*ppOutput=output.get();
 	return result;
 }
 
