@@ -5,7 +5,7 @@
 
 using namespace std;
 
-ScreensaverAutomat::ScreensaverAutomat(int pictureWidth,int pictureHeight,int fps):state(AutomatState::FIRST)
+ScreensaverAutomat::ScreensaverAutomat(int pictureWidth,int pictureHeight,int fps):state(AutomatState::FIRST),threadController(&fractal)
 {
     this->pictureWidth=pictureWidth;
     this->pictureHeight=pictureHeight;
@@ -68,7 +68,7 @@ unsigned int* ScreensaverAutomat::handleFirst()
     output1=new unsigned int[outputSize];
     outputBlend=new unsigned int[outputSize];
     
-    fractalInit(pictureWidth,pictureHeight);
+    fractal.fractalInit(pictureWidth,pictureHeight);
 
     threadController.beginCalculateFractal();
             
@@ -87,7 +87,7 @@ unsigned int* ScreensaverAutomat::handleSecond()
     
     if(millisPassed>=SECOND_MILLIS)
     {
-        fractalSetStopFlag();
+        fractal.fractalSetStopFlag();
         startMillis=getMilliseconds();
         state=AutomatState::WAIT_RESULT;        
     }
@@ -106,7 +106,7 @@ unsigned int* ScreensaverAutomat::handleShowIdle()
     
     if(millisPassed>=SHOW_MILLIS)
     {
-        fractalSetStopFlag();
+        fractal.fractalSetStopFlag();
         startMillis=getMilliseconds();
         state=AutomatState::WAIT_RESULT;
     }
@@ -130,7 +130,7 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
         {
             memcpy(output1,p,sizeof(unsigned int) * outputSize);
             
-            saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
+            fractal.saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
             imageCounter += 1;
             
             threadController.beginCalculateFractal();

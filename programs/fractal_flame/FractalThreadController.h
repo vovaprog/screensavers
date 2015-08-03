@@ -4,7 +4,7 @@
 #include <atomic>
 
 #include "Semaphore.h"
-#include "flame_fractal.h"
+#include "FractalFlame.h"
 
 using namespace std;
 
@@ -24,8 +24,10 @@ private:
     
     unsigned int numberOfIterations;
     
+    FractalFlame *pFractal;
+    
 public:  
-    FractalThreadController();
+    FractalThreadController(FractalFlame *pFractal);
     ~FractalThreadController();
     
     void beginCalculateFractal();

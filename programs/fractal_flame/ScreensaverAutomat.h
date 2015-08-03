@@ -2,7 +2,7 @@
 
 #include <small_utils.h>
 #include <filesystem_utils.h>
-#include "flame_fractal.h"
+#include "FractalFlame.h"
 #include "FractalThreadController.h"
 
 enum class AutomatState{ FIRST,SECOND,SHOW_IDLE,WAIT_RESULT,TRANSIT_START,TRANSIT_PROCESS };
@@ -24,6 +24,7 @@ private:
     
     int fps;
 
+    FractalFlame fractal;
     FractalThreadController threadController;
     
     const char *saveDirName="./fractals/screensaver";

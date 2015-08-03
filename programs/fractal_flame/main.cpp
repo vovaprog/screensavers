@@ -7,7 +7,7 @@
 
 #include <Semaphore.h>
 #include <ConstantFps.h>
-#include "flame_fractal.h"
+#include "FractalFlame.h"
 #include "ScreensaverAutomat.h"
 
 using namespace std;
@@ -130,7 +130,7 @@ static void startScreensaver(int argc, char **argv)
     glutMainLoop();	    
 }
 
-static void startRender(const string &fileName, int numberOfIterations)
+/*static void startRender(const string &fileName, int numberOfIterations)
 {
     fractalInit(pictureWidth,pictureHeight);
     
@@ -144,7 +144,7 @@ static void startPreview(int numberOfPreviews)
     fractalInit(pictureWidth,pictureHeight);
     
     fractalPreview(numberOfPreviews);    
-}
+}*/
 
 int main(int argc, char **argv)
 {
@@ -189,11 +189,11 @@ int main(int argc, char **argv)
                 return -1;
             }
 
-            startRender(fileName, iterations);
+            //startRender(fileName, iterations);
         }
         else if(mode=="preview")
         {
-            startPreview(numberOfPreviews);
+            //startPreview(numberOfPreviews);
         }
         else
         {

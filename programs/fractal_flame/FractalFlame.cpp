@@ -4,47 +4,19 @@
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
-#include <atomic>
+//#include <atomic>
 
 #include <FreeImage.h>
 
-#include "Function.h"
-#include "Point.h"
+#include "FractalFlame.h"
 #include "init_functions.h"
 #include "filesystem_utils.h"
-#include "flame_fractal.h"
 
 using namespace std;
 
 
-//=====calculate parameters=====
-static int pictureWidth,pictureHeight;
-static vector<Function*> functions;
-static unsigned int numberOfIterations=30000000;
-static double colorPowerArgument = 0.5; //0.45;
-//=====calculate parameters=====
 
-
-//=====buffers=====
-static unsigned int *output=nullptr;
-static unsigned int *saveOutput=nullptr;
-static Point *points=nullptr;
-unsigned int *hist=nullptr;
-//=====buffers=====
-
-
-//=====variables=====
-static atomic<bool> stopFlag;
-static int outputSize;
-static unsigned int histSize=0;
-static int totalProbabilityWeight;
-
-static unsigned int goodPointCounter=0;
-static unsigned int badPointCounter=0;
-//=====variables=====
-
-
-static void destroyFunctions()
+void FractalFlame::destroyFunctions()
 {
     for(auto funIter : functions)
     {
@@ -54,7 +26,7 @@ static void destroyFunctions()
     functions.clear();
 }
 
-void fractalDestroy()
+void FractalFlame::fractalDestroy()
 {
     destroyFunctions();
     
@@ -80,14 +52,14 @@ void fractalDestroy()
 	}
 }
 
-static void resetVariables()
+void FractalFlame::resetVariables()
 {
     destroyFunctions();
     goodPointCounter=0;
     badPointCounter=0;
 }
 
-void fractalInit(int argPictureWidth, int argPictureHeight)
+void FractalFlame::fractalInit(int argPictureWidth, int argPictureHeight)
 {	
 	fractalDestroy();	
 	
@@ -104,13 +76,13 @@ void fractalInit(int argPictureWidth, int argPictureHeight)
 }
 
 
-static void convertScreenToMath(double &x, double &y)
+void FractalFlame::convertScreenToMath(double &x, double &y)
 {
     x = -1.0 + (x / (pictureWidth/2.0));
     y = -1.0 + (y / (pictureHeight/2.0));
 }
 
-static bool convertMathToScreen(double x, double y,int &xOut,int &yOut)
+bool FractalFlame::convertMathToScreen(double x, double y,int &xOut,int &yOut)
 {
     xOut = (int)(((x+1.0)/2.0) * pictureWidth);
     yOut = (int)(((y+1.0)/2.0) * pictureHeight);
@@ -125,7 +97,7 @@ static bool convertMathToScreen(double x, double y,int &xOut,int &yOut)
     }
 }
 
-static void getInitialPoint(double &x, double &y)
+void FractalFlame::getInitialPoint(double &x, double &y)
 {
     x = rand() % pictureWidth;
     y = rand() % pictureHeight;
@@ -133,7 +105,7 @@ static void getInitialPoint(double &x, double &y)
     convertScreenToMath(x,y);
 }
 
-static Function* getRandomFunction()
+Function* FractalFlame::getRandomFunction()
 {
     int randomValue = rand() % totalProbabilityWeight;
     
@@ -148,12 +120,12 @@ static Function* getRandomFunction()
     return nullptr;
 }
 
-static inline int outputIndex(int screenX,int screenY)
+inline int FractalFlame::outputIndex(int screenX,int screenY)
 {
     return screenY * pictureWidth + screenX;    
 }
 
-static CalculateFractalResult plot(double mathX, double mathY, Function *pFun,unsigned int currentIteration)
+CalculateFractalResult FractalFlame::plot(double mathX, double mathY, Function *pFun,unsigned int currentIteration)
 {
     int screenX,screenY;
     
@@ -182,7 +154,7 @@ static CalculateFractalResult plot(double mathX, double mathY, Function *pFun,un
     return CalculateFractalResult::SUCCESS;
 }
 
-static void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
+void FractalFlame::findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
 {    
     minOutput=points[0].count;
     maxOutput=points[0].count;    
@@ -200,7 +172,7 @@ static void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
     }    
 }
 
-static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter)
+unsigned int FractalFlame::histAnalysis(unsigned int minCounter,unsigned int maxCounter)
 {        
     unsigned int counterRange=maxCounter-minCounter;
     
@@ -265,7 +237,7 @@ static unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter
     return 0;
 }
 
-static CalculateFractalResult createOutput()
+CalculateFractalResult FractalFlame::createOutput()
 {
     unsigned int maxCounter, minCounter;
     findMinMaxOutput(minCounter, maxCounter);
@@ -308,7 +280,7 @@ static CalculateFractalResult createOutput()
     return CalculateFractalResult::SUCCESS;
 }
 
-static void applyFunction(Function *pFun, double &x, double &y)
+void FractalFlame::applyFunction(Function *pFun, double &x, double &y)
 {
     double xAccum=0, yAccum=0;
 
@@ -329,7 +301,7 @@ static void applyFunction(Function *pFun, double &x, double &y)
     y=pFun->postTransformKoef[1][0] * xAccum + pFun->postTransformKoef[1][1] * yAccum + pFun->postTransformKoef[1][2];            
 }
 
-static void cleanBuffers()
+void FractalFlame::cleanBuffers()
 {
     for(int i=0;i<outputSize;i++)
     {
@@ -342,7 +314,7 @@ static void cleanBuffers()
 
 
 
-static CalculateFractalResult calculateFractal()
+CalculateFractalResult FractalFlame::calculateFractal()
 {
     double x, y;
         
@@ -380,7 +352,7 @@ static CalculateFractalResult calculateFractal()
 
 
 
-static void saveImage(const char *fileName,const char *fileType)
+void FractalFlame::saveImage(const char *fileName,const char *fileType)
 { 
 	if(saveOutput==nullptr)
 	{
@@ -407,7 +379,7 @@ static void saveImage(const char *fileName,const char *fileType)
 	FreeImage_Unload(Image);
 }
 
-void saveCurrentFractal(const char *argDirName,int index)
+void FractalFlame::saveCurrentFractal(const char *argDirName,int index)
 {
     string dirName(argDirName);
     
@@ -427,7 +399,7 @@ void saveCurrentFractal(const char *argDirName,int index)
     saveImage(fileName.c_str(),"png");		        
 }
 
-void fractalPreview(int numberOfPreviews)
+void FractalFlame::fractalPreview(int numberOfPreviews)
 {    
 	string dirName;
 	
@@ -458,7 +430,7 @@ void fractalPreview(int numberOfPreviews)
 	}		
 }
 
-void fractalRender(const char *fileName)
+void FractalFlame::fractalRender(const char *fileName)
 {
 	destroyFunctions();
 	loadFunctions(fileName,functions,totalProbabilityWeight);
@@ -471,7 +443,7 @@ void fractalRender(const char *fileName)
 	saveImage(outputFileName.c_str(),"bmp");
 }
 
-CalculateFractalResult fractalScreensaver(unsigned int **ppOutput)
+CalculateFractalResult FractalFlame::fractalScreensaver(unsigned int **ppOutput)
 {
 	resetVariables();
 	initFunctionsRandom(functions,totalProbabilityWeight);
@@ -506,12 +478,12 @@ CalculateFractalResult fractalScreensaver(unsigned int **ppOutput)
 	return result;
 }
 
-void fractalSetNumberOfIterations(int argNumberOfIterations)
+void FractalFlame::fractalSetNumberOfIterations(int argNumberOfIterations)
 {
     numberOfIterations = argNumberOfIterations;   
 }
 
-void fractalSetStopFlag()
+void FractalFlame::fractalSetStopFlag()
 {
     stopFlag.store(true);    
 }

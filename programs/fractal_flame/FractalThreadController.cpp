@@ -2,12 +2,12 @@
 
 #include <small_utils.h>
 #include "FractalThreadController.h"
-#include "flame_fractal.h"
+#include "FractalFlame.h"
 
 using namespace std;
 
 
-FractalThreadController::FractalThreadController()
+FractalThreadController::FractalThreadController(FractalFlame *pFractal):pFractal(pFractal)
 {
     threadStopFlag.store(false);    
 }
@@ -17,7 +17,7 @@ FractalThreadController::~FractalThreadController()
     if(t!=nullptr)
     {        
         threadStopFlag.store(true);
-        fractalSetStopFlag();
+        pFractal->fractalSetStopFlag();
         semStartWork.increment();
         t->join();
         t=nullptr;
@@ -40,7 +40,7 @@ void FractalThreadController::fractalThreadEntry()
                         
         unsigned int startMillis=getMilliseconds();
         
-        result = fractalScreensaver(&output);
+        result = pFractal->fractalScreensaver(&output);
         
         
         
