@@ -50,7 +50,7 @@ static void display()
 	
 	glutSwapBuffers();	  
 	
-	constFps.step();	
+	constFps.step();		
 }
 
 static void resizeGLScene(int Width,int Height)
@@ -143,7 +143,7 @@ static void startPreview(int numberOfPreviews)
     
     fractal.fractalInit(pictureWidth,pictureHeight);
     
-    fractal.fractalSetNumberOfIterations(1000000);
+    fractal.fractalSetNumberOfIterations(300000);
     
     fractal.fractalPreview(numberOfPreviews);    
 }
