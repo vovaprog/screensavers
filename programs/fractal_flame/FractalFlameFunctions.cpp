@@ -24,12 +24,6 @@ void FractalFlame::initFunctionProbabilities(vector<unique_ptr<Function>> &funct
 }
 
 
-/*static const int MIN_NUMBER_OF_FUNCTIONS = 2;
-static const int MAX_NUMBER_OF_FUNCTIONS = 3;
-static const int MIN_NUMBER_OF_VARIATIONS = 1;
-static const int MAX_NUMBER_OF_VARIATIONS = 3;*/
-
-
 inline double FractalFlame::getRandom01()
 {
     return ((double)(rand() % 1000))/1000.0;

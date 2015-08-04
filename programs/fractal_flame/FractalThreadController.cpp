@@ -20,6 +20,7 @@ FractalThreadController::~FractalThreadController()
         pFractal->fractalSetStopFlag();
         semStartWork.increment();
         t->join();
+        delete t;
         t=nullptr;
     }
 }

@@ -403,7 +403,7 @@ CalculateFractalResult FractalFlame::fractalScreensaver(unsigned int **ppOutput)
 	resetVariables();
 	initFunctionsRandom(functions,totalProbabilityWeight);
 	stopFlag.store(false);
-	numberOfIterations=300000000;
+	numberOfIterations=500000000;
 	
 	CalculateFractalResult result=CalculateFractalResult::BAD_PICTURE;
 	

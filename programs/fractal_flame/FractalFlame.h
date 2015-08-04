@@ -15,7 +15,7 @@ private:
     //=====calculate parameters=====
     int pictureWidth,pictureHeight;
     std::vector<std::unique_ptr<Function>> functions;
-    unsigned int numberOfIterations=30000000;
+    unsigned int numberOfIterations=1000000;
     double colorPowerArgument = 0.5; //0.45;
     //=====calculate parameters=====
 

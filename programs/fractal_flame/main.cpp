@@ -25,6 +25,9 @@ static ScreensaverAutomat *screensaver;
 
 static ConstantFps constFps(CONSTANT_FPS_VALUE);
 
+static unsigned int* output=0;
+
+
 static void keyPressed(unsigned char key, int x, int y) 
 {	
 	if(key==ESCAPE_KEY) 
@@ -37,13 +40,8 @@ static void keyPressed(unsigned char key, int x, int y)
 	}
 }
 
-unsigned int* output=0;
-
 static void display()
 {    
-    /*FractalFlame f;
-    f.fractalInit(pictureWidth,pictureHeight);
-    f.fractalScreensaver(&output);*/
     output=screensaver->nextFrame();    
 
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -52,7 +50,7 @@ static void display()
 	
 	glutSwapBuffers();	  
 	
-	constFps.step();
+	constFps.step();	
 }
 
 static void resizeGLScene(int Width,int Height)
@@ -67,11 +65,6 @@ static void startScreensaver(int argc, char **argv)
     
 
     glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE);	
-
-    //====================================================================
-    //====================================================================
-    //====================================================================
-
 
     //====================================================================
     //====================================================================
@@ -133,21 +126,27 @@ static void startScreensaver(int argc, char **argv)
     glutMainLoop();	    
 }
 
-/*static void startRender(const string &fileName, int numberOfIterations)
+static void startRender(const string &fileName, int numberOfIterations)
 {
-    fractalInit(pictureWidth,pictureHeight);
+    FractalFlame fractal;
     
-    fractalSetNumberOfIterations(numberOfIterations);
+    fractal.fractalInit(pictureWidth,pictureHeight);
     
-    fractalRender(fileName.c_str());
+    fractal.fractalSetNumberOfIterations(numberOfIterations);
+    
+    fractal.fractalRender(fileName.c_str());
 }
 
 static void startPreview(int numberOfPreviews)
 {
-    fractalInit(pictureWidth,pictureHeight);
+    FractalFlame fractal;
     
-    fractalPreview(numberOfPreviews);    
-}*/
+    fractal.fractalInit(pictureWidth,pictureHeight);
+    
+    fractal.fractalSetNumberOfIterations(1000000);
+    
+    fractal.fractalPreview(numberOfPreviews);    
+}
 
 int main(int argc, char **argv)
 {
@@ -192,11 +191,11 @@ int main(int argc, char **argv)
                 return -1;
             }
 
-            //startRender(fileName, iterations);
+            startRender(fileName, iterations);
         }
         else if(mode=="preview")
         {
-            //startPreview(numberOfPreviews);
+            startPreview(numberOfPreviews);
         }
         else
         {
