@@ -1,10 +1,10 @@
 #pragma once
 
 #include <vector>
+//#include <iostream>
 
 #include "Variation.h"
 
-using namespace std;
 
 class Function{
 public:        
@@ -16,7 +16,7 @@ public:
     double preTransformKoef[2][3];
     double postTransformKoef[2][3];
 
-    vector<VariationPointer> variations;
+    std::vector<VariationPointer> variations;
     
     Function():probabilityWeight(1),r(255),g(255),b(255)
     {
@@ -36,6 +36,11 @@ public:
         postTransformKoef[1][0]=0.0;
         postTransformKoef[1][1]=1.0;
         postTransformKoef[1][2]=0.0;        
+    }
+    
+    ~Function()
+    {
+        //cout <<"Function -destructor"<<endl;        
     }
 };
 

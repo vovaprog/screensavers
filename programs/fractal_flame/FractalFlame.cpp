@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
-//#include <atomic>
 
 #include <FreeImage.h>
 
@@ -15,26 +14,17 @@
 using namespace std;
 
 
-void FractalFlame::destroyFunctions()
-{
-    for(auto funIter : functions)
-    {
-        delete funIter;
-    }
-    
-    functions.clear();
-}
-
 void FractalFlame::resetVariables()
 {
-    destroyFunctions();
+    functions.clear();
+    
     goodPointCounter=0;
     badPointCounter=0;
 }
 
 void FractalFlame::fractalInit(int argPictureWidth, int argPictureHeight)
 {	
-	destroyFunctions();	
+	functions.clear();
 	
     pictureWidth=argPictureWidth;
     pictureHeight=argPictureHeight;    
@@ -82,11 +72,11 @@ Function* FractalFlame::getRandomFunction()
 {
     int randomValue = rand() % totalProbabilityWeight;
     
-    for(auto funIter : functions)
+    for(auto& funIter : functions)
     {
         if(randomValue<funIter->probabilityUpBorder)
         {
-            return funIter;    
+            return funIter.get();    
         }
     }
     
@@ -384,7 +374,6 @@ void FractalFlame::fractalPreview(int numberOfPreviews)
 
 	for(int i=0;i<numberOfPreviews;i++)
 	{
-		destroyFunctions();
 		initFunctionsRandom(functions,totalProbabilityWeight);
 		
 		if(calculateFractal()==CalculateFractalResult::SUCCESS)
@@ -400,7 +389,6 @@ void FractalFlame::fractalPreview(int numberOfPreviews)
 
 void FractalFlame::fractalRender(const char *fileName)
 {
-	destroyFunctions();
 	loadFunctions(fileName,functions,totalProbabilityWeight);
 	
 	calculateFractal();

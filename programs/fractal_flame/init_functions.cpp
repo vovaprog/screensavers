@@ -3,6 +3,7 @@
 #include <string>
 #include <ctime>
 #include <iostream>
+#include <memory>
 
 #include <tinyxml.h>
 
@@ -11,11 +12,11 @@
 
 using namespace std;
 
-static void initFunctionProbabilities(vector<Function*> &functions, int &totalProbabilityWeight)
+static void initFunctionProbabilities(vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
 {
     totalProbabilityWeight=0;
     
-    for(auto funIter : functions)
+    for(auto& funIter : functions)
     {
         totalProbabilityWeight += funIter->probabilityWeight;
         funIter->probabilityUpBorder=totalProbabilityWeight;
@@ -40,7 +41,7 @@ static inline double getRandomValue(double start, double end)
 }
 
 
-void saveFunctions(const char *fileName,vector<Function*> &functions)
+void saveFunctions(const char *fileName,vector<unique_ptr<Function>> &functions)
 {    
 	TiXmlDocument doc;
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -52,7 +53,7 @@ void saveFunctions(const char *fileName,vector<Function*> &functions)
 	TiXmlElement *flameElement = new TiXmlElement( "flame" );
 	flamesElement->LinkEndChild(flameElement);
 
-	for(auto pFun : functions)
+	for(auto& pFun : functions)
 	{
 		TiXmlElement *xformElement = new TiXmlElement( "xform" );		
 		flameElement->LinkEndChild(xformElement);
@@ -108,8 +109,10 @@ void saveFunctions(const char *fileName,vector<Function*> &functions)
 
 static bool firstTimeInitFunctionsRandom=true;
 
-void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeight)
+void initFunctionsRandom(vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
 {
+    functions.clear();
+    
     vector<VariationPointer> variations;
     variations.push_back(variationSin);
     variations.push_back(variationFisheye);            
@@ -191,15 +194,17 @@ void initFunctionsRandom(vector<Function*> &functions, int &totalProbabilityWeig
         pFun->postTransformKoef[1][2]=0.0 + getRandomValue(-KDEV,KDEV);           
                 
         
-        functions.push_back(pFun);
+        functions.push_back(unique_ptr<Function>(pFun));
     }
     cout <<"------------"<<endl;
     
     initFunctionProbabilities(functions,totalProbabilityWeight);    
 }
 
-void loadFunctions(const char *fileName,vector<Function*> &functions, int &totalProbabilityWeight)
+void loadFunctions(const char *fileName,vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
 {
+    functions.clear();
+    
 	TiXmlDocument doc(fileName);
 	if (!doc.LoadFile()) 
 	{
@@ -213,8 +218,7 @@ void loadFunctions(const char *fileName,vector<Function*> &functions, int &total
 
 	while(xformElem)
 	{
-		Function *pFun=new Function();
-		functions.push_back(pFun);
+		Function *pFun=new Function();		
 		
 		sscanf(xformElem->Attribute("coefs"),"%lf %lf %lf %lf %lf %lf",
 			&(pFun->preTransformKoef[0][0]),&(pFun->preTransformKoef[1][0]),
@@ -259,6 +263,8 @@ void loadFunctions(const char *fileName,vector<Function*> &functions, int &total
 		
 		
 		xformElem=xformElem->NextSiblingElement();
+		
+		functions.push_back(unique_ptr<Function>(pFun));
 	}
 	
 	initFunctionProbabilities(functions,totalProbabilityWeight);	

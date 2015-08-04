@@ -14,17 +14,17 @@ private:
 
     //=====calculate parameters=====
     int pictureWidth,pictureHeight;
-    std::vector<Function*> functions;
+    std::vector<std::unique_ptr<Function>> functions;
     unsigned int numberOfIterations=30000000;
     double colorPowerArgument = 0.5; //0.45;
     //=====calculate parameters=====
 
 
     //=====buffers=====
-    unique_ptr<unsigned int[]> output;
-    unique_ptr<unsigned int[]> saveOutput;
-    unique_ptr<Point[]> points;
-    unique_ptr<unsigned int[]> hist;    
+    std::unique_ptr<unsigned int[]> output;
+    std::unique_ptr<unsigned int[]> saveOutput;
+    std::unique_ptr<Point[]> points;
+    std::unique_ptr<unsigned int[]> hist;    
     //=====buffers=====
 
 
@@ -53,8 +53,8 @@ public:
     
     void saveCurrentFractal(const char *dirName,int index);
     
-private:
-    void destroyFunctions();
+private:    
+    //void destroyFunctions();
     void resetVariables();
     void convertScreenToMath(double &x, double &y);
     bool convertMathToScreen(double x, double y,int &xOut,int &yOut);

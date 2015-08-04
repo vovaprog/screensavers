@@ -40,8 +40,11 @@ static void keyPressed(unsigned char key, int x, int y)
 unsigned int* output=0;
 
 static void display()
-{
-    output=screensaver->nextFrame();
+{    
+    /*FractalFlame f;
+    f.fractalInit(pictureWidth,pictureHeight);
+    f.fractalScreensaver(&output);*/
+    output=screensaver->nextFrame();    
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	
