@@ -36,7 +36,15 @@ private:
     
     unsigned int goodPointCounter=0;
     unsigned int badPointCounter=0;
+    
+    bool firstTimeInitFunctionsRandom=true;
     //=====variables=====
+    
+    const int MIN_NUMBER_OF_FUNCTIONS = 2;
+    const int MAX_NUMBER_OF_FUNCTIONS = 3;
+    const int MIN_NUMBER_OF_VARIATIONS = 1;
+    const int MAX_NUMBER_OF_VARIATIONS = 3;
+
 
 public:    
     void fractalInit(int argPictureWidth, int argPictureHeight);
@@ -54,7 +62,6 @@ public:
     void saveCurrentFractal(const char *dirName,int index);
     
 private:    
-    //void destroyFunctions();
     void resetVariables();
     void convertScreenToMath(double &x, double &y);
     bool convertMathToScreen(double x, double y,int &xOut,int &yOut);
@@ -69,4 +76,12 @@ private:
     void cleanBuffers();
     CalculateFractalResult calculateFractal();
     void saveImage(const char *fileName,const char *fileType);
+    
+    void saveFunctions(const char *fileName,std::vector<std::unique_ptr<Function>> &functions);
+    void initFunctionsRandom(std::vector<std::unique_ptr<Function>> &functions, int &totalProbabilityWeight);
+    void loadFunctions(const char *fileName,std::vector<std::unique_ptr<Function>> &functions, int &totalProbabilityWeight);
+    
+    void initFunctionProbabilities(std::vector<std::unique_ptr<Function>> &functions, int &totalProbabilityWeight);
+    double getRandom01();
+    double getRandomValue(double start, double end);
 };

@@ -8,11 +8,11 @@
 #include <tinyxml.h>
 
 #include "Function.h"
-#include "init_functions.h"
+#include "FractalFlame.h"
 
 using namespace std;
 
-static void initFunctionProbabilities(vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
+void FractalFlame::initFunctionProbabilities(vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
 {
     totalProbabilityWeight=0;
     
@@ -24,24 +24,24 @@ static void initFunctionProbabilities(vector<unique_ptr<Function>> &functions, i
 }
 
 
-static const int MIN_NUMBER_OF_FUNCTIONS = 2;
+/*static const int MIN_NUMBER_OF_FUNCTIONS = 2;
 static const int MAX_NUMBER_OF_FUNCTIONS = 3;
 static const int MIN_NUMBER_OF_VARIATIONS = 1;
-static const int MAX_NUMBER_OF_VARIATIONS = 3;
+static const int MAX_NUMBER_OF_VARIATIONS = 3;*/
 
 
-static inline double getRandom01()
+inline double FractalFlame::getRandom01()
 {
     return ((double)(rand() % 1000))/1000.0;
 }
 
-static inline double getRandomValue(double start, double end)
+inline double FractalFlame::getRandomValue(double start, double end)
 {
     return start + getRandom01() * (end - start);
 }
 
 
-void saveFunctions(const char *fileName,vector<unique_ptr<Function>> &functions)
+void FractalFlame::saveFunctions(const char *fileName,vector<unique_ptr<Function>> &functions)
 {    
 	TiXmlDocument doc;
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -107,9 +107,8 @@ void saveFunctions(const char *fileName,vector<unique_ptr<Function>> &functions)
 	doc.SaveFile( fileName );    
 }
 
-static bool firstTimeInitFunctionsRandom=true;
 
-void initFunctionsRandom(vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
+void FractalFlame::initFunctionsRandom(vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
 {
     functions.clear();
     
@@ -201,7 +200,7 @@ void initFunctionsRandom(vector<unique_ptr<Function>> &functions, int &totalProb
     initFunctionProbabilities(functions,totalProbabilityWeight);    
 }
 
-void loadFunctions(const char *fileName,vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
+void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
 {
     functions.clear();
     

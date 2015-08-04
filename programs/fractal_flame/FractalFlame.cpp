@@ -8,7 +8,6 @@
 #include <FreeImage.h>
 
 #include "FractalFlame.h"
-#include "init_functions.h"
 #include "filesystem_utils.h"
 
 using namespace std;
