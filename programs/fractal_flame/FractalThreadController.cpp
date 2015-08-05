@@ -17,7 +17,7 @@ FractalThreadController::~FractalThreadController()
     if(t!=nullptr)
     {        
         threadStopFlag.store(true);
-        pFractal->fractalSetStopFlag();
+        pFractal->setStopFlag();
         semStartWork.increment();
         t->join();
         delete t;
@@ -41,7 +41,7 @@ void FractalThreadController::fractalThreadEntry()
                         
         unsigned int startMillis=getMilliseconds();
         
-        result = pFractal->fractalScreensaver(&output);
+        result = pFractal->screensaver(&output);
         
         
         
@@ -73,7 +73,7 @@ void FractalThreadController::beginCalculateFractal()
 }
 
 
-CalculateFractalResult FractalThreadController::getResultWithTimeout(unsigned int **ppOutput)
+FractalFlame::CalculateFractalResult FractalThreadController::getResultWithTimeout(unsigned int **ppOutput)
 {    
     if(semResult.waitMilliseconds(100))
     {   
@@ -82,7 +82,7 @@ CalculateFractalResult FractalThreadController::getResultWithTimeout(unsigned in
     }
     else
     {
-        return CalculateFractalResult::TIMEOUT;
+        return FractalFlame::CalculateFractalResult::TIMEOUT;
     }
 }
 

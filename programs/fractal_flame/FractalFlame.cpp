@@ -21,7 +21,7 @@ void FractalFlame::resetVariables()
     badPointCounter=0;
 }
 
-void FractalFlame::fractalInit(int argPictureWidth, int argPictureHeight)
+void FractalFlame::init(int argPictureWidth, int argPictureHeight)
 {	
 	functions.clear();
 	
@@ -87,7 +87,7 @@ inline int FractalFlame::outputIndex(int screenX,int screenY)
     return screenY * pictureWidth + screenX;    
 }
 
-CalculateFractalResult FractalFlame::plot(double mathX, double mathY, Function *pFun,unsigned int currentIteration)
+FractalFlame::CalculateFractalResult FractalFlame::plot(double mathX, double mathY, Function *pFun,unsigned int currentIteration)
 {
     int screenX,screenY;
     
@@ -109,11 +109,11 @@ CalculateFractalResult FractalFlame::plot(double mathX, double mathY, Function *
         if(badPointCounter>300000 && badPointCounter/8 > goodPointCounter)
         {
             cout <<"plot BAD PICTURE! good: "<<goodPointCounter<<"   bad: "<<badPointCounter<<endl;
-            return CalculateFractalResult::BAD_PICTURE;
+            return FractalFlame::CalculateFractalResult::BAD_PICTURE;
         }
     }
     
-    return CalculateFractalResult::SUCCESS;
+    return FractalFlame::CalculateFractalResult::SUCCESS;
 }
 
 void FractalFlame::findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput)
@@ -194,7 +194,7 @@ unsigned int FractalFlame::histAnalysis(unsigned int minCounter,unsigned int max
     return 0;
 }
 
-CalculateFractalResult FractalFlame::createOutput()
+FractalFlame::CalculateFractalResult FractalFlame::createOutput()
 {
     unsigned int maxCounter, minCounter;
     findMinMaxOutput(minCounter, maxCounter);
@@ -207,7 +207,7 @@ CalculateFractalResult FractalFlame::createOutput()
     {
     	cout <<"bad picture!"<<endl;
     	memset(output.get(),0,outputSize * sizeof(unsigned int));
-    	return CalculateFractalResult::BAD_PICTURE;
+    	return FractalFlame::CalculateFractalResult::BAD_PICTURE;
     }
         
     unsigned int counterUpLimit = histAnalysis(minCounter, maxCounter);
@@ -234,7 +234,7 @@ CalculateFractalResult FractalFlame::createOutput()
         output[i] = (0xff000000 | (points[i].b << 16) | (points[i].g <<8) | points[i].r);
     }
     
-    return CalculateFractalResult::SUCCESS;
+    return FractalFlame::CalculateFractalResult::SUCCESS;
 }
 
 void FractalFlame::applyFunction(Function *pFun, double &x, double &y)
@@ -271,7 +271,7 @@ void FractalFlame::cleanBuffers()
 
 
 
-CalculateFractalResult FractalFlame::calculateFractal()
+FractalFlame::CalculateFractalResult FractalFlame::calculateFractal()
 {
     double x, y;
         
@@ -287,10 +287,10 @@ CalculateFractalResult FractalFlame::calculateFractal()
         
         if(i>20)
         {
-            if(plot(x,y,pFun,i)==CalculateFractalResult::BAD_PICTURE)
+            if(plot(x,y,pFun,i)==FractalFlame::CalculateFractalResult::BAD_PICTURE)
             {
                 memset(output.get(),0,outputSize * sizeof(unsigned int));
-                return CalculateFractalResult::BAD_PICTURE;   
+                return FractalFlame::CalculateFractalResult::BAD_PICTURE;   
             }
         }        
         
@@ -356,7 +356,7 @@ void FractalFlame::saveCurrentFractal(const char *argDirName,int index)
     saveImage(fileName.c_str(),"png");		        
 }
 
-void FractalFlame::fractalPreview(int numberOfPreviews)
+void FractalFlame::preview(int numberOfPreviews)
 {    
 	string dirName;
 	
@@ -375,7 +375,7 @@ void FractalFlame::fractalPreview(int numberOfPreviews)
 	{
 		initFunctionsRandom(functions,totalProbabilityWeight);
 		
-		if(calculateFractal()==CalculateFractalResult::SUCCESS)
+		if(calculateFractal()==FractalFlame::CalculateFractalResult::SUCCESS)
 		{		    
             saveCurrentFractal(dirName.c_str(),i);
 		}
@@ -386,7 +386,7 @@ void FractalFlame::fractalPreview(int numberOfPreviews)
 	}		
 }
 
-void FractalFlame::fractalRender(const char *fileName)
+void FractalFlame::render(const char *fileName)
 {
 	loadFunctions(fileName,functions,totalProbabilityWeight);
 	
@@ -398,24 +398,24 @@ void FractalFlame::fractalRender(const char *fileName)
 	saveImage(outputFileName.c_str(),"bmp");
 }
 
-CalculateFractalResult FractalFlame::fractalScreensaver(unsigned int **ppOutput)
+FractalFlame::CalculateFractalResult FractalFlame::screensaver(unsigned int **ppOutput)
 {
 	resetVariables();
 	initFunctionsRandom(functions,totalProbabilityWeight);
 	stopFlag.store(false);
 	numberOfIterations=500000000;
 	
-	CalculateFractalResult result=CalculateFractalResult::BAD_PICTURE;
+	FractalFlame::CalculateFractalResult result=FractalFlame::CalculateFractalResult::BAD_PICTURE;
 	
 	for(int i=0;i<30;i++)
 	{
 	    result=calculateFractal();
 	    
-		if(result==CalculateFractalResult::SUCCESS)
+		if(result==FractalFlame::CalculateFractalResult::SUCCESS)
 		{
 			break;
 		}
-		else if(result==CalculateFractalResult::BAD_PICTURE)
+		else if(result==FractalFlame::CalculateFractalResult::BAD_PICTURE)
 		{
 		    if(!stopFlag.load())
 		    {		 
@@ -433,12 +433,12 @@ CalculateFractalResult FractalFlame::fractalScreensaver(unsigned int **ppOutput)
 	return result;
 }
 
-void FractalFlame::fractalSetNumberOfIterations(int argNumberOfIterations)
+void FractalFlame::setNumberOfIterations(int argNumberOfIterations)
 {
     numberOfIterations = argNumberOfIterations;   
 }
 
-void FractalFlame::fractalSetStopFlag()
+void FractalFlame::setStopFlag()
 {
     stopFlag.store(true);    
 }

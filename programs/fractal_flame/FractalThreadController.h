@@ -17,7 +17,7 @@ private:
     Semaphore semResult, semStartWork;
     
     unsigned int *output=nullptr;
-    CalculateFractalResult result;
+    FractalFlame::CalculateFractalResult result;
 
     atomic<bool> threadStopFlag;
     atomic<unsigned int> periodMilliseconds;
@@ -32,7 +32,7 @@ public:
     
     void beginCalculateFractal();
     
-    CalculateFractalResult getResultWithTimeout(unsigned int **ppOutput);    
+    FractalFlame::CalculateFractalResult getResultWithTimeout(unsigned int **ppOutput);    
     
     void fractalThreadEntry();   
     

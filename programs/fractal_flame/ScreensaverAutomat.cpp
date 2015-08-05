@@ -68,7 +68,7 @@ unsigned int* ScreensaverAutomat::handleFirst()
     output1=new unsigned int[outputSize];
     outputBlend=new unsigned int[outputSize];
     
-    fractal.fractalInit(pictureWidth,pictureHeight);
+    fractal.init(pictureWidth,pictureHeight);
 
     threadController.beginCalculateFractal();
             
@@ -87,7 +87,7 @@ unsigned int* ScreensaverAutomat::handleSecond()
     
     if(millisPassed>=SECOND_MILLIS)
     {
-        fractal.fractalSetStopFlag();
+        fractal.setStopFlag();
         startMillis=getMilliseconds();
         state=AutomatState::WAIT_RESULT;        
     }
@@ -106,7 +106,7 @@ unsigned int* ScreensaverAutomat::handleShowIdle()
     
     if(millisPassed>=SHOW_MILLIS)
     {
-        fractal.fractalSetStopFlag();
+        fractal.setStopFlag();
         startMillis=getMilliseconds();
         state=AutomatState::WAIT_RESULT;
     }
@@ -125,8 +125,8 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
     if(millisPassed>=WAIT_RESULT_MILLIS)
     {
         unsigned int *p;
-        CalculateFractalResult result = threadController.getResultWithTimeout(&p);
-        if(result==CalculateFractalResult::SUCCESS)
+        FractalFlame::CalculateFractalResult result = threadController.getResultWithTimeout(&p);
+        if(result==FractalFlame::CalculateFractalResult::SUCCESS)
         {
             memcpy(output1,p,sizeof(unsigned int) * outputSize);
             
@@ -136,11 +136,11 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
             threadController.beginCalculateFractal();
             state=AutomatState::TRANSIT_START;
         }
-        else if(result==CalculateFractalResult::TIMEOUT)
+        else if(result==FractalFlame::CalculateFractalResult::TIMEOUT)
         {
             state=AutomatState::WAIT_RESULT;
         }
-        else if(result==CalculateFractalResult::BAD_PICTURE)
+        else if(result==FractalFlame::CalculateFractalResult::BAD_PICTURE)
         {
             threadController.beginCalculateFractal();
             startMillis=getMilliseconds();

@@ -5,10 +5,11 @@
 #include "FractalFlame.h"
 #include "FractalThreadController.h"
 
-enum class AutomatState{ FIRST,SECOND,SHOW_IDLE,WAIT_RESULT,TRANSIT_START,TRANSIT_PROCESS };
 
 class ScreensaverAutomat{
 private:
+    enum class AutomatState{ FIRST,SECOND,SHOW_IDLE,WAIT_RESULT,TRANSIT_START,TRANSIT_PROCESS };    
+    
     AutomatState state;
     const unsigned int TRANSIT_MILLIS = 3 * 1000;
     const unsigned int SHOW_MILLIS = 5 * 1000;

@@ -130,22 +130,22 @@ static void startRender(const string &fileName, int numberOfIterations)
 {
     FractalFlame fractal;
     
-    fractal.fractalInit(pictureWidth,pictureHeight);
+    fractal.init(pictureWidth,pictureHeight);
     
-    fractal.fractalSetNumberOfIterations(numberOfIterations);
+    fractal.setNumberOfIterations(numberOfIterations);
     
-    fractal.fractalRender(fileName.c_str());
+    fractal.render(fileName.c_str());
 }
 
 static void startPreview(int numberOfPreviews)
 {
     FractalFlame fractal;
     
-    fractal.fractalInit(pictureWidth,pictureHeight);
+    fractal.init(pictureWidth,pictureHeight);
     
-    fractal.fractalSetNumberOfIterations(300000);
+    fractal.setNumberOfIterations(300000);
     
-    fractal.fractalPreview(numberOfPreviews);    
+    fractal.preview(numberOfPreviews);    
 }
 
 int main(int argc, char **argv)

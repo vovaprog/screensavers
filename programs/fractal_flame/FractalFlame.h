@@ -7,11 +7,9 @@
 #include "Function.h"
 #include "Point.h"
 
-enum class CalculateFractalResult { SUCCESS, BAD_PICTURE, TIMEOUT };
 
 class FractalFlame{
-private:    
-
+private:        
     //=====calculate parameters=====
     int pictureWidth,pictureHeight;
     std::vector<std::unique_ptr<Function>> functions;
@@ -46,18 +44,20 @@ private:
     const int MAX_NUMBER_OF_VARIATIONS = 3;
 
 
-public:    
-    void fractalInit(int argPictureWidth, int argPictureHeight);
+public:
+    enum class CalculateFractalResult { SUCCESS, BAD_PICTURE, TIMEOUT };    
     
-    void fractalPreview(int numberOfPreviews);
+    void init(int argPictureWidth, int argPictureHeight);
     
-    void fractalRender(const char *fileName);
+    void preview(int numberOfPreviews);
     
-    CalculateFractalResult fractalScreensaver(unsigned int **ppOutput);
+    void render(const char *fileName);
     
-    void fractalSetNumberOfIterations(int argNumberOfIterations);
+    CalculateFractalResult screensaver(unsigned int **ppOutput);
     
-    void fractalSetStopFlag();
+    void setNumberOfIterations(int argNumberOfIterations);
+    
+    void setStopFlag();
     
     void saveCurrentFractal(const char *dirName,int index);
     
