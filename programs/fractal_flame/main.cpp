@@ -5,7 +5,6 @@
 
 #include <boost/program_options.hpp>
 
-#include <Semaphore.h>
 #include <ConstantFps.h>
 #include "FractalFlame.h"
 #include "ScreensaverAutomat.h"
@@ -150,7 +149,7 @@ static void startPreview(int numberOfPreviews)
 
 int main(int argc, char **argv)
 {
-	try{		
+	try{	    
 		string mode, fileName;
 		int iterations,numberOfPreviews;
 		bool windowMode;

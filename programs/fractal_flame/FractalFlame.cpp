@@ -9,6 +9,7 @@
 
 #include "FractalFlame.h"
 #include "filesystem_utils.h"
+#include "SimpleProfiler.h"
 
 using namespace std;
 
@@ -390,7 +391,7 @@ void FractalFlame::render(const char *fileName)
 {
 	loadFunctions(fileName,functions,totalProbabilityWeight);
 	
-	calculateFractal();
+    calculateFractal();
 	
 	string outputFileName(fileName);
 	outputFileName += "_render.bmp";
