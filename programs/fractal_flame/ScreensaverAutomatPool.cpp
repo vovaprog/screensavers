@@ -1,11 +1,11 @@
 #include <string>
 #include <string.h>
 
-#include "ScreensaverAutomat.h"
+#include "ScreensaverAutomatPool.h"
 
 using namespace std;
 
-ScreensaverAutomat::ScreensaverAutomat(int pictureWidth,int pictureHeight,int fps):state(AutomatState::FIRST),threadController(&fractal)
+ScreensaverAutomatPool::ScreensaverAutomatPool(int pictureWidth,int pictureHeight,int fps):state(AutomatState::FIRST)
 {
     this->pictureWidth=pictureWidth;
     this->pictureHeight=pictureHeight;
@@ -15,7 +15,7 @@ ScreensaverAutomat::ScreensaverAutomat(int pictureWidth,int pictureHeight,int fp
     initSaveDirectory();
 }
 
-ScreensaverAutomat::~ScreensaverAutomat()
+ScreensaverAutomatPool::~ScreensaverAutomatPool()
 {
     if(output0!=nullptr)
     {
@@ -29,9 +29,13 @@ ScreensaverAutomat::~ScreensaverAutomat()
     {
         delete[] outputBlend;    
     }
+    if(poolController!=nullptr)
+    {
+        delete poolController;
+    }
 }
 
-void ScreensaverAutomat::initSaveDirectory()
+void ScreensaverAutomatPool::initSaveDirectory()
 {		
     if(directoryExists(saveDirName))
     {	
@@ -40,7 +44,7 @@ void ScreensaverAutomat::initSaveDirectory()
     createDirectory(saveDirName);
 }    
         
-unsigned int* ScreensaverAutomat::nextFrame()
+unsigned int* ScreensaverAutomatPool::nextFrame()
 {
     switch(state){
     case AutomatState::FIRST:
@@ -60,15 +64,15 @@ unsigned int* ScreensaverAutomat::nextFrame()
     }
 }
     
-unsigned int* ScreensaverAutomat::handleFirst()
+unsigned int* ScreensaverAutomatPool::handleFirst()
 {        
     output0=new unsigned int[outputSize];
     output1=new unsigned int[outputSize];
     outputBlend=new unsigned int[outputSize];
+        
+    poolController=new FractalThreadPoolController(pictureWidth,pictureHeight,4);
+    poolController->startTasks();
     
-    fractal.init(pictureWidth,pictureHeight);
-
-    threadController.beginCalculateFractal();
             
     memset(output0,0,sizeof(unsigned int) * outputSize);
     
@@ -79,13 +83,13 @@ unsigned int* ScreensaverAutomat::handleFirst()
     return output0;
 }
     
-unsigned int* ScreensaverAutomat::handleSecond()
+unsigned int* ScreensaverAutomatPool::handleSecond()
 {        
     unsigned int millisPassed = getMilliseconds() - startMillis;
     
     if(millisPassed>=SECOND_MILLIS)
     {
-        fractal.setStopFlag();
+        //fractal.setStopFlag();
         startMillis=getMilliseconds();
         state=AutomatState::WAIT_RESULT;        
     }
@@ -98,13 +102,13 @@ unsigned int* ScreensaverAutomat::handleSecond()
 }
 
 
-unsigned int* ScreensaverAutomat::handleShowIdle()
+unsigned int* ScreensaverAutomatPool::handleShowIdle()
 {        
     unsigned int millisPassed = getMilliseconds() - startMillis;
     
     if(millisPassed>=SHOW_MILLIS)
     {
-        fractal.setStopFlag();
+        //fractal.setStopFlag();
         startMillis=getMilliseconds();
         state=AutomatState::WAIT_RESULT;
     }
@@ -116,22 +120,21 @@ unsigned int* ScreensaverAutomat::handleShowIdle()
     return output0;
 }       
     
-unsigned int* ScreensaverAutomat::handleWaitResult()
+unsigned int* ScreensaverAutomatPool::handleWaitResult()
 {
     unsigned int millisPassed = getMilliseconds() - startMillis;
     
     if(millisPassed>=WAIT_RESULT_MILLIS)
     {
-        unsigned int *p;
-        FractalFlame::CalculateFractalResult result = threadController.getResultWithTimeout(&p);
+        FractalFlame::CalculateFractalResult result = poolController->getResult(output1);
         if(result==FractalFlame::CalculateFractalResult::SUCCESS)
         {
-            memcpy(output1,p,sizeof(unsigned int) * outputSize);
+            //memcpy(output1,p,sizeof(unsigned int) * outputSize);
             
-            fractal.saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
+            //fractal.saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
             imageCounter += 1;
             
-            threadController.beginCalculateFractal();
+            //threadController.beginCalculateFractal();
             state=AutomatState::TRANSIT_START;
         }
         else if(result==FractalFlame::CalculateFractalResult::TIMEOUT)
@@ -140,7 +143,7 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
         }
         else if(result==FractalFlame::CalculateFractalResult::BAD_PICTURE)
         {
-            threadController.beginCalculateFractal();
+            //threadController.beginCalculateFractal();
             startMillis=getMilliseconds();
             state=AutomatState::SHOW_IDLE;
         }
@@ -152,7 +155,7 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
     return output0;
 }
 
-unsigned int* ScreensaverAutomat::handleTransitStart()
+unsigned int* ScreensaverAutomatPool::handleTransitStart()
 {         
     double blendD=1.0 / ((TRANSIT_MILLIS / 1000.0) * fps);
     blendKoef=1.0-blendD;
@@ -165,7 +168,7 @@ unsigned int* ScreensaverAutomat::handleTransitStart()
     return outputBlend;        
 }
     
-unsigned int* ScreensaverAutomat::handleTransitProcess()
+unsigned int* ScreensaverAutomatPool::handleTransitProcess()
 {        
     unsigned int millisPassed = getMilliseconds() - startMillis;
     
@@ -198,7 +201,7 @@ unsigned int* ScreensaverAutomat::handleTransitProcess()
     }
 }
     
-void ScreensaverAutomat::blend(unsigned int *p0,unsigned int *p1,unsigned int *output,double k)
+void ScreensaverAutomatPool::blend(unsigned int *p0,unsigned int *p1,unsigned int *output,double k)
 {
     for(int i=0;i<outputSize;i++)
     {

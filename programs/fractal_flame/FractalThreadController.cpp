@@ -87,8 +87,3 @@ FractalFlame::CalculateFractalResult FractalThreadController::getResultWithTimeo
 }
 
 
-void FractalThreadController::setPeriodMilliseconds(unsigned int milliseconds)
-{
-    periodMilliseconds.store(milliseconds);    
-}
-

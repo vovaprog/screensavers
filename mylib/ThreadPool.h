@@ -15,7 +15,7 @@ public:
     void *inputData;
     void *outputData;
     
-    ThreadPoolTask():inputData(nullptr),outputData(nullptr),function(nullptr){}
+    ThreadPoolTask():function(nullptr),inputData(nullptr),outputData(nullptr){}
     
     ThreadPoolTask(ThreadFunction function,void *inputData):function(function),inputData(inputData),outputData(nullptr){}
 };

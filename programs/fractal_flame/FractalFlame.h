@@ -61,6 +61,9 @@ public:
     
     void saveCurrentFractal(const char *dirName,int index);
     
+    unsigned int* getLastOutput();
+    CalculateFractalResult getLastResult();
+    
 private:    
     void resetVariables();
     void convertScreenToMath(double &x, double &y);

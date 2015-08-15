@@ -8,10 +8,22 @@
 
 using namespace std;
 
-void fractalThreadEntry();
+class FractalThreadController{    
+public:  
+    
+    FractalThreadController(FractalFlame *pFractal);
+    ~FractalThreadController();
+    
+    void beginCalculateFractal();
+    
+    FractalFlame::CalculateFractalResult getResultWithTimeout(unsigned int **ppOutput);    
 
-class FractalThreadController{
 private:
+    
+    void fractalThreadEntry();   
+
+private:
+    
     thread *t=nullptr;
         
     Semaphore semResult, semStartWork;
@@ -19,22 +31,9 @@ private:
     unsigned int *output=nullptr;
     FractalFlame::CalculateFractalResult result;
 
-    atomic<bool> threadStopFlag;
-    atomic<unsigned int> periodMilliseconds;
+    atomic<bool> threadStopFlag;    
     
     unsigned int numberOfIterations;
     
-    FractalFlame *pFractal;
-    
-public:  
-    FractalThreadController(FractalFlame *pFractal);
-    ~FractalThreadController();
-    
-    void beginCalculateFractal();
-    
-    FractalFlame::CalculateFractalResult getResultWithTimeout(unsigned int **ppOutput);    
-    
-    void fractalThreadEntry();   
-    
-    void setPeriodMilliseconds(unsigned int milliseconds);
+    FractalFlame *pFractal;    
 };

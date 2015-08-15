@@ -444,3 +444,7 @@ void FractalFlame::setStopFlag()
     stopFlag.store(true);    
 }
 
+unsigned int* FractalFlame::getLastOutput()
+{
+    return output.get();
+}

@@ -45,7 +45,7 @@ public:
 
         if(index<0 || index>=tableSize) 
         {
-            std::cout <<"LookupTable invalid index for argument: "<<x<<std::endl;
+            //std::cout <<"LookupTable invalid index for argument: "<<x<<std::endl;
             return table[0];
         }
         
