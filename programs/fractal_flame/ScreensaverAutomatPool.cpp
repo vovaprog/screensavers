@@ -11,8 +11,6 @@ ScreensaverAutomatPool::ScreensaverAutomatPool(int pictureWidth,int pictureHeigh
     this->pictureHeight=pictureHeight;
     this->outputSize = this->pictureWidth * this->pictureHeight;
     this->fps=fps;
-    
-    initSaveDirectory();
 }
 
 ScreensaverAutomatPool::~ScreensaverAutomatPool()
@@ -34,15 +32,6 @@ ScreensaverAutomatPool::~ScreensaverAutomatPool()
         delete poolController;
     }
 }
-
-void ScreensaverAutomatPool::initSaveDirectory()
-{		
-    if(directoryExists(saveDirName))
-    {	
-        deleteDirectory(saveDirName);						
-    }   
-    createDirectory(saveDirName);
-}    
         
 unsigned int* ScreensaverAutomatPool::nextFrame()
 {
@@ -70,7 +59,7 @@ unsigned int* ScreensaverAutomatPool::handleFirst()
     output1=new unsigned int[outputSize];
     outputBlend=new unsigned int[outputSize];
         
-    poolController=new FractalThreadPoolController(pictureWidth,pictureHeight,4);
+    poolController=new FractalThreadPoolController(pictureWidth,pictureHeight,2);
     poolController->startTasks();
     
             
@@ -89,7 +78,7 @@ unsigned int* ScreensaverAutomatPool::handleSecond()
     
     if(millisPassed>=SECOND_MILLIS)
     {
-        //fractal.setStopFlag();
+        poolController->setStopFlag();
         startMillis=getMilliseconds();
         state=AutomatState::WAIT_RESULT;        
     }
@@ -108,7 +97,7 @@ unsigned int* ScreensaverAutomatPool::handleShowIdle()
     
     if(millisPassed>=SHOW_MILLIS)
     {
-        //fractal.setStopFlag();
+        poolController->setStopFlag();
         startMillis=getMilliseconds();
         state=AutomatState::WAIT_RESULT;
     }
@@ -129,12 +118,6 @@ unsigned int* ScreensaverAutomatPool::handleWaitResult()
         FractalFlame::CalculateFractalResult result = poolController->getResult(output1);
         if(result==FractalFlame::CalculateFractalResult::SUCCESS)
         {
-            //memcpy(output1,p,sizeof(unsigned int) * outputSize);
-            
-            //fractal.saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
-            imageCounter += 1;
-            
-            //threadController.beginCalculateFractal();
             state=AutomatState::TRANSIT_START;
         }
         else if(result==FractalFlame::CalculateFractalResult::TIMEOUT)
@@ -143,7 +126,6 @@ unsigned int* ScreensaverAutomatPool::handleWaitResult()
         }
         else if(result==FractalFlame::CalculateFractalResult::BAD_PICTURE)
         {
-            //threadController.beginCalculateFractal();
             startMillis=getMilliseconds();
             state=AutomatState::SHOW_IDLE;
         }

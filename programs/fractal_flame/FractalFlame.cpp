@@ -270,10 +270,8 @@ void FractalFlame::cleanBuffers()
     }
 }
 
-
-
 FractalFlame::CalculateFractalResult FractalFlame::calculateFractal()
-{
+{    
     double x, y;
         
     cleanBuffers();    
@@ -281,7 +279,7 @@ FractalFlame::CalculateFractalResult FractalFlame::calculateFractal()
     getInitialPoint(x,y);
     
     for(unsigned int i=0;i<numberOfIterations;i++)
-    {
+    {        
         Function* pFun=getRandomFunction();
                 
         applyFunction(pFun, x, y);        
@@ -405,7 +403,7 @@ FractalFlame::CalculateFractalResult FractalFlame::screensaver(unsigned int **pp
 	initFunctionsRandom(functions,totalProbabilityWeight);
 	stopFlag.store(false);
 	numberOfIterations=500000000;
-	
+		
 	FractalFlame::CalculateFractalResult result=FractalFlame::CalculateFractalResult::BAD_PICTURE;
 	
 	for(int i=0;i<30;i++)

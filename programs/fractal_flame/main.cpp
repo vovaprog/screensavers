@@ -6,9 +6,13 @@
 #include <boost/program_options.hpp>
 
 #include <ConstantFps.h>
-#include "FractalFlame.h"
-//#include "ScreensaverAutomat.h"
-#include "ScreensaverAutomatPool.h"
+
+#define USE_THREAD_POOL
+#ifdef USE_THREAD_POOL
+#   include "ScreensaverAutomatPool.h"
+#else
+#   include "ScreensaverAutomat.h"
+#endif
 
 using namespace std;
 using namespace boost::program_options;
@@ -21,8 +25,11 @@ static int window;
 
 static bool isFullScreen=true;
 
-//static ScreensaverAutomat *screensaver;
+#ifdef USE_THREAD_POOL
 static ScreensaverAutomatPool *screensaver;
+#else
+static ScreensaverAutomat *screensaver;
+#endif
 
 static ConstantFps constFps(CONSTANT_FPS_VALUE);
 
@@ -42,7 +49,7 @@ static void keyPressed(unsigned char key, int x, int y)
 }
 
 static void display()
-{    
+{        
     output=screensaver->nextFrame();    
 
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -80,9 +87,14 @@ static void startScreensaver(int argc, char **argv)
         pictureHeight = glutGet(GLUT_SCREEN_HEIGHT);
     }
 
-    //screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
-    screensaver=new ScreensaverAutomatPool(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
     
+#ifdef USE_THREAD_POOL
+    screensaver=new ScreensaverAutomatPool(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
+#else    
+    screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
+#endif    
+    
+
     //====================================================================
     //====================================================================
     //====================================================================
@@ -157,27 +169,29 @@ int main(int argc, char **argv)
 		int iterations,numberOfPreviews;
 		bool windowMode;
 		
-		options_description desc("program options");
-        desc.add_options()
-            ("help,h", "print help message")
-            ("mode", value(&mode)->default_value("screensaver"), "program mode (screensaver, render, preview)")
-            ("width",value(&pictureWidth)->default_value(600),"width")
-            ("height",value(&pictureHeight)->default_value(600),"height")
-            ("iterations",value(&iterations)->default_value(30000000),"number of iterations for render mode")
-            ("input-file",value(&fileName),"file with fractal parameters (for render mode)")
-            ("number-of-previews", value(&numberOfPreviews)->default_value(30),"number of previews (for preview mode)")
-            ("window",bool_switch(&windowMode), "show in window mode")
-            ;
-        
-        variables_map vm;
-        store(parse_command_line(argc, argv, desc), vm);
-        notify(vm);    
-        
-        if (vm.count("help")) 
-        {
-            cout << desc << endl;
-            return 0;
-        }        
+		{
+            options_description desc("program options");
+            desc.add_options()
+                ("help,h", "print help message")
+                ("mode", value(&mode)->default_value("screensaver"), "program mode (screensaver, render, preview)")
+                ("width",value(&pictureWidth)->default_value(600),"width")
+                ("height",value(&pictureHeight)->default_value(600),"height")
+                ("iterations",value(&iterations)->default_value(30000000),"number of iterations for render mode")
+                ("input-file",value(&fileName),"file with fractal parameters (for render mode)")
+                ("number-of-previews", value(&numberOfPreviews)->default_value(30),"number of previews (for preview mode)")
+                ("window",bool_switch(&windowMode), "show in window mode")
+                ;
+            
+            variables_map vm;
+            store(parse_command_line(argc, argv, desc), vm);
+            notify(vm);    
+            
+            if (vm.count("help")) 
+            {
+                cout << desc << endl;
+                return 0;
+            }
+        }
                 
         isFullScreen = !windowMode;
         

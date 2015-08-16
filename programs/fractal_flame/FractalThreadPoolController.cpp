@@ -3,9 +3,10 @@
 #include <string.h>
 #include <algorithm>
 
-#include <iostream>
+#include <filesystem_utils.h>
 
 using std::find;
+
 
 FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pictureHeight,int numberOfThreads)
 {
@@ -16,15 +17,28 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
     
     for(int i=0;i<numberOfThreads;++i)
     {
-        fractals[i]=new FractalPoolData();
+        fractals[i]=new FractalData();
         fractals[i]->fractal->init(pictureWidth,pictureHeight);
     }
     
     pool=new ThreadPool(numberOfThreads);
+    
+    
+    
+    if(directoryExists(saveDirName))
+    {	
+        deleteDirectory(saveDirName);						
+    }   
+    createDirectory(saveDirName);    
 }
 
 FractalThreadPoolController::~FractalThreadPoolController()
 {
+    for(int i=0;i<numberOfFractals;++i)
+    {
+        fractals[i]->fractal->setStopFlag();
+    }    
+    
     delete pool;
     
     for(int i=0;i<numberOfFractals;++i)
@@ -37,21 +51,22 @@ FractalThreadPoolController::~FractalThreadPoolController()
 
 void* ThreadFractalFunction(void *dataInput)
 {
-    FractalPoolData *fData=(FractalPoolData*)dataInput;
+    FractalThreadPoolController::FractalPoolData *fData=(FractalThreadPoolController::FractalPoolData*)dataInput;
     
     fData->result = fData->fractal->screensaver(&fData->output);
     
     return fData;
 }
 
-FractalFlame::CalculateFractalResult FractalThreadPoolController::getResult(unsigned int *output)
+void FractalThreadPoolController::setStopFlag()
 {
-    FractalPoolData *fData = calcQueue.front();
-    fData->fractal->setStopFlag();
-    
-    fData = (FractalPoolData*)pool->getResult();
-    
-    std::cout <<"getting result from: "<<(unsigned long long int)fData->fractal<<std::endl;
+    FractalData *fData = calcQueue.front();
+    fData->fractal->setStopFlag();    
+}
+
+FractalFlame::CalculateFractalResult FractalThreadPoolController::getResult(unsigned int *output)
+{    
+    FractalData *fData = (FractalData*)pool->getResult();
     
     FractalFlame::CalculateFractalResult result = fData->result;
     
@@ -59,6 +74,11 @@ FractalFlame::CalculateFractalResult FractalThreadPoolController::getResult(unsi
     {
         memcpy(output,fData->output,sizeof(unsigned int) * outputSize);
     }    
+    
+    
+    fData->fractal->saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
+    imageCounter += 1;
+    
     
     calcQueue.remove(fData);
     
@@ -71,7 +91,7 @@ void FractalThreadPoolController::startTasks()
 {
     for(int i=0;i<numberOfFractals;++i)
     {        
-        FractalPoolData *fractal = fractals[i];
+        FractalData *fractal = fractals[i];
         
         if(find(calcQueue.begin(),calcQueue.end(),fractal) == calcQueue.end())
         {
