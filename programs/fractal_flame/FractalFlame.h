@@ -13,18 +13,20 @@ public:
     enum class CalculateFractalResult { SUCCESS, BAD_PICTURE, TIMEOUT };    
     
     void init(int argPictureWidth, int argPictureHeight);
-    
-    void preview(int numberOfPreviews);
-    
-    void render(const char *fileName);
-    
+        
     CalculateFractalResult screensaver(unsigned int **ppOutput);
     
     void setNumberOfIterations(int argNumberOfIterations);
     
     void setStopFlag();
     
+#ifndef NO_IMAGE_FUNCTIONS
+    void preview(int numberOfPreviews);
+    
+    void render(const char *fileName);
+
     void saveCurrentFractal(const char *dirName,int index);
+#endif
     
     unsigned int* getLastOutput();
     CalculateFractalResult getLastResult();
@@ -43,11 +45,17 @@ private:
     void applyFunction(Function *pFun, double &x, double &y);
     void cleanBuffers();
     CalculateFractalResult calculateFractal();
-    void saveImage(const char *fileName,const char *fileType);
     
+#ifndef NO_IMAGE_FUNCTIONS    
+    void saveImage(const char *fileName,const char *fileType);
+#endif    
+    
+#ifndef NO_XML_FUNCTIONS
     void saveFunctions(const char *fileName,std::vector<std::unique_ptr<Function>> &functions);
-    void initFunctionsRandom(std::vector<std::unique_ptr<Function>> &functions, int &totalProbabilityWeight);
     void loadFunctions(const char *fileName,std::vector<std::unique_ptr<Function>> &functions, int &totalProbabilityWeight);
+#endif
+    
+    void initFunctionsRandom(std::vector<std::unique_ptr<Function>> &functions, int &totalProbabilityWeight);    
     
     void initFunctionProbabilities(std::vector<std::unique_ptr<Function>> &functions, int &totalProbabilityWeight);
     double getRandom01();

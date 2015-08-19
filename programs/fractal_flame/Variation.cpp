@@ -10,7 +10,7 @@
 
 using namespace std;
 
-#define USE_LOOKUP
+//#define USE_LOOKUP
 #ifdef USE_LOOKUP
 
 #include <LookupTable.h>

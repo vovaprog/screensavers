@@ -140,8 +140,10 @@ static void startScreensaver(int argc, char **argv)
     glutMainLoop();	    
 }
 
+#ifndef NO_IMAGE_FUNCTIONS
+
 static void startRender(const string &fileName, int numberOfIterations)
-{
+{    
     FractalFlame fractal;
     
     fractal.init(pictureWidth,pictureHeight);
@@ -161,6 +163,8 @@ static void startPreview(int numberOfPreviews)
     
     fractal.preview(numberOfPreviews);    
 }
+
+#endif
 
 int main(int argc, char **argv)
 {
@@ -199,6 +203,7 @@ int main(int argc, char **argv)
         {
             startScreensaver(argc,argv);
         }
+#ifndef NO_IMAGE_FUNCTIONS        
         else if(mode=="render")
         {
             if(fileName.size()==0)
@@ -213,6 +218,7 @@ int main(int argc, char **argv)
         {
             startPreview(numberOfPreviews);
         }
+#endif        
         else
         {
             cout <<"unknown mode!"<<endl;

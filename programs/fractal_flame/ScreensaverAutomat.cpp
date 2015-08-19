@@ -127,8 +127,11 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
         if(result==FractalFlame::CalculateFractalResult::SUCCESS)
         {
             memcpy(output1,p,sizeof(unsigned int) * outputSize);
-            
+
+#ifndef NO_IMAGE_FUNCTIONS            
             fractal.saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
+#endif
+
             imageCounter += 1;
             
             threadController.beginCalculateFractal();

@@ -5,7 +5,9 @@
 #include <iostream>
 #include <memory>
 
-#include <tinyxml.h>
+#ifndef NO_XML_FUNCTIONS
+#   include <tinyxml.h>
+#endif
 
 #include "Function.h"
 #include "FractalFlame.h"
@@ -34,6 +36,7 @@ inline double FractalFlame::getRandomValue(double start, double end)
     return start + getRandom01() * (end - start);
 }
 
+#ifndef NO_XML_FUNCTIONS
 
 void FractalFlame::saveFunctions(const char *fileName,vector<unique_ptr<Function>> &functions)
 {    
@@ -101,6 +104,7 @@ void FractalFlame::saveFunctions(const char *fileName,vector<unique_ptr<Function
 	doc.SaveFile( fileName );    
 }
 
+#endif
 
 void FractalFlame::initFunctionsRandom(vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
 {
@@ -194,6 +198,9 @@ void FractalFlame::initFunctionsRandom(vector<unique_ptr<Function>> &functions, 
     initFunctionProbabilities(functions,totalProbabilityWeight);    
 }
 
+
+#ifndef NO_XML_FUNCTIONS
+
 void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function>> &functions, int &totalProbabilityWeight)
 {
     functions.clear();
@@ -262,4 +269,6 @@ void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function
 	
 	initFunctionProbabilities(functions,totalProbabilityWeight);	
 }
+
+#endif
 

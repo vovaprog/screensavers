@@ -5,7 +5,9 @@
 #include <iostream>
 #include <cmath>
 
-#include <FreeImage.h>
+#ifndef NO_IMAGE_FUNCTIONS
+#   include <FreeImage.h>
+#endif
 
 #include "FractalFlame.h"
 #include "filesystem_utils.h"
@@ -307,6 +309,7 @@ FractalFlame::CalculateFractalResult FractalFlame::calculateFractal()
 }
 
 
+#ifndef NO_IMAGE_FUNCTIONS
 
 void FractalFlame::saveImage(const char *fileName,const char *fileType)
 { 
@@ -355,6 +358,8 @@ void FractalFlame::saveCurrentFractal(const char *argDirName,int index)
     saveImage(fileName.c_str(),"png");		        
 }
 
+
+
 void FractalFlame::preview(int numberOfPreviews)
 {    
 	string dirName;
@@ -396,6 +401,9 @@ void FractalFlame::render(const char *fileName)
 	
 	saveImage(outputFileName.c_str(),"bmp");
 }
+
+#endif
+
 
 FractalFlame::CalculateFractalResult FractalFlame::screensaver(unsigned int **ppOutput)
 {

@@ -75,8 +75,10 @@ FractalFlame::CalculateFractalResult FractalThreadPoolController::getResult(unsi
         memcpy(output,fData->output,sizeof(unsigned int) * outputSize);
     }    
     
-    
+#ifndef NO_IMAGE_FUNCTIONS    
     fData->fractal->saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
+#endif    
+    
     imageCounter += 1;
     
     
