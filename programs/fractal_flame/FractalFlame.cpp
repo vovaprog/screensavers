@@ -1,3 +1,5 @@
+#include "FractalFlame.h"
+
 #include <string>
 #include <string.h>
 #include <ctime>
@@ -7,11 +9,9 @@
 
 #ifndef NO_IMAGE_FUNCTIONS
 #   include <FreeImage.h>
+#   include "filesystem_utils.h"
 #endif
 
-#include "FractalFlame.h"
-#include "filesystem_utils.h"
-#include "SimpleProfiler.h"
 
 using namespace std;
 
