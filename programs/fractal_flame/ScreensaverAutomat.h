@@ -1,7 +1,5 @@
 #pragma once
 
-#include <small_utils.h>
-#include <filesystem_utils.h>
 #include "FractalFlame.h"
 #include "FractalThreadController.h"
 
@@ -28,8 +26,10 @@ private:
     unsigned int* handleTransitProcess();
     
     void blend(unsigned int *p0,unsigned int *p1,unsigned int *output,double k);
-    
+
+#ifndef NO_IMAGE_FUNCTIONS    
     void initSaveDirectory();
+#endif    
     
 private:
     enum class AutomatState{ FIRST,SECOND,SHOW_IDLE,WAIT_RESULT,TRANSIT_START,TRANSIT_PROCESS };    

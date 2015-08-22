@@ -111,12 +111,7 @@ public:
     }
     
     void speedTest()
-    {
-        /*using std::cout;
-        using std::endl;
-        using std::string;*/
-        
-  	                        
+    {          	                        
         double x=0.0;
         double acc=0.0;
     
@@ -156,7 +151,7 @@ public:
 #endif    
 };
 
-typedef LookupTable<std::sin,absSin,100000> SinLookupTable;
+typedef LookupTable<std::sin,absSin,300000> SinLookupTable;
 
-typedef LookupTable<std::cos,absCos,100000> CosLookupTable;
+typedef LookupTable<std::cos,absCos,300000> CosLookupTable;
 

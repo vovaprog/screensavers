@@ -2,10 +2,12 @@
 #include <string.h>
 
 #include "ScreensaverAutomatPool.h"
+#include <small_utils.h>
 
 using namespace std;
 
-ScreensaverAutomatPool::ScreensaverAutomatPool(int pictureWidth,int pictureHeight,int fps):state(AutomatState::FIRST)
+ScreensaverAutomatPool::ScreensaverAutomatPool(int pictureWidth,int pictureHeight,int fps,int numberOfThreads):
+    state(AutomatState::FIRST),numberOfThreads(numberOfThreads)
 {
     this->pictureWidth=pictureWidth;
     this->pictureHeight=pictureHeight;
@@ -59,7 +61,7 @@ unsigned int* ScreensaverAutomatPool::handleFirst()
     output1=new unsigned int[outputSize];
     outputBlend=new unsigned int[outputSize];
         
-    poolController=new FractalThreadPoolController(pictureWidth,pictureHeight,2);
+    poolController=new FractalThreadPoolController(pictureWidth,pictureHeight,numberOfThreads);
     poolController->startTasks();
     
             

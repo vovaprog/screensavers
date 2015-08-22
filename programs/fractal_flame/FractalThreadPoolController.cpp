@@ -24,12 +24,13 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
     pool=new ThreadPool(numberOfThreads);
     
     
-    
+#ifndef NO_IMAGE_FUNCTIONS    
     if(directoryExists(saveDirName))
     {	
         deleteDirectory(saveDirName);						
     }   
-    createDirectory(saveDirName);    
+    createDirectory(saveDirName);
+#endif    
 }
 
 FractalThreadPoolController::~FractalThreadPoolController()

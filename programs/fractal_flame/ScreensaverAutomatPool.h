@@ -1,14 +1,10 @@
 #pragma once
 
-#include <small_utils.h>
-#include <filesystem_utils.h>
-
 #include "FractalThreadPoolController.h"
-
 
 class ScreensaverAutomatPool{        
 public:
-    ScreensaverAutomatPool(int pictureWidth,int pictureHeight,int fps);
+    ScreensaverAutomatPool(int pictureWidth,int pictureHeight,int fps,int numberOfThreads);
         
     ~ScreensaverAutomatPool();
     
@@ -49,5 +45,6 @@ private:
     
     int fps;
 
-    FractalThreadPoolController *poolController=nullptr;    
+    FractalThreadPoolController *poolController=nullptr;
+    int numberOfThreads;
 };

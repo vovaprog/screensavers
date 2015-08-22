@@ -5,12 +5,11 @@
 #    define M_PI 3.14159265358979323846
 #endif
 
-#include <Variation.h>
-
+#include "Variation.h"
 
 using namespace std;
 
-//#define USE_LOOKUP
+
 #ifdef USE_LOOKUP
 
 #include <LookupTable.h>

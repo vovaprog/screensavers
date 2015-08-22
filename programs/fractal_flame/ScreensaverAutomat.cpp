@@ -2,6 +2,8 @@
 #include <string.h>
 
 #include "ScreensaverAutomat.h"
+#include <filesystem_utils.h>
+#include <small_utils.h>
 
 using namespace std;
 
@@ -12,7 +14,9 @@ ScreensaverAutomat::ScreensaverAutomat(int pictureWidth,int pictureHeight,int fp
     this->outputSize = this->pictureWidth * this->pictureHeight;
     this->fps=fps;
     
+#ifndef NO_IMAGE_FUNCTIONS    
     initSaveDirectory();
+#endif    
 }
 
 ScreensaverAutomat::~ScreensaverAutomat()
@@ -31,6 +35,7 @@ ScreensaverAutomat::~ScreensaverAutomat()
     }
 }
 
+#ifndef NO_IMAGE_FUNCTIONS
 void ScreensaverAutomat::initSaveDirectory()
 {		
     if(directoryExists(saveDirName))
@@ -39,7 +44,8 @@ void ScreensaverAutomat::initSaveDirectory()
     }   
     createDirectory(saveDirName);
 }    
-        
+#endif        
+
 unsigned int* ScreensaverAutomat::nextFrame()
 {
     switch(state){
