@@ -8,8 +8,18 @@
 using std::find;
 
 
-FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pictureHeight,int numberOfThreads)
+FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pictureHeight,int numberOfThreads /* =0 */)
 {
+    if(numberOfThreads<=0)
+    {
+        numberOfThreads=ThreadPool::getNumberOfProcessors();
+        
+        if(numberOfThreads>1)
+        {
+            numberOfThreads -= 1;
+        }
+    }
+    
     numberOfFractals=numberOfThreads;
     outputSize = pictureWidth * pictureHeight;
     

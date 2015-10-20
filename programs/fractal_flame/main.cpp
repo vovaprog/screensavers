@@ -8,8 +8,7 @@
 #include <ConstantFps.h>
 
 #ifdef USE_THREAD_POOL
-#   include "ScreensaverAutomatPool.h"
-#   define THREAD_POOL_NUMBER_OF_THREADS 2 
+#   include "ScreensaverAutomatPool.h" 
 #else
 #   include "ScreensaverAutomat.h"
 #endif
@@ -89,7 +88,7 @@ static void startScreensaver(int argc, char **argv)
 
     
 #ifdef USE_THREAD_POOL
-    screensaver=new ScreensaverAutomatPool(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE,THREAD_POOL_NUMBER_OF_THREADS);
+    screensaver=new ScreensaverAutomatPool(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
 #else    
     screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
 #endif    

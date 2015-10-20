@@ -6,7 +6,7 @@
 
 using namespace std;
 
-ScreensaverAutomatPool::ScreensaverAutomatPool(int pictureWidth,int pictureHeight,int fps,int numberOfThreads):
+ScreensaverAutomatPool::ScreensaverAutomatPool(int pictureWidth,int pictureHeight,int fps,int numberOfThreads /* =0 */):
     state(AutomatState::FIRST),numberOfThreads(numberOfThreads)
 {
     this->pictureWidth=pictureWidth;

@@ -4,7 +4,7 @@
 
 class ScreensaverAutomatPool{        
 public:
-    ScreensaverAutomatPool(int pictureWidth,int pictureHeight,int fps,int numberOfThreads);
+    ScreensaverAutomatPool(int pictureWidth,int pictureHeight,int fps,int numberOfThreads=0);
         
     ~ScreensaverAutomatPool();
     

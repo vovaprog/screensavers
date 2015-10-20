@@ -9,7 +9,7 @@
 class FractalThreadPoolController{    
 public:  
     
-    FractalThreadPoolController(int pictureWidth,int pictureHeight,int numberOfThreads);
+    FractalThreadPoolController(int pictureWidth,int pictureHeight,int numberOfThreads=0);
     ~FractalThreadPoolController();
 
     void setStopFlag();
