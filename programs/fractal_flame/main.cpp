@@ -158,7 +158,7 @@ static void startPreview(int numberOfPreviews)
     
     fractal.init(pictureWidth,pictureHeight);
     
-    fractal.setNumberOfIterations(300000);
+    fractal.setNumberOfIterations(600000);
     
     fractal.preview(numberOfPreviews);    
 }

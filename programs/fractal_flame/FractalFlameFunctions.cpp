@@ -98,7 +98,11 @@ void FractalFlame::saveFunctions(const char *fileName,vector<unique_ptr<Function
 			to_string(pFun->postTransformKoef[0][1])+" "+to_string(pFun->postTransformKoef[1][1])+" "+
 			to_string(pFun->postTransformKoef[0][2])+" "+to_string(pFun->postTransformKoef[1][2]);
 		
-		xformElement->SetAttribute("post",post.c_str());				
+		xformElement->SetAttribute("post",post.c_str());		
+		
+		xformElement->SetAttribute("r",to_string(pFun->r));
+		xformElement->SetAttribute("g",to_string(pFun->g));
+		xformElement->SetAttribute("b",to_string(pFun->b));
 	}
 	
 	doc.SaveFile( fileName );    
@@ -256,11 +260,32 @@ void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function
 		if(xformElem->Attribute("exponential")) pFun->variations.push_back(variationExponential);
 		if(xformElem->Attribute("cosine")) pFun->variations.push_back(variationCosine);
 
+		if(xformElem->Attribute("r"))
+		{
+		    sscanf(xformElem->Attribute("r"),"%u",&(pFun->r));
+		}
+		else
+		{
+		    pFun->r = 150 + rand() % 106;
+		}
 		
-        pFun->r = 150 + rand() % 106; 
-        pFun->g = 150 + rand() % 106;
-        pFun->b = 150 + rand() % 106;        
-		
+		if(xformElem->Attribute("g"))
+		{
+		    sscanf(xformElem->Attribute("g"),"%u",&(pFun->g));
+		}
+		else
+		{         
+		    pFun->g = 150 + rand() % 106;
+        }
+        
+		if(xformElem->Attribute("b"))
+		{
+		    sscanf(xformElem->Attribute("b"),"%u",&(pFun->b));
+		}
+		else
+		{        
+		    pFun->b = 150 + rand() % 106;
+		}		
 		
 		xformElem=xformElem->NextSiblingElement();
 		
