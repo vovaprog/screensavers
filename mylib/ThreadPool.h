@@ -30,6 +30,8 @@ public:
         
     void* getResult();
     
+    static int getNumberOfProcessors();
+    
 private:    
     void threadEntry();
 

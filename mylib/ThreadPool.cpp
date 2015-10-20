@@ -102,3 +102,16 @@ void ThreadPool::threadEntry()
         }            
     }
 }
+
+int ThreadPool::getNumberOfProcessors()
+{
+    int numberOfProcessors = std::thread::hardware_concurrency();
+    
+    if(numberOfProcessors==0)
+    {
+        return 1;
+    }
+    
+    return numberOfProcessors;
+}
+
