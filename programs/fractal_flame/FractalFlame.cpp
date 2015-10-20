@@ -397,9 +397,9 @@ void FractalFlame::render(const char *fileName)
     calculateFractal();
 	
 	string outputFileName(fileName);
-	outputFileName += "_render.bmp";
+	outputFileName += "_render.png";
 	
-	saveImage(outputFileName.c_str(),"bmp");
+	saveImage(outputFileName.c_str(),"png");
 }
 
 #endif
