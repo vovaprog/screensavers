@@ -34,6 +34,7 @@ static ConstantFps constFps(CONSTANT_FPS_VALUE);
 
 static unsigned int* output=0;
 
+static double xLowerBound = -1.0,xUpperBound = 1.0,yLowerBound = -1.0,yUpperBound = 1.0;
 
 static void keyPressed(unsigned char key, int x, int y) 
 {	
@@ -149,6 +150,8 @@ static void startRender(const string &fileName, int numberOfIterations)
     
     fractal.setNumberOfIterations(numberOfIterations);
     
+    fractal.setViewBounds(xLowerBound,xUpperBound,yLowerBound,yUpperBound);
+    
     fractal.render(fileName.c_str());
 }
 
@@ -159,6 +162,8 @@ static void startPreview(int numberOfPreviews)
     fractal.init(pictureWidth,pictureHeight);
     
     fractal.setNumberOfIterations(600000);
+    
+    fractal.setViewBounds(xLowerBound,xUpperBound,yLowerBound,yUpperBound);
     
     fractal.preview(numberOfPreviews);    
 }
@@ -183,6 +188,10 @@ int main(int argc, char **argv)
                 ("input-file",value(&fileName),"file with fractal parameters (for render mode)")
                 ("number-of-previews", value(&numberOfPreviews)->default_value(30),"number of previews (for preview mode)")
                 ("window",bool_switch(&windowMode), "show in window mode")
+                ("x-lower-bound",value(&xLowerBound)->default_value(-1.0),"x lower bound")
+                ("x-upper-bound",value(&xUpperBound)->default_value(1.0),"x upper bound")
+                ("y-lower-bound",value(&yLowerBound)->default_value(-1.0),"y lower bound")
+                ("y-upper-bound",value(&yUpperBound)->default_value(1.0),"y upper bound")                
                 ;
             
             variables_map vm;

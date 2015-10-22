@@ -18,6 +18,8 @@ public:
     
     void setNumberOfIterations(int argNumberOfIterations);
     
+    void setViewBounds(double xLowerBound,double xUpperBound,double yLowerBound,double yUpperBound);
+    
     void setStopFlag();
     
 #ifndef NO_IMAGE_FUNCTIONS
@@ -67,6 +69,9 @@ private:
     std::vector<std::unique_ptr<Function>> functions;
     unsigned int numberOfIterations=1000000;
     double colorPowerArgument = 0.5; //0.45;
+    
+    double xLowerBound=-1.0, xUpperBound=1.0;
+    double yLowerBound=-1.0, yUpperBound=1.0;
     //=====calculate parameters=====
 
 

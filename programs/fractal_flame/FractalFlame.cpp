@@ -40,17 +40,16 @@ void FractalFlame::init(int argPictureWidth, int argPictureHeight)
     stopFlag.store(false);
 }
 
-
-void FractalFlame::convertScreenToMath(double &x, double &y)
-{
-    x = -1.0 + (x / (pictureWidth/2.0));
-    y = -1.0 + (y / (pictureHeight/2.0));
+inline void FractalFlame::convertScreenToMath(double &x, double &y)
+{        
+    x = xLowerBound + (x / (pictureWidth/(xUpperBound-xLowerBound)));
+    y = yLowerBound + (y / (pictureHeight/(yUpperBound-yLowerBound)));
 }
 
-bool FractalFlame::convertMathToScreen(double x, double y,int &xOut,int &yOut)
-{
-    xOut = (int)(((x+1.0)/2.0) * pictureWidth);
-    yOut = (int)(((y+1.0)/2.0) * pictureHeight);
+inline bool FractalFlame::convertMathToScreen(double x, double y, int &xOut, int &yOut)
+{    
+    xOut = (int)(((x - xLowerBound) / (xUpperBound - xLowerBound)) * pictureWidth);
+    yOut = (int)(((y - yLowerBound) / (yUpperBound - yLowerBound)) * pictureHeight);    
     
     if(xOut<0 || yOut<0 || xOut>=pictureWidth || yOut>=pictureHeight)
     {
@@ -59,8 +58,9 @@ bool FractalFlame::convertMathToScreen(double x, double y,int &xOut,int &yOut)
     else
     {
         return true;
-    }
+    }    
 }
+
 
 void FractalFlame::getInitialPoint(double &x, double &y)
 {
@@ -453,4 +453,12 @@ void FractalFlame::setStopFlag()
 unsigned int* FractalFlame::getLastOutput()
 {
     return output.get();
+}
+
+void FractalFlame::setViewBounds(double xLowerBound,double xUpperBound,double yLowerBound,double yUpperBound)
+{
+    this->xLowerBound=xLowerBound;
+    this->xUpperBound=xUpperBound;
+    this->yLowerBound=yLowerBound;
+    this->yUpperBound=yUpperBound;
 }
