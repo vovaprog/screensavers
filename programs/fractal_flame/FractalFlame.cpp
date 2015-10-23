@@ -149,9 +149,7 @@ unsigned int FractalFlame::histAnalysis(unsigned int minCounter,unsigned int max
     }
 
     unsigned int HIST_BINS = (unsigned int)pow(10, l);
-    
-    cout << "histogram bins: "<<HIST_BINS<<endl;
-    
+        
     if(counterRange < HIST_BINS || HIST_BINS<2)
     {
         return 0;
@@ -166,9 +164,7 @@ unsigned int FractalFlame::histAnalysis(unsigned int minCounter,unsigned int max
     memset(hist.get(),0,HIST_BINS*sizeof(unsigned int));
     
     
-    unsigned int binSize = counterRange / HIST_BINS;
-        
-    cout << "bin size: "<<binSize << endl;    
+    unsigned int binSize = counterRange / HIST_BINS;            
     
     for(int i=0;i<outputSize;i++)
     {
@@ -187,7 +183,7 @@ unsigned int FractalFlame::histAnalysis(unsigned int minCounter,unsigned int max
     {
         pointSum += hist[i];
         
-        if(((double)pointSum / (double)outputSize)>0.999)//0.995)
+        if(((double)pointSum / (double)outputSize)>0.999)
         {
             return minCounter + (i+1) * binSize;
         }
@@ -201,9 +197,7 @@ FractalFlame::CalculateFractalResult FractalFlame::createOutput()
 {
     unsigned int maxCounter, minCounter;
     findMinMaxOutput(minCounter, maxCounter);
-    
-    cout << "max count: " << maxCounter << "   min count: "<<minCounter << endl;
-    
+        
     double maxCounterDivAll = (double)maxCounter / (double)numberOfIterations;
     
     if(maxCounter==0 || maxCounter<=minCounter+10 || maxCounterDivAll>=0.5)
@@ -214,7 +208,7 @@ FractalFlame::CalculateFractalResult FractalFlame::createOutput()
     }
         
     unsigned int counterUpLimit = histAnalysis(minCounter, maxCounter);
-
+    
     for(int i=0;i<outputSize;i++)
     {
         double v;

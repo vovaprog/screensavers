@@ -68,7 +68,7 @@ private:
     int pictureWidth,pictureHeight;
     std::vector<std::unique_ptr<Function>> functions;
     unsigned int numberOfIterations=1000000;
-    double colorPowerArgument = 0.5; //0.45;
+    double colorPowerArgument = 0.5;
     
     double xLowerBound=-1.0, xUpperBound=1.0;
     double yLowerBound=-1.0, yUpperBound=1.0;

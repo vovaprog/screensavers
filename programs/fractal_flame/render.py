@@ -1,7 +1,7 @@
-FOLDER = "./build/fractals1"
+FOLDER = "./fractals"
 WIDTH=1680
 HEIGHT=1050
-ITERATIONS=1000000
+ITERATIONS=50000000
 FRACTAL_FLAME_PROGRAM="./build/fractal_flame"
 
 #=======================================================================================
