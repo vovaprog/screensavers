@@ -218,9 +218,9 @@ void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function
 	TiXmlHandle hDoc(&doc);
 	TiXmlElement* xformElem;
 	
-	xformElem=hDoc.FirstChild("Flames").FirstChild("flame"	).FirstChild("xform").Element();
+	xformElem=hDoc.FirstChild("Flames").FirstChild("flame").FirstChild("xform").Element();
 
-	while(xformElem)
+	while(xformElem && strcmp(xformElem->Value(),"xform")==0)
 	{
 		Function *pFun=new Function();		
 		
@@ -285,14 +285,45 @@ void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function
 		else
 		{        
 		    pFun->b = 150 + rand() % 106;
-		}		
+		}						
 		
 		xformElem=xformElem->NextSiblingElement();
-		
+				
 		functions.push_back(unique_ptr<Function>(pFun));
 	}
 	
-	initFunctionProbabilities(functions,totalProbabilityWeight);	
+	initFunctionProbabilities(functions,totalProbabilityWeight);
+	
+	TiXmlElement* paramsElem=hDoc.FirstChild("Flames").FirstChild("flame").FirstChild("renderParameters").Element();
+		
+	if(paramsElem)
+	{
+	    const char *attributeString;
+	    
+	    attributeString = xformElem->Attribute("xLowerBound");	    
+	    if(attributeString)
+		{
+		    sscanf(attributeString,"%lf",&xLowerBound);
+		}
+
+	    attributeString = xformElem->Attribute("xUpperBound");	    
+	    if(attributeString)
+		{
+		    sscanf(attributeString,"%lf",&xUpperBound);
+		}
+		
+	    attributeString = xformElem->Attribute("yLowerBound");	    
+	    if(attributeString)
+		{
+		    sscanf(attributeString,"%lf",&yLowerBound);
+		}
+
+	    attributeString = xformElem->Attribute("yUpperBound");	    
+	    if(attributeString)
+		{
+		    sscanf(attributeString,"%lf",&yUpperBound);
+		}				
+	}
 }
 
 #endif
