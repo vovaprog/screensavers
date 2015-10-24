@@ -331,35 +331,35 @@ void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function
 		}
 		
 		
-		double viewBoundsRatio=0.0;
+		double viewBoundsRatio=1.0, viewBoundsCenter=0.0;
 
-	    attributeString = paramsElem->Attribute("xViewBoundsByRatio");	    
+	    attributeString = paramsElem->Attribute("xViewBoundsRatio");	    
 	    if(attributeString)
 		{
 		    sscanf(attributeString,"%lf",&viewBoundsRatio);
-		    setXViewBoundsByRatio(viewBoundsRatio);
+		    
+            attributeString = paramsElem->Attribute("xViewBoundsCenter");	    
+            if(attributeString)
+            {
+                sscanf(attributeString,"%lf",&viewBoundsCenter);
+            }		    
+		    
+		    setXViewBoundsByRatio(viewBoundsRatio, viewBoundsCenter);
 		}
 
-	    attributeString = paramsElem->Attribute("yViewBoundsByRatio");	    
+	    attributeString = paramsElem->Attribute("yViewBoundsRatio");	    
 	    if(attributeString)
 		{
 		    sscanf(attributeString,"%lf",&viewBoundsRatio);
-		    setYViewBoundsByRatio(viewBoundsRatio);
+		    
+            attributeString = paramsElem->Attribute("yViewBoundsCenter");	    
+            if(attributeString)
+            {
+                sscanf(attributeString,"%lf",&viewBoundsCenter);
+            }		    
+		    
+		    setYViewBoundsByRatio(viewBoundsRatio, viewBoundsCenter);
 		}
-		
-	    attributeString = paramsElem->Attribute("xViewBoundsByRatioWithLower");	    
-	    if(attributeString)
-		{
-		    sscanf(attributeString,"%lf",&viewBoundsRatio);
-		    setXViewBoundsByRatioWithLower(xLowerBound,viewBoundsRatio);
-		}
-
-	    attributeString = paramsElem->Attribute("yViewBoundsByRatioWithLower");	    
-	    if(attributeString)
-		{
-		    sscanf(attributeString,"%lf",&viewBoundsRatio);
-		    setYViewBoundsByRatioWithLower(yLowerBound,viewBoundsRatio);
-		}				
 	}
 }
 
