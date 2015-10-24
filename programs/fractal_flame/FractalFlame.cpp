@@ -457,30 +457,30 @@ void FractalFlame::setViewBounds(double xLowerBound,double xUpperBound,double yL
     this->yUpperBound=yUpperBound;
 }
 
-void FractalFlame::setXViewBoundsByRatio()
+void FractalFlame::setXViewBoundsByRatio(double ratio)
 {
-    double xSize = (yUpperBound-yLowerBound)*((double)pictureWidth / (double)pictureHeight);
+    double xSize = ratio * (yUpperBound-yLowerBound)*((double)pictureWidth / (double)pictureHeight);
     xLowerBound=0.0 - (xSize/2.0);
     xUpperBound=0.0 + (xSize/2.0);    
 }
 
-void FractalFlame::setYViewBoundsByRatio()
+void FractalFlame::setYViewBoundsByRatio(double ratio)
 {
-    double ySize = (xUpperBound-xLowerBound)*((double)pictureHeight / (double)pictureWidth);
+    double ySize = ratio * (xUpperBound-xLowerBound)*((double)pictureHeight / (double)pictureWidth);
     yLowerBound=0.0 - (ySize/2.0);
     yUpperBound=0.0 + (ySize/2.0);    
 }
 
-void FractalFlame::setXViewBoundsByRatio(double xLowerB)
+void FractalFlame::setXViewBoundsByRatioWithLower(double xLowerB, double ratio)
 {
-    double xSize = (yUpperBound-yLowerBound)*((double)pictureWidth / (double)pictureHeight);
+    double xSize = ratio * (yUpperBound-yLowerBound)*((double)pictureWidth / (double)pictureHeight);
     xLowerBound=xLowerB;
     xUpperBound=xLowerB + xSize;    
 }
 
-void FractalFlame::setYViewBoundsByRatio(double yLowerB)
+void FractalFlame::setYViewBoundsByRatioWithLower(double yLowerB, double ratio)
 {
-    double ySize = (xUpperBound-xLowerBound)*((double)pictureHeight / (double)pictureWidth);
+    double ySize = ratio * (xUpperBound-xLowerBound)*((double)pictureHeight / (double)pictureWidth);
     yLowerBound=yLowerB;
     yUpperBound=yLowerB+ySize;    
 }

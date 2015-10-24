@@ -3,6 +3,6 @@
     <flame>
         <xform disk="1.0" coefs="0.940000 -0.054800 0.093600 0.940800 0.075200 0.042000" post="0.907000 -0.150400 0.102000 0.889000 0.002400 0.068800" r="255" g="110" b="100"/>
         <xform bent="1.0" polar="1.0" coefs="0.842400 -0.118400 -0.125200 0.954200 0.026400 0.070400" post="0.972600 -0.126000 -0.025200 0.803600 0.121200 -0.032000" r="150" g="255" b="100"/>
-        <renderParameters xLowerBound="-2.0" xUpperBound="2.0" yLowerBound="-1.1" yUpperBound="0.8" />
+        <renderParameters yLowerBound="-1.1" yUpperBound="0.8" xViewBoundsByRatio="1.5" />
     </flame>
 </Flames>

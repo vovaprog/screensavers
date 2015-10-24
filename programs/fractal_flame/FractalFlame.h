@@ -20,10 +20,10 @@ public:
     
     void setViewBounds(double xLowerBound,double xUpperBound,double yLowerBound,double yUpperBound);
     
-    void setXViewBoundsByRatio();
-    void setYViewBoundsByRatio();
-    void setXViewBoundsByRatio(double xLowerB);
-    void setYViewBoundsByRatio(double yLowerB);
+    void setXViewBoundsByRatio(double ratio = 1.0);
+    void setYViewBoundsByRatio(double ratio = 1.0);
+    void setXViewBoundsByRatioWithLower(double xLowerB, double ratio = 1.0);
+    void setYViewBoundsByRatioWithLower(double yLowerB, double ratio = 1.0);
     
     void setStopFlag();
     
