@@ -20,6 +20,11 @@ public:
     
     void setViewBounds(double xLowerBound,double xUpperBound,double yLowerBound,double yUpperBound);
     
+    void setXViewBoundsByRatio();
+    void setYViewBoundsByRatio();
+    void setXViewBoundsByRatio(double xLowerB);
+    void setYViewBoundsByRatio(double yLowerB);
+    
     void setStopFlag();
     
 #ifndef NO_IMAGE_FUNCTIONS

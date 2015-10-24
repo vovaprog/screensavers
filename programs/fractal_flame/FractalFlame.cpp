@@ -456,3 +456,32 @@ void FractalFlame::setViewBounds(double xLowerBound,double xUpperBound,double yL
     this->yLowerBound=yLowerBound;
     this->yUpperBound=yUpperBound;
 }
+
+void FractalFlame::setXViewBoundsByRatio()
+{
+    double xSize = (yUpperBound-yLowerBound)*((double)pictureWidth / (double)pictureHeight);
+    xLowerBound=0.0 - (xSize/2.0);
+    xUpperBound=0.0 + (xSize/2.0);    
+}
+
+void FractalFlame::setYViewBoundsByRatio()
+{
+    double ySize = (xUpperBound-xLowerBound)*((double)pictureHeight / (double)pictureWidth);
+    yLowerBound=0.0 - (ySize/2.0);
+    yUpperBound=0.0 + (ySize/2.0);    
+}
+
+void FractalFlame::setXViewBoundsByRatio(double xLowerB)
+{
+    double xSize = (yUpperBound-yLowerBound)*((double)pictureWidth / (double)pictureHeight);
+    xLowerBound=xLowerB;
+    xUpperBound=xLowerB + xSize;    
+}
+
+void FractalFlame::setYViewBoundsByRatio(double yLowerB)
+{
+    double ySize = (xUpperBound-xLowerBound)*((double)pictureHeight / (double)pictureWidth);
+    yLowerBound=yLowerB;
+    yUpperBound=yLowerB+ySize;    
+}
+
