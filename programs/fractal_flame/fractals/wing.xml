@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<Flames>
+    <flame>
+        <xform bubble="1.0" spherical="1.0" horseshoe="1.0" coefs="0.900200 0.016800 0.134800 0.985800 -0.147600 0.010000" post="0.935200 0.140800 -0.080400 0.933400 -0.055600 -0.119200" r="180" g="230" b="255"/>
+        <xform spherical="1.0" coefs="0.915800 0.017600 -0.182800 0.874800 -0.092000 -0.197200" post="0.958000 -0.074800 -0.040800 0.861200 0.054400 -0.084000" r="190" g="255" b="180"/>
+        <renderParameters yLowerBound="-2.4" yUpperBound="1.1" xViewBoundsRatio="0.9" xViewBoundsCenter="-0.75" colorPower="0.5" />
+    </flame>
+</Flames>
