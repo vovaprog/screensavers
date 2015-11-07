@@ -15,7 +15,7 @@
 
 using namespace std;
 
-void FlameParameters::initFunctionProbabilities(int &totalProbabilityWeight)
+void FlameParameters::initFunctionProbabilities()
 {
     totalProbabilityWeight=0;
     
@@ -25,7 +25,6 @@ void FlameParameters::initFunctionProbabilities(int &totalProbabilityWeight)
         funIter->probabilityUpBorder=totalProbabilityWeight;
     }    
 }
-
 
 inline double FlameParameters::getRandom01()
 {
@@ -111,7 +110,7 @@ void FlameParameters::save(const char *fileName)
 
 #endif
 
-void FlameParameters::initRandom(int &totalProbabilityWeight)
+void FlameParameters::initRandom()
 {
     functions.clear();
     
@@ -200,13 +199,13 @@ void FlameParameters::initRandom(int &totalProbabilityWeight)
     }
     cout <<"------------"<<endl;
     
-    initFunctionProbabilities(totalProbabilityWeight);    
+    initFunctionProbabilities();    
 }
 
 
 #ifndef NO_XML_FUNCTIONS
 
-void FlameParameters::load(const char *fileName, int &totalProbabilityWeight)
+void FlameParameters::load(const char *fileName)
 {
     functions.clear();
     
@@ -293,7 +292,7 @@ void FlameParameters::load(const char *fileName, int &totalProbabilityWeight)
 		functions.push_back(unique_ptr<Function>(pFun));
 	}
 	
-	initFunctionProbabilities(totalProbabilityWeight);
+	initFunctionProbabilities();
 	
 	TiXmlElement* paramsElem=hDoc.FirstChild("Flames").FirstChild("flame").FirstChild("renderParameters").Element();
 		
@@ -332,7 +331,8 @@ void FlameParameters::load(const char *fileName, int &totalProbabilityWeight)
 		}
 		
 		
-		double viewBoundsRatio=1.0, viewBoundsCenter=0.0;
+		setViewBoundsByX = false;
+		setViewBoundsByY = false;
 
 	    attributeString = paramsElem->Attribute("xViewBoundsRatio");	    
 	    if(attributeString)
@@ -345,7 +345,7 @@ void FlameParameters::load(const char *fileName, int &totalProbabilityWeight)
                 sscanf(attributeString,"%lf",&viewBoundsCenter);
             }		    
 		    
-		    setXViewBoundsByRatio(viewBoundsRatio, viewBoundsCenter);
+            setViewBoundsByX = true;
 		}
 
 	    attributeString = paramsElem->Attribute("yViewBoundsRatio");	    
@@ -359,23 +359,26 @@ void FlameParameters::load(const char *fileName, int &totalProbabilityWeight)
                 sscanf(attributeString,"%lf",&viewBoundsCenter);
             }		    
 		    
-		    setYViewBoundsByRatio(viewBoundsRatio, viewBoundsCenter);
+            setViewBoundsByY = true;
 		}
 	}
 }
 
 #endif
 
-void FlameParameters::setXViewBoundsByRatio(double ratio, double center)
+void FlameParameters::setViewBoundsForPictureSize(int pictureWidth, int pictureHeight)
 {
-    /*double xSize = ratio * (yUpperBound-yLowerBound)*((double)pictureWidth / (double)pictureHeight);
-    xLowerBound=center - (xSize/2.0);
-    xUpperBound=center + (xSize/2.0);*/    
+    if(setViewBoundsByX)
+    {
+        double xSize = viewBoundsRatio * (yUpperBound-yLowerBound)*((double)pictureWidth / (double)pictureHeight);
+        xLowerBound=viewBoundsCenter - (xSize/2.0);
+        xUpperBound=viewBoundsCenter + (xSize/2.0);            
+    }
+    else if(setViewBoundsByY)
+    {
+        double ySize = viewBoundsRatio * (xUpperBound-xLowerBound)*((double)pictureHeight / (double)pictureWidth);
+        yLowerBound=viewBoundsCenter - (ySize/2.0);
+        yUpperBound=viewBoundsCenter + (ySize/2.0);            
+    }
 }
 
-void FlameParameters::setYViewBoundsByRatio(double ratio, double center)
-{
-    /*double ySize = ratio * (xUpperBound-xLowerBound)*((double)pictureHeight / (double)pictureWidth);
-    yLowerBound=center - (ySize/2.0);
-    yUpperBound=center + (ySize/2.0);*/    
-}

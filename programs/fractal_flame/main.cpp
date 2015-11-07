@@ -13,6 +13,8 @@
 #   include "ScreensaverAutomat.h"
 #endif
 
+#include "FractalFlame2.h"
+
 using namespace std;
 using namespace boost::program_options;
 
@@ -144,7 +146,7 @@ static void startScreensaver(int argc, char **argv)
 
 static void startRender(const string &fileName, int numberOfIterations)
 {    
-    FractalFlame fractal;
+    /*FractalFlame fractal;
     
     fractal.init(pictureWidth,pictureHeight);
     
@@ -152,7 +154,16 @@ static void startRender(const string &fileName, int numberOfIterations)
     
     fractal.setViewBounds(xLowerBound,xUpperBound,yLowerBound,yUpperBound);
     
-    fractal.render(fileName.c_str());
+    fractal.render(fileName.c_str());*/
+    
+    FractalFlame2 fractal;
+    
+    shared_ptr<RenderParameters> rp(new RenderParameters());
+    rp->pictureWidth=pictureWidth;
+    rp->pictureHeight=pictureHeight;
+    rp->numberOfIterations=numberOfIterations;    
+    
+    fractal.render(rp,fileName.c_str());
 }
 
 static void startPreview(int numberOfPreviews)
