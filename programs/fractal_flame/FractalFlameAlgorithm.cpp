@@ -297,8 +297,17 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::calculateFr
 }
 
 
+void FractalFlameAlgorithm::resetVariables()
+{
+    goodPointCounter=0;
+    badPointCounter=0;
+}
+
+
 unsigned int* FractalFlameAlgorithm::calculate(shared_ptr<FlameParameters> params)
 {
+    resetVariables();
+    
     fp = params;
     fp->setViewBoundsForPictureSize(rp->pictureWidth,rp->pictureHeight);
     FractalFlameAlgorithm::CalculateFractalResult result = calculateFractal();
@@ -313,10 +322,17 @@ unsigned int* FractalFlameAlgorithm::calculate(shared_ptr<FlameParameters> param
 }
 
 
-void FractalFlameAlgorithm::setStopFlag()
+void FractalFlameAlgorithm::setStopFlag(bool value)
 {
-    stopFlag.store(true);    
+    stopFlag.store(value);    
 }
 
+bool FractalFlameAlgorithm::getStopFlag()
+{
+    return stopFlag.load();
+}
 
-
+std::shared_ptr<FlameParameters> FractalFlameAlgorithm::getFlameParameters()
+{
+    return fp;    
+}

@@ -7,8 +7,9 @@ set(MYLIB ../../mylib)
 include_directories("." ${MYLIB})
 
 set(SOURCE main.cpp FractalFlame.cpp FractalFlame2.cpp FractalFlameAlgorithm.cpp FractalFlameFunctions.cpp FlameParameters.cpp Variation.cpp  
-        ScreensaverAutomat.cpp FractalThreadController.cpp FractalThreadPoolController.cpp ScreensaverAutomatPool.cpp ImageUtils.cpp ${MYLIB}/filesystem_utils.cpp ${MYLIB}/small_utils.cpp ${MYLIB}/ThreadPool.cpp) 
+           ScreensaverAutomat.cpp FractalThreadController.cpp FractalThreadPoolController.cpp ScreensaverAutomatPool.cpp ImageUtils.cpp ${MYLIB}/filesystem_utils.cpp ${MYLIB}/small_utils.cpp ${MYLIB}/ThreadPool.cpp) 
 
+        
 if(MSVC OR MINGW)
     set(CPPLIBS "C:/cpplibs")
     set(BOOST "C:/Tools/boost")

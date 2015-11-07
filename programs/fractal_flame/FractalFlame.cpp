@@ -471,4 +471,3 @@ void FractalFlame::setYViewBoundsByRatio(double ratio, double center)
     yUpperBound=center + (ySize/2.0);    
 }
 
-

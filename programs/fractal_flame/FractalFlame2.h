@@ -12,7 +12,12 @@ public:
     void render(shared_ptr<RenderParameters> renderParams, const char *fileName);
     void preview(int numberOfPreviews, shared_ptr<RenderParameters> renderParams, shared_ptr<FlameParameters> flameParams);
     
-private:
+    void screensaverInit(int width, int height);
+    FractalFlameAlgorithm::CalculateFractalResult screensaver(unsigned int **ppOutput);
+
+    void setStopFlag();
+    
+private:    
     
     FractalFlameAlgorithm algorithm;
     

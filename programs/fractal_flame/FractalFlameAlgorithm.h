@@ -16,7 +16,10 @@ public:
     void setRenderParameters(std::shared_ptr<RenderParameters> renderParams);
     unsigned int* calculate(std::shared_ptr<FlameParameters> params);
 
-    void setStopFlag();    
+    void setStopFlag(bool value);    
+    bool getStopFlag();
+    
+    std::shared_ptr<FlameParameters> getFlameParameters();
     
 private:        
     void convertScreenToMath(double &x, double &y);
@@ -31,6 +34,7 @@ private:
     void applyFunction(Function *pFun, double &x, double &y);
     void cleanBuffers();
     CalculateFractalResult calculateFractal();
+    void resetVariables();
     
 private:        
     //=====calculate parameters=====    

@@ -28,7 +28,7 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
     for(int i=0;i<numberOfThreads;++i)
     {
         fractals[i]=new FractalData();
-        fractals[i]->fractal->init(pictureWidth,pictureHeight);
+        fractals[i]->fractal->screensaverInit(pictureWidth,pictureHeight);
     }
     
     pool=new ThreadPool(numberOfThreads);
@@ -75,20 +75,21 @@ void FractalThreadPoolController::setStopFlag()
     fData->fractal->setStopFlag();    
 }
 
-FractalFlame::CalculateFractalResult FractalThreadPoolController::getResult(unsigned int *output)
+FractalFlameAlgorithm::CalculateFractalResult FractalThreadPoolController::getResult(unsigned int *output)
 {    
     FractalData *fData = (FractalData*)pool->getResult();
     
-    FractalFlame::CalculateFractalResult result = fData->result;
+    FractalFlameAlgorithm::CalculateFractalResult result = fData->result;
     
-    if(fData->result == FractalFlame::CalculateFractalResult::SUCCESS)
+    if(fData->result == FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
     {
         memcpy(output,fData->output,sizeof(unsigned int) * outputSize);
     }    
+
     
-#ifndef NO_IMAGE_FUNCTIONS    
-    fData->fractal->saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
-#endif    
+//#ifndef NO_IMAGE_FUNCTIONS    
+//    fData->fractal->saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
+//#endif    
     
     imageCounter += 1;
     

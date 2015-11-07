@@ -76,3 +76,60 @@ void FractalFlame2::preview(int numberOfPreviews, shared_ptr<RenderParameters> r
 	}        
 }
 
+void FractalFlame2::screensaverInit(int width, int height)
+{
+    shared_ptr<RenderParameters> rp(new RenderParameters());
+    rp->pictureWidth=width;
+    rp->pictureHeight=height;    
+    rp->numberOfIterations=500000000;
+    algorithm.setRenderParameters(rp);
+}
+
+FractalFlameAlgorithm::CalculateFractalResult FractalFlame2::screensaver(unsigned int **ppOutput)
+{
+    shared_ptr<FlameParameters> flameParams = algorithm.getFlameParameters();
+    
+    if(!flameParams)
+    {
+        flameParams=shared_ptr<FlameParameters>(new FlameParameters());        
+    }
+    
+    flameParams->initRandom();
+    algorithm.setStopFlag(false);
+    
+	
+	for(int i=0;i<30;i++)
+	{
+	    unsigned int* output = algorithm.calculate(flameParams);
+	    
+		if(output!=nullptr)
+		{
+		    *ppOutput=output;
+		    		    
+		    return FractalFlameAlgorithm::CalculateFractalResult::SUCCESS;
+		}
+		else
+		{
+		    if(!algorithm.getStopFlag())
+		    {		 
+                flameParams->initRandom();
+			}
+			else
+			{
+			    *ppOutput=nullptr;
+			    return FractalFlameAlgorithm::CalculateFractalResult::BAD_PICTURE;
+			}
+		}
+	}
+	
+	*ppOutput=nullptr;
+	return FractalFlameAlgorithm::CalculateFractalResult::BAD_PICTURE;
+}
+
+
+void FractalFlame2::setStopFlag()
+{
+    algorithm.setStopFlag(true);
+}
+
+

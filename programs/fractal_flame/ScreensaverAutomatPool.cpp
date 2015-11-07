@@ -117,16 +117,16 @@ unsigned int* ScreensaverAutomatPool::handleWaitResult()
     
     if(millisPassed>=WAIT_RESULT_MILLIS)
     {
-        FractalFlame::CalculateFractalResult result = poolController->getResult(output1);
-        if(result==FractalFlame::CalculateFractalResult::SUCCESS)
+        FractalFlameAlgorithm::CalculateFractalResult result = poolController->getResult(output1);
+        if(result==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
         {
             state=AutomatState::TRANSIT_START;
         }
-        else if(result==FractalFlame::CalculateFractalResult::TIMEOUT)
+        /*else if(result==FractalFlameAlgorithm::CalculateFractalResult::TIMEOUT)
         {
             state=AutomatState::WAIT_RESULT;
-        }
-        else if(result==FractalFlame::CalculateFractalResult::BAD_PICTURE)
+        }*/
+        else if(result==FractalFlameAlgorithm::CalculateFractalResult::BAD_PICTURE)
         {
             startMillis=getMilliseconds();
             state=AutomatState::SHOW_IDLE;
