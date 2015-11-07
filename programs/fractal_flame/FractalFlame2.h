@@ -10,6 +10,7 @@ class FractalFlame2{
 public:
     
     void render(shared_ptr<RenderParameters> renderParams, const char *fileName);
+    void preview(int numberOfPreviews, shared_ptr<RenderParameters> renderParams, shared_ptr<FlameParameters> flameParams);
     
 private:
     

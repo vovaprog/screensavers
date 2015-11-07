@@ -166,9 +166,9 @@ static void startRender(const string &fileName, int numberOfIterations)
     fractal.render(rp,fileName.c_str());
 }
 
-static void startPreview(int numberOfPreviews)
+static void startPreview(int numberOfPreviews, int numberOfIterations)
 {
-    FractalFlame fractal;
+    /*FractalFlame fractal;
     
     fractal.init(pictureWidth,pictureHeight);
     
@@ -176,7 +176,22 @@ static void startPreview(int numberOfPreviews)
     
     fractal.setViewBounds(xLowerBound,xUpperBound,yLowerBound,yUpperBound);
     
-    fractal.preview(numberOfPreviews);    
+    fractal.preview(numberOfPreviews);*/
+    
+    FractalFlame2 fractal;
+
+    shared_ptr<RenderParameters> rp(new RenderParameters());
+    rp->pictureWidth=pictureWidth;
+    rp->pictureHeight=pictureHeight;
+    rp->numberOfIterations=numberOfIterations;    
+
+    shared_ptr<FlameParameters> fp(new FlameParameters());
+    fp->xLowerBound=xLowerBound;
+    fp->xUpperBound=xUpperBound;
+    fp->yLowerBound=yLowerBound;
+    fp->yUpperBound=yUpperBound;
+    
+    fractal.preview(numberOfPreviews,rp,fp);
 }
 
 #endif
@@ -235,7 +250,7 @@ int main(int argc, char **argv)
         }
         else if(mode=="preview")
         {
-            startPreview(numberOfPreviews);
+            startPreview(numberOfPreviews,1000000);
         }
 #endif        
         else

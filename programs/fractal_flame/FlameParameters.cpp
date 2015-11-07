@@ -148,7 +148,7 @@ void FlameParameters::initRandom()
     //if(firstTimeInitFunctionsRandom)
     //{        
         //firstTimeInitFunctionsRandom=false;
-        srand((unsigned int)time(NULL)); 
+        //srand((unsigned int)time(NULL)); 
     //}
 
     
