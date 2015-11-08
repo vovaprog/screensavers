@@ -6,6 +6,7 @@
 #include <ctime>
 #include <iostream>
 #include <memory>
+#include <locale.h>
 
 #ifndef NO_XML_FUNCTIONS
 #   include <tinyxml.h>
@@ -207,6 +208,8 @@ void FlameParameters::initRandom()
 
 void FlameParameters::load(const char *fileName)
 {
+    setlocale(LC_NUMERIC,"C");
+    
     functions.clear();
     
 	TiXmlDocument doc(fileName);

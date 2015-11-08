@@ -18,3 +18,10 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
+
+LIBS += -L../fractal_flame/build -lfractal_flame -ltinyxml
+
+
+INCLUDEPATH += ../fractal_flame
+
+CONFIG += c++11
