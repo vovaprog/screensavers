@@ -385,3 +385,8 @@ void FlameParameters::setViewBoundsForPictureSize(int pictureWidth, int pictureH
     }
 }
 
+void FlameParameters::prepare()
+{
+    initFunctionProbabilities();    
+}
+

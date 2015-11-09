@@ -230,15 +230,186 @@ void MainWindow::FlameParametersToControls(shared_ptr<FlameParameters> fp)
     if(fp->functions.size()>0)
     {
         FlameTransform0ToControls(fp->functions[0].get());
+        ui->pageT0->setHidden(false);
     }
+    else
+    {
+        ui->pageT0->setHidden(true);
+    }
+
     if(fp->functions.size()>1)
     {
         FlameTransform1ToControls(fp->functions[1].get());
+        ui->pageT1->setHidden(false);
     }
+    else
+    {
+        ui->pageT1->setHidden(true);
+    }
+
     if(fp->functions.size()>2)
     {
         FlameTransform2ToControls(fp->functions[2].get());
+        ui->pageT2->setHidden(false);
     }
+    else
+    {
+        ui->pageT2->setHidden(true);
+    }
+}
+
+void MainWindow::getFunctionsChecked(QListWidget *list, Function *f)
+{
+    for(int i=0;i<list->count();i++)
+    {
+        if(list->item(i)->checkState()==Qt::Checked)
+        {
+            QString t = list->item(i)->text();
+
+            if(t=="sinusoidal") f->variations.push_back(variationSin);
+            else if(t=="eyefish") f->variations.push_back(variationFisheye);
+            else if(t=="spherical") f->variations.push_back(variationSpherical);
+            else if(t=="swirl") f->variations.push_back(variationSwirl);
+            else if(t=="horseshoe") f->variations.push_back(variationHorseshoe);
+            else if(t=="polar") f->variations.push_back(variationPolar);
+            else if(t=="handkerchief") f->variations.push_back(variationHandkerchief);
+            else if(t=="heart") f->variations.push_back(variationHeart);
+            else if(t=="disk") f->variations.push_back(variationDisk);
+            else if(t=="spiral") f->variations.push_back(variationSpiral);
+            else if(t=="hyperbolic") f->variations.push_back(variationHyperbolic);
+            else if(t=="diamond") f->variations.push_back(variationDiamond);
+            else if(t=="julia") f->variations.push_back(variationJulia);
+            else if(t=="ex") f->variations.push_back(variationEx);
+            else if(t=="bent") f->variations.push_back(variationBent);
+            else if(t=="mirror") f->variations.push_back(variationMirror);
+            else if(t=="power") f->variations.push_back(variationPower);
+            else if(t=="bubble") f->variations.push_back(variationBubble);
+            else if(t=="cylinder") f->variations.push_back(variationCylinder);
+            else if(t=="tangent") f->variations.push_back(variationTangent);
+            else if(t=="noise") f->variations.push_back(variationNoise);
+            else if(t=="blur") f->variations.push_back(variationBlur);
+            else if(t=="gaussian") f->variations.push_back(variationGaussian);
+            else if(t=="exponential") f->variations.push_back(variationExponential);
+            else if(t=="cosine") f->variations.push_back(variationCosine);
+        }
+    }
+}
+
+
+void MainWindow::ReadTransform0FromControls(Function *f)
+{
+    f->preTransformKoef[0][0]=ui->spinT0PreXX->value();
+    f->preTransformKoef[0][1]=ui->spinT0PreXY->value();
+    f->preTransformKoef[0][2]=ui->spinT0PreXC->value();
+
+    f->preTransformKoef[1][0]=ui->spinT0PreYX->value();
+    f->preTransformKoef[1][1]=ui->spinT0PreYY->value();
+    f->preTransformKoef[1][2]=ui->spinT0PreYC->value();
+
+
+    f->postTransformKoef[0][0]=ui->spinT0PostXX->value();
+    f->postTransformKoef[0][1]=ui->spinT0PostXY->value();
+    f->postTransformKoef[0][2]=ui->spinT0PostXC->value();
+
+    f->postTransformKoef[1][0]=ui->spinT0PostYX->value();
+    f->postTransformKoef[1][1]=ui->spinT0PostYY->value();
+    f->postTransformKoef[1][2]=ui->spinT0PostYC->value();
+
+    f->r=ui->spinT0R->value();
+    f->g=ui->spinT0G->value();
+    f->b=ui->spinT0B->value();
+
+    getFunctionsChecked(ui->listT0Functions,f);
+}
+
+void MainWindow::ReadTransform1FromControls(Function *f)
+{
+    f->preTransformKoef[0][0]=ui->spinT1PreXX->value();
+    f->preTransformKoef[0][1]=ui->spinT1PreXY->value();
+    f->preTransformKoef[0][2]=ui->spinT1PreXC->value();
+
+    f->preTransformKoef[1][0]=ui->spinT1PreYX->value();
+    f->preTransformKoef[1][1]=ui->spinT1PreYY->value();
+    f->preTransformKoef[1][2]=ui->spinT1PreYC->value();
+
+
+    f->postTransformKoef[0][0]=ui->spinT1PostXX->value();
+    f->postTransformKoef[0][1]=ui->spinT1PostXY->value();
+    f->postTransformKoef[0][2]=ui->spinT1PostXC->value();
+
+    f->postTransformKoef[1][0]=ui->spinT1PostYX->value();
+    f->postTransformKoef[1][1]=ui->spinT1PostYY->value();
+    f->postTransformKoef[1][2]=ui->spinT1PostYC->value();
+
+    f->r=ui->spinT1R->value();
+    f->g=ui->spinT1G->value();
+    f->b=ui->spinT1B->value();
+
+    getFunctionsChecked(ui->listT1Functions,f);
+}
+
+void MainWindow::ReadTransform2FromControls(Function *f)
+{
+    f->preTransformKoef[0][0]=ui->spinT2PreXX->value();
+    f->preTransformKoef[0][1]=ui->spinT2PreXY->value();
+    f->preTransformKoef[0][2]=ui->spinT2PreXC->value();
+
+    f->preTransformKoef[1][0]=ui->spinT2PreYX->value();
+    f->preTransformKoef[1][1]=ui->spinT2PreYY->value();
+    f->preTransformKoef[1][2]=ui->spinT2PreYC->value();
+
+
+    f->postTransformKoef[0][0]=ui->spinT2PostXX->value();
+    f->postTransformKoef[0][1]=ui->spinT2PostXY->value();
+    f->postTransformKoef[0][2]=ui->spinT2PostXC->value();
+
+    f->postTransformKoef[1][0]=ui->spinT2PostYX->value();
+    f->postTransformKoef[1][1]=ui->spinT2PostYY->value();
+    f->postTransformKoef[1][2]=ui->spinT2PostYC->value();
+
+    f->r=ui->spinT2R->value();
+    f->g=ui->spinT2G->value();
+    f->b=ui->spinT2B->value();
+
+    getFunctionsChecked(ui->listT2Functions,f);
+}
+
+
+void MainWindow::ReadFlameParametersFromControls(shared_ptr<FlameParameters> fp)
+{
+    fp->xLowerBound=ui->spinXLowerBound->value();
+    fp->xUpperBound=ui->spinXUpperBound->value();
+    fp->yLowerBound=ui->spinYLowerBound->value();
+    fp->yUpperBound=ui->spinYUpperBound->value();
+
+    fp->setViewBoundsByX = ui->checkSetBoundsByX->isChecked();
+    fp->setViewBoundsByY = ui->checkSetBoundsByY->isChecked();
+
+    fp->viewBoundsRatio = ui->spinSetBoundsRatio->value();
+    fp->viewBoundsCenter = ui->spinSetBoundsCenter->value();
+
+    if(!ui->pageT0->isHidden())
+    {
+        Function *f = new Function();
+        ReadTransform0FromControls(f);
+        fp->functions.push_back(unique_ptr<Function>(f));
+    }
+
+    if(!ui->pageT1->isHidden())
+    {
+        Function *f = new Function();
+        ReadTransform1FromControls(f);
+        fp->functions.push_back(unique_ptr<Function>(f));
+    }
+
+    if(!ui->pageT2->isHidden())
+    {
+        Function *f = new Function();
+        ReadTransform2FromControls(f);
+        fp->functions.push_back(unique_ptr<Function>(f));
+    }
+
+    fp->prepare();
 }
 
 void MainWindow::on_butCalculateFlame_clicked()
@@ -248,10 +419,7 @@ void MainWindow::on_butCalculateFlame_clicked()
     rp->pictureHeight = ui->mainGraphicsView->size().height();
 
     shared_ptr<FlameParameters> fp(new FlameParameters());
-    fp->initRandom();
-
-    FlameParametersToControls(fp);
-
+    ReadFlameParametersFromControls(fp);
 
     fractalAlgo.setRenderParameters(rp);
     unsigned int *output = fractalAlgo.calculate(fp);
@@ -273,7 +441,7 @@ void MainWindow::on_butTransform0Color_clicked()
     ui->labelT0Color->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()));
 }
 
-void MainWindow::on_butOpen_clicked()
+void MainWindow::on_butOpenFlame_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,"select file");
 
@@ -282,10 +450,6 @@ void MainWindow::on_butOpen_clicked()
         return;
     }
 
-    shared_ptr<RenderParameters> rp=readRenderParameters();
-    rp->pictureWidth = ui->mainGraphicsView->size().width();
-    rp->pictureHeight = ui->mainGraphicsView->size().height();
-
     shared_ptr<FlameParameters> fp(new FlameParameters());
 
     QByteArray ba = fileName.toLatin1();
@@ -293,17 +457,12 @@ void MainWindow::on_butOpen_clicked()
     fp->load(c_str);
 
     FlameParametersToControls(fp);
+}
 
+void MainWindow::on_butRandomFlame_clicked()
+{
+    shared_ptr<FlameParameters> fp(new FlameParameters());
+    fp->initRandom();
 
-    fractalAlgo.setRenderParameters(rp);
-    unsigned int *output = fractalAlgo.calculate(fp);
-
-    if(output!=nullptr)
-    {
-        QImage img((uchar*)output, rp->pictureWidth, rp->pictureHeight, QImage::Format_RGB32);
-
-        scene->clear();
-        scene->addPixmap(QPixmap::fromImage(img));
-        ui->mainGraphicsView->update();
-    }
+    FlameParametersToControls(fp);
 }

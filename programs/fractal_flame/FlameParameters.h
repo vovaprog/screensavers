@@ -14,6 +14,8 @@ public:
     
     void setViewBoundsForPictureSize(int pictureWidth, int pictureHeight);
     
+    void prepare();
+    
 private:
     void initFunctionProbabilities();
     double getRandom01();
