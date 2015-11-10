@@ -1,4 +1,6 @@
 #include <cstdlib>
+#include <algorithm>
+#include <string.h>
 
 #include <cmath>
 #ifndef M_PI
@@ -290,3 +292,42 @@ void variationTangent(double x, double y, double &xOut, double &yOut)
     yOut = tan(y);    
 }
 
+
+static vector<Variation> variations; 
+
+static void initVariations()
+{
+    Variation v;
+    
+    v.name="sinusoidal";
+    v.f=variationSin;
+    variations.push_back(v);    
+    
+    v.name="eyefish";
+    v.f=variationFisheye;
+    variations.push_back(v);        
+}
+
+vector<Variation>& getVariations()
+{
+    if(variations.size()<1) initVariations();
+    
+    return variations;
+}
+
+Variation* getVariationByName(char *name)
+{
+    if(variations.size()<1) initVariations();    
+    
+    auto iter = find_if(variations.begin(),variations.end(),[name](const Variation& v)
+        {
+            return (strcmp(name,v.name)==0);                
+        });
+    
+    if(iter!=variations.end())
+    {
+        return &(*iter);
+    }
+    
+    return nullptr;
+}

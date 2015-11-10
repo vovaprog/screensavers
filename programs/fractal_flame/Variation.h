@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 typedef void (*VariationPointer)(double x, double y, double &xOut, double &yOut);
 
 void variationSin(double x, double y, double &xOut, double &yOut);
@@ -29,5 +31,14 @@ void variationCosine(double x, double y, double &xOut, double &yOut);//-
 void variationNoise(double x, double y, double &xOut, double &yOut);//-
 void variationBlur(double x, double y, double &xOut, double &yOut);//-
 void variationGaussian(double x, double y, double &xOut, double &yOut);//-
+
+
+struct Variation{
+    const char *name;
+    VariationPointer f;    
+};
+
+std::vector<Variation>& getVariations();
+Variation* getVariationByName(char *name);
 
 
