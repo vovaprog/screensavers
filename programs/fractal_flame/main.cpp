@@ -56,7 +56,7 @@ static void display()
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	glDrawPixels(pictureWidth, pictureHeight, GL_RGBA, GL_UNSIGNED_BYTE, output);
+	glDrawPixels(pictureWidth, pictureHeight, /*GL_RGBA*/ GL_BGRA, GL_UNSIGNED_BYTE, output);
 	
 	glutSwapBuffers();	  
 	

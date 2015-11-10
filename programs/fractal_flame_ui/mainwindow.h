@@ -21,18 +21,21 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_butCalculateFlame_clicked();
-
     void on_butTransform0Color_clicked();
 
     void on_butOpenFlame_clicked();
 
     void on_butRandomFlame_clicked();
 
+    void on_butCalculateFast_clicked();
+
+    void on_butCalculateMore_clicked();
+
+    void on_butSaveFlame_clicked();
+
 private:
     Ui::MainWindow *ui;
 
-    shared_ptr<RenderParameters> readRenderParameters();
     void FlameParametersToControls(shared_ptr<FlameParameters> fp);
     void FlameTransform0ToControls(Function *f);
     void FlameTransform1ToControls(Function *f);
@@ -46,6 +49,8 @@ private:
     void ReadTransform1FromControls(Function *f);
     void ReadTransform2FromControls(Function *f);
     void getFunctionsChecked(QListWidget *list, Function *f);
+
+    void calculateFlame(unsigned int iterations);
 
     QGraphicsScene * scene;
     FractalFlameAlgorithm fractalAlgo;

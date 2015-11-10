@@ -9,6 +9,9 @@
 #include <memory>
 #include <vector>
 
+#include <filesystem_utils.h>
+#include <ImageUtils.h>
+
 using namespace std;
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -72,14 +75,14 @@ void MainWindow::FillFunctionList(QListWidget *list,vector<QString> &functionNam
     }
 }
 
-shared_ptr<RenderParameters> MainWindow::readRenderParameters()
+/*shared_ptr<RenderParameters> MainWindow::readRenderParameters()
 {
     shared_ptr<RenderParameters> rp(new RenderParameters());
     rp->pictureWidth=ui->spinWidth->value();
     rp->pictureHeight=ui->spinHeight->value();
     rp->numberOfIterations=ui->spinIterations->value();
     return rp;
-}
+}*/
 
 void MainWindow::setFunctionChecked(QListWidget *list, QString s)
 {
@@ -412,11 +415,12 @@ void MainWindow::ReadFlameParametersFromControls(shared_ptr<FlameParameters> fp)
     fp->prepare();
 }
 
-void MainWindow::on_butCalculateFlame_clicked()
+void MainWindow::calculateFlame(unsigned int iterations)
 {
-    shared_ptr<RenderParameters> rp=readRenderParameters();
-    rp->pictureWidth = ui->mainGraphicsView->size().width();
-    rp->pictureHeight = ui->mainGraphicsView->size().height();
+    shared_ptr<RenderParameters> rp(new RenderParameters());
+    rp->pictureWidth = ui->mainGraphicsView->size().width()-4;
+    rp->pictureHeight = ui->mainGraphicsView->size().height()-4;
+    rp->numberOfIterations=iterations;
 
     shared_ptr<FlameParameters> fp(new FlameParameters());
     ReadFlameParametersFromControls(fp);
@@ -428,6 +432,8 @@ void MainWindow::on_butCalculateFlame_clicked()
     {
         QImage img((uchar*)output, rp->pictureWidth, rp->pictureHeight, QImage::Format_RGB32);
 
+        img = img.mirrored();
+
         scene->clear();
         scene->addPixmap(QPixmap::fromImage(img));
         ui->mainGraphicsView->update();
@@ -438,7 +444,7 @@ void MainWindow::on_butTransform0Color_clicked()
 {
     QColor color = QColorDialog::getColor(Qt::white);
     QString style = "background-color: rgb(%1, %2, %3);";
-    ui->labelT0Color->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()));
+    ui->colorT0Display->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()));
 }
 
 void MainWindow::on_butOpenFlame_clicked()
@@ -457,6 +463,8 @@ void MainWindow::on_butOpenFlame_clicked()
     fp->load(c_str);
 
     FlameParametersToControls(fp);
+
+    calculateFlame(ui->spinIterationsFast->value());
 }
 
 void MainWindow::on_butRandomFlame_clicked()
@@ -465,4 +473,60 @@ void MainWindow::on_butRandomFlame_clicked()
     fp->initRandom();
 
     FlameParametersToControls(fp);
+
+    calculateFlame(ui->spinIterationsFast->value());
 }
+
+void MainWindow::on_butCalculateFast_clicked()
+{
+    calculateFlame(ui->spinIterationsFast->value());
+}
+
+void MainWindow::on_butCalculateMore_clicked()
+{
+    calculateFlame(ui->spinIterationsMore->value());
+}
+
+
+void MainWindow::on_butSaveFlame_clicked()
+{
+    string dirName="./fractals";
+
+    if(!directoryExists(dirName.c_str()))
+    {
+        createDirectory(dirName.c_str());
+    }
+
+
+    string fileName;
+
+    for(int i=0;i<1000;i++)
+    {
+        fileName = dirName+"/fractal_"+to_string(i);
+
+        if(!fileExists((fileName+".xml").c_str()) && !fileExists((fileName+".png").c_str()))
+        {
+            break;
+        }
+    }
+
+
+    shared_ptr<FlameParameters> fp(new FlameParameters());
+    ReadFlameParametersFromControls(fp);
+    fp->save((fileName+".xml").c_str());
+
+
+    shared_ptr<RenderParameters> rp(new RenderParameters());
+    rp->pictureWidth = ui->mainGraphicsView->size().width();
+    rp->pictureHeight = ui->mainGraphicsView->size().height();
+    rp->numberOfIterations=ui->spinIterationsFast->value();
+
+    fractalAlgo.setRenderParameters(rp);
+    unsigned int *output = fractalAlgo.calculate(fp);
+
+    if(output!=nullptr)
+    {
+        saveImage((fileName+".png").c_str(), "png", output, rp->pictureWidth, rp->pictureHeight);
+    }
+}
+

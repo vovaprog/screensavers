@@ -19,9 +19,9 @@ HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 
-LIBS += -L../fractal_flame/build -lfractal_flame -ltinyxml
+LIBS += -L../fractal_flame/build -lfractal_flame -ltinyxml -lboost_filesystem -lboost_system -lfreeimage
 
 
-INCLUDEPATH += ../fractal_flame
+INCLUDEPATH += ../fractal_flame ../../mylib
 
 CONFIG += c++11

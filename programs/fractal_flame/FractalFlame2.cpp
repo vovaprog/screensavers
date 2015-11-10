@@ -17,12 +17,13 @@ void FractalFlame2::render(shared_ptr<RenderParameters> renderParams, const char
     
     if(output!=nullptr)
     {    
-        ImageUtils imgUtils;
+        //ImageUtils imgUtils;
     
         string outputFileName(fileName);
         outputFileName += "_render.png";        
         
-        imgUtils.saveImage(outputFileName.c_str(), "png", output, renderParams->pictureWidth, renderParams->pictureHeight);
+        //imgUtils.
+        saveImage(outputFileName.c_str(), "png", output, renderParams->pictureWidth, renderParams->pictureHeight);
     }
 }
 
@@ -45,7 +46,7 @@ void FractalFlame2::preview(int numberOfPreviews, shared_ptr<RenderParameters> r
 		}
 	}
 
-	ImageUtils imgUtils;
+	//ImageUtils imgUtils;
 	
 	for(int i=0;i<numberOfPreviews;i++)
 	{
@@ -67,7 +68,8 @@ void FractalFlame2::preview(int numberOfPreviews, shared_ptr<RenderParameters> r
             {
                 deleteFile(fileName.c_str());
             }    
-            imgUtils.saveImage(fileName.c_str(), "png", output, renderParams->pictureWidth, renderParams->pictureHeight);		  		    
+            //imgUtils.
+            saveImage(fileName.c_str(), "png", output, renderParams->pictureWidth, renderParams->pictureHeight);		  		    
 		}
 		else
 		{

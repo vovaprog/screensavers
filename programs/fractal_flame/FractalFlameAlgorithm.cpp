@@ -220,7 +220,8 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::createOutpu
         points[i].g = (unsigned int)(points[i].g * v);
         points[i].b = (unsigned int)(points[i].b * v);
         
-        output[i] = (0xff000000 | (points[i].b << 16) | (points[i].g <<8) | points[i].r);
+        //output[i] = (0xff000000 | (points[i].b << 16) | (points[i].g <<8) | points[i].r);
+        output[i] = (0xff000000 | (points[i].r << 16) | (points[i].g <<8) | points[i].b);
     }
     
     return FractalFlameAlgorithm::CalculateFractalResult::SUCCESS;
