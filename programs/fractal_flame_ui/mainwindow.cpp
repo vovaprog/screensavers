@@ -5,6 +5,7 @@
 #include <QColorDialog>
 #include <QPalette>
 #include <QFileDialog>
+#include <QProgressDialog>
 
 #include <memory>
 #include <vector>
@@ -440,13 +441,6 @@ void MainWindow::calculateFlame(unsigned int iterations)
     }
 }
 
-void MainWindow::on_butTransform0Color_clicked()
-{
-    QColor color = QColorDialog::getColor(Qt::white);
-    QString style = "background-color: rgb(%1, %2, %3);";
-    ui->colorT0Display->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()));
-}
-
 void MainWindow::on_butOpenFlame_clicked()
 {
     QString fileName = QFileDialog::getOpenFileName(this,"select file");
@@ -530,3 +524,82 @@ void MainWindow::on_butSaveFlame_clicked()
     }
 }
 
+void MainWindow::displayColor(QSpinBox *spinR,QSpinBox *spinG,QSpinBox *spinB,QLineEdit *colorDisplay)
+{
+    QColor color(spinR->value(),spinG->value(),spinB->value());
+    QString style = "background-color: rgb(%1, %2, %3);";
+    colorDisplay->setStyleSheet(style.arg(color.red()).arg(color.green()).arg(color.blue()));
+}
+
+void MainWindow::selectColor(QSpinBox *spinR,QSpinBox *spinG,QSpinBox *spinB,QLineEdit *colorDisplay)
+{
+    QColor color(spinR->value(),spinG->value(),spinB->value());
+
+    color = QColorDialog::getColor(color);
+
+    spinR->setValue(color.red());
+    spinG->setValue(color.green());
+    spinB->setValue(color.blue());
+
+    displayColor(spinR,spinG,spinB,colorDisplay);
+}
+
+void MainWindow::on_butT0Color_clicked()
+{
+    selectColor(ui->spinT0R,ui->spinT0G,ui->spinT0B,ui->colorT0Display);
+}
+
+void MainWindow::on_butT1Color_clicked()
+{
+    selectColor(ui->spinT1R,ui->spinT1G,ui->spinT1B,ui->colorT1Display);
+}
+
+void MainWindow::on_spinT0R_valueChanged(int arg1)
+{
+    displayColor(ui->spinT0R,ui->spinT0G,ui->spinT0B,ui->colorT0Display);
+}
+
+void MainWindow::on_spinT0G_valueChanged(int arg1)
+{
+    displayColor(ui->spinT0R,ui->spinT0G,ui->spinT0B,ui->colorT0Display);
+}
+
+void MainWindow::on_spinT0B_valueChanged(int arg1)
+{
+    displayColor(ui->spinT0R,ui->spinT0G,ui->spinT0B,ui->colorT0Display);
+}
+
+void MainWindow::on_spinT1R_valueChanged(int arg1)
+{
+    displayColor(ui->spinT1R,ui->spinT1G,ui->spinT1B,ui->colorT1Display);
+}
+
+void MainWindow::on_spinT1G_valueChanged(int arg1)
+{
+    displayColor(ui->spinT1R,ui->spinT1G,ui->spinT1B,ui->colorT1Display);
+}
+
+void MainWindow::on_spinT1B_valueChanged(int arg1)
+{
+    displayColor(ui->spinT1R,ui->spinT1G,ui->spinT1B,ui->colorT1Display);
+}
+
+void MainWindow::on_butT2Color_clicked()
+{
+    selectColor(ui->spinT2R,ui->spinT2G,ui->spinT2B,ui->colorT2Display);
+}
+
+void MainWindow::on_spinT2R_valueChanged(int arg1)
+{
+    displayColor(ui->spinT2R,ui->spinT2G,ui->spinT2B,ui->colorT2Display);
+}
+
+void MainWindow::on_spinT2G_valueChanged(int arg1)
+{
+    displayColor(ui->spinT2R,ui->spinT2G,ui->spinT2B,ui->colorT2Display);
+}
+
+void MainWindow::on_spinT2B_valueChanged(int arg1)
+{
+    displayColor(ui->spinT2R,ui->spinT2G,ui->spinT2B,ui->colorT2Display);
+}

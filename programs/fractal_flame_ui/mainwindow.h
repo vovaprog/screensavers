@@ -5,6 +5,7 @@
 
 #include <QGraphicsScene>
 #include <QListWidget>
+#include <QSpinBox>
 
 #include <FractalFlame2.h>
 
@@ -21,8 +22,6 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_butTransform0Color_clicked();
-
     void on_butOpenFlame_clicked();
 
     void on_butRandomFlame_clicked();
@@ -32,6 +31,30 @@ private slots:
     void on_butCalculateMore_clicked();
 
     void on_butSaveFlame_clicked();
+
+    void on_butT0Color_clicked();
+
+    void on_butT1Color_clicked();
+
+    void on_spinT0R_valueChanged(int arg1);
+
+    void on_spinT0G_valueChanged(int arg1);
+
+    void on_spinT0B_valueChanged(int arg1);
+
+    void on_spinT1R_valueChanged(int arg1);
+
+    void on_spinT1G_valueChanged(int arg1);
+
+    void on_spinT1B_valueChanged(int arg1);
+
+    void on_butT2Color_clicked();
+
+    void on_spinT2R_valueChanged(int arg1);
+
+    void on_spinT2G_valueChanged(int arg1);
+
+    void on_spinT2B_valueChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;
@@ -51,6 +74,8 @@ private:
     void getFunctionsChecked(QListWidget *list, Function *f);
 
     void calculateFlame(unsigned int iterations);
+    void selectColor(QSpinBox *spinR,QSpinBox *spinG,QSpinBox *spinB,QLineEdit *colorDisplay);
+    void displayColor(QSpinBox *spinR,QSpinBox *spinG,QSpinBox *spinB,QLineEdit *colorDisplay);
 
     QGraphicsScene * scene;
     FractalFlameAlgorithm fractalAlgo;
