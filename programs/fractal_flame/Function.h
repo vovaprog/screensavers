@@ -16,7 +16,7 @@ public:
     double preTransformKoef[2][3];
     double postTransformKoef[2][3];
 
-    std::vector<VariationPointer> variations;
+    std::vector<Variation> variations;
     
     Function():probabilityWeight(1),r(255),g(255),b(255)
     {
@@ -36,12 +36,7 @@ public:
         postTransformKoef[1][0]=0.0;
         postTransformKoef[1][1]=1.0;
         postTransformKoef[1][2]=0.0;        
-    }
-    
-    ~Function()
-    {
-        //cout <<"Function -destructor"<<endl;        
-    }
+    }    
 };
 
 

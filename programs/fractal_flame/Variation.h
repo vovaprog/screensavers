@@ -39,6 +39,6 @@ struct Variation{
 };
 
 std::vector<Variation>& getVariations();
-Variation* getVariationByName(char *name);
+Variation getVariationByName(const char *name);
 
 

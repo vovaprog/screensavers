@@ -24,7 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     scene = new QGraphicsScene;
     ui->mainGraphicsView->setScene(scene);
 
-    vector<QString> functionNames;
+    /*vector<QString> functionNames;
 
     functionNames.push_back("sinusoidal");
     functionNames.push_back("eyefish");
@@ -50,11 +50,11 @@ MainWindow::MainWindow(QWidget *parent) :
     functionNames.push_back("blur");
     functionNames.push_back("gaussian");
     functionNames.push_back("exponential");
-    functionNames.push_back("cosine");
+    functionNames.push_back("cosine");*/
 
-    FillFunctionList(ui->listT0Functions,functionNames);
-    FillFunctionList(ui->listT1Functions,functionNames);
-    FillFunctionList(ui->listT2Functions,functionNames);
+    FillFunctionList(ui->listT0Functions);
+    FillFunctionList(ui->listT1Functions);
+    FillFunctionList(ui->listT2Functions);
 }
 
 MainWindow::~MainWindow()
@@ -62,11 +62,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::FillFunctionList(QListWidget *list,vector<QString> &functionNames)
+void MainWindow::FillFunctionList(QListWidget *list)
 {
-    for(auto& s : functionNames)
+    for(auto& v : getVariations())
     {
-        list->addItem(s);
+        list->addItem(v.name);
     }
 
     for(int i=0;i<list->count();i++)
@@ -105,7 +105,8 @@ void MainWindow::setFunctionsChecked(QListWidget *list, Function *f)
 
     for(auto variation : f->variations)
     {
-        if(variation == variationSin) setFunctionChecked(list, "sinusoidal");
+        setFunctionChecked(list, variation.name);
+        /*if(variation == variationSin) setFunctionChecked(list, "sinusoidal");
         else if(variation == variationFisheye) setFunctionChecked(list, "eyefish");
         else if(variation == variationSpherical) setFunctionChecked(list, "spherical");
         else if(variation == variationSwirl) setFunctionChecked(list, "swirl");
@@ -133,7 +134,7 @@ void MainWindow::setFunctionsChecked(QListWidget *list, Function *f)
         else
         {
             throw string("unknown variation!");
-        }
+        }*/
     }
 }
 
@@ -270,7 +271,22 @@ void MainWindow::getFunctionsChecked(QListWidget *list, Function *f)
         {
             QString t = list->item(i)->text();
 
-            if(t=="sinusoidal") f->variations.push_back(variationSin);
+            QByteArray ba = t.toLatin1();
+            const char *c_str = ba.data();
+
+
+            Variation v = getVariationByName(c_str);
+
+            if(v.f!=nullptr)
+            {
+                f->variations.push_back(v);
+            }
+            else
+            {
+                throw string("invalid variation name!");
+            }
+
+            /*if(t=="sinusoidal") f->variations.push_back(variationSin);
             else if(t=="eyefish") f->variations.push_back(variationFisheye);
             else if(t=="spherical") f->variations.push_back(variationSpherical);
             else if(t=="swirl") f->variations.push_back(variationSwirl);
@@ -294,7 +310,7 @@ void MainWindow::getFunctionsChecked(QListWidget *list, Function *f)
             else if(t=="blur") f->variations.push_back(variationBlur);
             else if(t=="gaussian") f->variations.push_back(variationGaussian);
             else if(t=="exponential") f->variations.push_back(variationExponential);
-            else if(t=="cosine") f->variations.push_back(variationCosine);
+            else if(t=="cosine") f->variations.push_back(variationCosine);*/
         }
     }
 }

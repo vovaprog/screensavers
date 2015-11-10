@@ -57,7 +57,7 @@ void FractalFlame::saveFunctions(const char *fileName,vector<unique_ptr<Function
 		
 		for(auto variation : pFun->variations)
 		{		
-			if(variation == variationSin) xformElement->SetAttribute("sinusoidal","1.0");
+			/*if(variation == variationSin) xformElement->SetAttribute("sinusoidal","1.0");
 			else if(variation == variationFisheye) xformElement->SetAttribute("eyefish","1.0");
 			else if(variation == variationSpherical) xformElement->SetAttribute("spherical","1.0");
 			else if(variation == variationSwirl) xformElement->SetAttribute("swirl","1.0");						
@@ -85,7 +85,7 @@ void FractalFlame::saveFunctions(const char *fileName,vector<unique_ptr<Function
 			else
 			{
 				throw string("unknown variation!");
-			}
+			}*/
 		}
 			
 		string coefs = to_string(pFun->preTransformKoef[0][0])+" "+to_string(pFun->preTransformKoef[1][0])+" "+
@@ -163,7 +163,7 @@ void FractalFlame::initFunctionsRandom(vector<unique_ptr<Function>> &functions, 
         for(int j=0;j<numberOfVariations;j++)
         {        
             int variationIndex = rand() % variations.size();                    
-            pFun->variations.push_back(variations[variationIndex]);
+            //pFun->variations.push_back(variations[variationIndex]);
             cout <<variationIndex<<"   ";
         }
         cout<<endl;
@@ -234,7 +234,7 @@ void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function
 			&(pFun->postTransformKoef[0][1]),&(pFun->postTransformKoef[1][1]),
 			&(pFun->postTransformKoef[0][2]),&(pFun->postTransformKoef[1][2]));
 		    
-		if(xformElem->Attribute("sinusoidal")) pFun->variations.push_back(variationSin);
+		/*if(xformElem->Attribute("sinusoidal")) pFun->variations.push_back(variationSin);
 		if(xformElem->Attribute("eyefish")) pFun->variations.push_back(variationFisheye);
 		if(xformElem->Attribute("spherical")) pFun->variations.push_back(variationSpherical);
 		if(xformElem->Attribute("swirl")) pFun->variations.push_back(variationSwirl);
@@ -258,7 +258,7 @@ void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function
 		if(xformElem->Attribute("blur")) pFun->variations.push_back(variationBlur);
 		if(xformElem->Attribute("gaussian")) pFun->variations.push_back(variationGaussian);
 		if(xformElem->Attribute("exponential")) pFun->variations.push_back(variationExponential);
-		if(xformElem->Attribute("cosine")) pFun->variations.push_back(variationCosine);
+		if(xformElem->Attribute("cosine")) pFun->variations.push_back(variationCosine);*/
 
 		if(xformElem->Attribute("r"))
 		{

@@ -39,6 +39,33 @@ inline double FlameParameters::getRandomValue(double start, double end)
 
 #ifndef NO_XML_FUNCTIONS
 
+/*void FlameParameters::save(const char *fileName)
+{    
+	TiXmlDocument doc;
+	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
+	doc.LinkEndChild( decl );
+	
+	TiXmlElement *flamesElement = new TiXmlElement( "flames" );
+	doc.LinkEndChild( flamesElement );
+	
+	TiXmlElement *flameElement = new TiXmlElement( "flame" );
+	flamesElement->LinkEndChild(flameElement);
+
+	for(auto& pFun : functions)
+	{
+		TiXmlElement *xformElement = new TiXmlElement( "xform" );		
+		flameElement->LinkEndChild(xformElement);
+		
+		for(auto variation : pFun->variations)
+		{	
+            TiXmlElement *varElement = new TiXmlElement( "variation" );		
+            flameElement->LinkEndChild(xformElement);
+		    
+            
+		}		
+	}	
+}*/
+
 void FlameParameters::save(const char *fileName)
 {    
 	TiXmlDocument doc;
@@ -56,7 +83,7 @@ void FlameParameters::save(const char *fileName)
 		TiXmlElement *xformElement = new TiXmlElement( "xform" );		
 		flameElement->LinkEndChild(xformElement);
 		
-		for(auto variation : pFun->variations)
+		/*for(auto variation : pFun->variations)
 		{		
 			if(variation == variationSin) xformElement->SetAttribute("sinusoidal","1.0");
 			else if(variation == variationFisheye) xformElement->SetAttribute("eyefish","1.0");
@@ -87,7 +114,7 @@ void FlameParameters::save(const char *fileName)
 			{
 				throw string("unknown variation!");
 			}
-		}
+		}*/
 			
 		string coefs = to_string(pFun->preTransformKoef[0][0])+" "+to_string(pFun->preTransformKoef[1][0])+" "+
 			to_string(pFun->preTransformKoef[0][1])+" "+to_string(pFun->preTransformKoef[1][1])+" "+
@@ -115,8 +142,8 @@ void FlameParameters::initRandom()
 {
     functions.clear();
     
-    vector<VariationPointer> variations;
-    variations.push_back(variationSin);
+    //vector<VariationPointer> variations;
+    /*variations.push_back(variationSin);
     variations.push_back(variationFisheye);            
     variations.push_back(variationSpherical);    
     variations.push_back(variationSwirl);    
@@ -136,7 +163,7 @@ void FlameParameters::initRandom()
     variations.push_back(variationPower);
     variations.push_back(variationBubble);
     variations.push_back(variationCylinder);
-    variations.push_back(variationTangent);
+    variations.push_back(variationTangent);*/
     //=======================================    
     //variations.push_back(variationNoise);
     //variations.push_back(variationBlur);
@@ -152,6 +179,8 @@ void FlameParameters::initRandom()
         //srand((unsigned int)time(NULL)); 
     //}
 
+    vector<Variation> &variations = getVariations();
+    
     
     int numberOfFunctions=MIN_NUMBER_OF_FUNCTIONS + rand() % (MAX_NUMBER_OF_FUNCTIONS + 1 - MIN_NUMBER_OF_FUNCTIONS);
     cout <<"------------"<<endl;
@@ -236,32 +265,40 @@ void FlameParameters::load(const char *fileName)
 			&(pFun->postTransformKoef[0][0]),&(pFun->postTransformKoef[1][0]),
 			&(pFun->postTransformKoef[0][1]),&(pFun->postTransformKoef[1][1]),
 			&(pFun->postTransformKoef[0][2]),&(pFun->postTransformKoef[1][2]));
-		    
-		if(xformElem->Attribute("sinusoidal")) pFun->variations.push_back(variationSin);
-		if(xformElem->Attribute("eyefish")) pFun->variations.push_back(variationFisheye);
-		if(xformElem->Attribute("spherical")) pFun->variations.push_back(variationSpherical);
-		if(xformElem->Attribute("swirl")) pFun->variations.push_back(variationSwirl);
-		if(xformElem->Attribute("horseshoe")) pFun->variations.push_back(variationHorseshoe);
-		if(xformElem->Attribute("polar")) pFun->variations.push_back(variationPolar);
-		if(xformElem->Attribute("handkerchief")) pFun->variations.push_back(variationHandkerchief);
-		if(xformElem->Attribute("heart")) pFun->variations.push_back(variationHeart);
-		if(xformElem->Attribute("disk")) pFun->variations.push_back(variationDisk);
-		if(xformElem->Attribute("spiral")) pFun->variations.push_back(variationSpiral);
-		if(xformElem->Attribute("hyperbolic")) pFun->variations.push_back(variationHyperbolic);
-		if(xformElem->Attribute("diamond")) pFun->variations.push_back(variationDiamond);
-		if(xformElem->Attribute("julia")) pFun->variations.push_back(variationJulia);
-		if(xformElem->Attribute("ex")) pFun->variations.push_back(variationEx);
-		if(xformElem->Attribute("bent")) pFun->variations.push_back(variationBent);
-		if(xformElem->Attribute("mirror")) pFun->variations.push_back(variationMirror);
-		if(xformElem->Attribute("power")) pFun->variations.push_back(variationPower);
-		if(xformElem->Attribute("bubble")) pFun->variations.push_back(variationBubble);
-		if(xformElem->Attribute("cylinder")) pFun->variations.push_back(variationCylinder);
-		if(xformElem->Attribute("tangent")) pFun->variations.push_back(variationTangent);
-		if(xformElem->Attribute("noise")) pFun->variations.push_back(variationNoise);
-		if(xformElem->Attribute("blur")) pFun->variations.push_back(variationBlur);
-		if(xformElem->Attribute("gaussian")) pFun->variations.push_back(variationGaussian);
-		if(xformElem->Attribute("exponential")) pFun->variations.push_back(variationExponential);
-		if(xformElem->Attribute("cosine")) pFun->variations.push_back(variationCosine);
+		
+		for(auto v : getVariations())
+		{
+		    if(xformElem->Attribute(v.name))
+		    {
+		        pFun->variations.push_back(v);
+		    }
+		}
+		
+		/*if(xformElem->Attribute("sinusoidal")) pFun->variations.push_back(getVariationByName("sinusoidal"));
+		if(xformElem->Attribute("eyefish")) pFun->variations.push_back(getVariationByName("eyefish"));
+		if(xformElem->Attribute("spherical")) pFun->variations.push_back(getVariationByName("spherical"));
+		if(xformElem->Attribute("swirl")) pFun->variations.push_back(getVariationByName("swirl"));
+		if(xformElem->Attribute("horseshoe")) pFun->variations.push_back(getVariationByName("horseshoe"));
+		if(xformElem->Attribute("polar")) pFun->variations.push_back(getVariationByName("polar"));
+		if(xformElem->Attribute("handkerchief")) pFun->variations.push_back(getVariationByName("handkerchief"));
+		if(xformElem->Attribute("heart")) pFun->variations.push_back(getVariationByName("heart"));
+		if(xformElem->Attribute("disk")) pFun->variations.push_back(getVariationByName("disk"));
+		if(xformElem->Attribute("spiral")) pFun->variations.push_back(getVariationByName("spiral"));
+		if(xformElem->Attribute("hyperbolic")) pFun->variations.push_back(getVariationByName("hyperbolic"));
+		if(xformElem->Attribute("diamond")) pFun->variations.push_back(getVariationByName("diamond"));
+		if(xformElem->Attribute("julia")) pFun->variations.push_back(getVariationByName("julia"));
+		if(xformElem->Attribute("ex")) pFun->variations.push_back(getVariationByName("ex"));
+		if(xformElem->Attribute("bent")) pFun->variations.push_back(getVariationByName("bent"));
+		if(xformElem->Attribute("mirror")) pFun->variations.push_back(getVariationByName(variationMirror);
+		if(xformElem->Attribute("power")) pFun->variations.push_back(getVariationByName(variationPower);
+		if(xformElem->Attribute("bubble")) pFun->variations.push_back(getVariationByName(variationBubble);
+		if(xformElem->Attribute("cylinder")) pFun->variations.push_back(getVariationByName(variationCylinder);
+		if(xformElem->Attribute("tangent")) pFun->variations.push_back(getVariationByName(variationTangent);
+		if(xformElem->Attribute("noise")) pFun->variations.push_back(getVariationByName(variationNoise);
+		if(xformElem->Attribute("blur")) pFun->variations.push_back(getVariationByName(variationBlur);
+		if(xformElem->Attribute("gaussian")) pFun->variations.push_back(getVariationByName(variationGaussian);
+		if(xformElem->Attribute("exponential")) pFun->variations.push_back(getVariationByName(variationExponential);
+		if(xformElem->Attribute("cosine")) pFun->variations.push_back(getVariationByName(variationCosine);*/
 
 		if(xformElem->Attribute("r"))
 		{

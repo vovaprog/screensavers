@@ -295,6 +295,7 @@ void variationTangent(double x, double y, double &xOut, double &yOut)
 
 static vector<Variation> variations; 
 
+
 static void initVariations()
 {
     Variation v;
@@ -305,7 +306,99 @@ static void initVariations()
     
     v.name="eyefish";
     v.f=variationFisheye;
-    variations.push_back(v);        
+    variations.push_back(v);    
+    
+    v.name="spherical";
+    v.f=variationSpherical;
+    variations.push_back(v);    
+
+    v.name="swirl";
+    v.f=variationSwirl;
+    variations.push_back(v);    
+
+    v.name="horseshoe";
+    v.f=variationHorseshoe;
+    variations.push_back(v);    
+
+    v.name="polar";
+    v.f=variationPolar;
+    variations.push_back(v);    
+
+    v.name="handkerchief";
+    v.f=variationHandkerchief;
+    variations.push_back(v);    
+
+    v.name="heart";
+    v.f=variationHeart;
+    variations.push_back(v);    
+
+    v.name="disk";
+    v.f=variationDisk;
+    variations.push_back(v);    
+
+    v.name="spiral";
+    v.f=variationSpiral;
+    variations.push_back(v);    
+
+    v.name="hyperbolic";
+    v.f=variationHyperbolic;
+    variations.push_back(v);    
+    
+    v.name="diamond";
+    v.f=variationDiamond;
+    variations.push_back(v);    
+
+    v.name="julia";
+    v.f=variationJulia;
+    variations.push_back(v);    
+
+    v.name="ex";
+    v.f=variationEx;
+    variations.push_back(v);    
+    
+    v.name="bent";
+    v.f=variationBent;
+    variations.push_back(v);           
+
+    v.name="mirror";
+    v.f=variationMirror;
+    variations.push_back(v);    
+
+    v.name="power";
+    v.f=variationPower;
+    variations.push_back(v);    
+
+    v.name="bubble";
+    v.f=variationBubble;
+    variations.push_back(v);    
+
+    v.name="cylinder";
+    v.f=variationCylinder;
+    variations.push_back(v);    
+
+    v.name="tangent";
+    v.f=variationTangent;
+    variations.push_back(v);    
+
+    v.name="noise";
+    v.f=variationNoise;
+    variations.push_back(v);    
+
+    v.name="blur";
+    v.f=variationBlur;
+    variations.push_back(v);    
+
+    v.name="gaussian";
+    v.f=variationGaussian;
+    variations.push_back(v);    
+
+    v.name="exponential";
+    v.f=variationExponential;
+    variations.push_back(v);    
+
+    v.name="cosine";
+    v.f=variationCosine;
+    variations.push_back(v);    
 }
 
 vector<Variation>& getVariations()
@@ -315,7 +408,7 @@ vector<Variation>& getVariations()
     return variations;
 }
 
-Variation* getVariationByName(char *name)
+Variation getVariationByName(const char *name)
 {
     if(variations.size()<1) initVariations();    
     
@@ -326,8 +419,12 @@ Variation* getVariationByName(char *name)
     
     if(iter!=variations.end())
     {
-        return &(*iter);
+        return *iter;
     }
     
-    return nullptr;
+    Variation nullVar;
+    nullVar.name=nullptr;
+    nullVar.f=nullptr;
+    
+    return nullVar;
 }

@@ -245,7 +245,7 @@ void FractalFlame::applyFunction(Function *pFun, double &x, double &y)
     {            
         double xOut,yOut;
         
-        fun(x , y, xOut, yOut);
+        fun.f(x , y, xOut, yOut);
         
         xAccum += xOut;
         yAccum += yOut;

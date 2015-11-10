@@ -65,7 +65,7 @@ private:
     void FlameTransform2ToControls(Function *f);
     void setFunctionChecked(QListWidget *list, QString s);
     void setFunctionsChecked(QListWidget *list, Function *f);
-    void FillFunctionList(QListWidget *list,vector<QString> &functionNames);
+    void FillFunctionList(QListWidget *list);
 
     void ReadFlameParametersFromControls(shared_ptr<FlameParameters> fp);
     void ReadTransform0FromControls(Function *f);
