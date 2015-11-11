@@ -39,7 +39,22 @@ inline double FlameParameters::getRandomValue(double start, double end)
 
 #ifndef NO_XML_FUNCTIONS
 
-/*void FlameParameters::save(const char *fileName)
+/*
+<flames>
+    <flame>
+        <xform r="255" g="255" b="255">
+            <variation type="bubble" />
+            <preTransformX x="1" y="1" c="1"/>
+            <preTransformY x="1" y="1" c="1"/>
+            <postTransformX x="1" y="1" c="1"/>
+            <postTransformY x="1" y="1" c="1"/>
+        </xform>
+        <renderParameters xLowerBound="1" xUpperBound="1" yLowerBound="1" yUpperBound="1" setBoundsBy="x" setBoundsRatio="1" setBoundsCenter="1" />
+    </flame>
+</flames>    
+
+*/
+void FlameParameters::save(const char *fileName)
 {    
 	TiXmlDocument doc;
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -51,22 +66,74 @@ inline double FlameParameters::getRandomValue(double start, double end)
 	TiXmlElement *flameElement = new TiXmlElement( "flame" );
 	flamesElement->LinkEndChild(flameElement);
 
-	for(auto& pFun : functions)
+	for(auto& xf : functions)
 	{
 		TiXmlElement *xformElement = new TiXmlElement( "xform" );		
 		flameElement->LinkEndChild(xformElement);
 		
-		for(auto variation : pFun->variations)
+		
+		xformElement->SetAttribute("r",to_string(xf->r));
+		xformElement->SetAttribute("g",to_string(xf->g));
+		xformElement->SetAttribute("b",to_string(xf->b));		
+		
+		
+		for(auto variation : xf->variations)
 		{	
             TiXmlElement *varElement = new TiXmlElement( "variation" );		
-            flameElement->LinkEndChild(xformElement);
-		    
-            
-		}		
-	}	
-}*/
+            xformElement->LinkEndChild(varElement);
+		    varElement->SetAttribute("type",variation.name);            
+		}				
 
-void FlameParameters::save(const char *fileName)
+		
+        TiXmlElement *transformElement = new TiXmlElement( "preTransformX" );		
+        xformElement->LinkEndChild(transformElement);
+		transformElement->SetAttribute("x",to_string(xf->preTransformKoef[0][0]));
+		transformElement->SetAttribute("y",to_string(xf->preTransformKoef[0][1]));
+		transformElement->SetAttribute("c",to_string(xf->preTransformKoef[0][2]));
+
+        transformElement = new TiXmlElement( "preTransformY" );		
+        xformElement->LinkEndChild(transformElement);
+		transformElement->SetAttribute("x",to_string(xf->preTransformKoef[1][0]));
+		transformElement->SetAttribute("y",to_string(xf->preTransformKoef[1][1]));
+		transformElement->SetAttribute("c",to_string(xf->preTransformKoef[1][2]));
+        
+        transformElement = new TiXmlElement( "postTransformX" );		
+        xformElement->LinkEndChild(transformElement);
+		transformElement->SetAttribute("x",to_string(xf->postTransformKoef[0][0]));
+		transformElement->SetAttribute("y",to_string(xf->postTransformKoef[0][1]));
+		transformElement->SetAttribute("c",to_string(xf->postTransformKoef[0][2]));
+        
+        transformElement = new TiXmlElement( "postTransformX" );		
+        xformElement->LinkEndChild(transformElement);
+		transformElement->SetAttribute("x",to_string(xf->postTransformKoef[1][0]));
+		transformElement->SetAttribute("y",to_string(xf->postTransformKoef[1][1]));
+		transformElement->SetAttribute("c",to_string(xf->postTransformKoef[1][2]));			
+	}
+		
+    TiXmlElement *renderElement = new TiXmlElement( "renderParameters" );		
+    flameElement->LinkEndChild(renderElement);
+    renderElement->SetAttribute("xLowerBound",to_string(xLowerBound));
+    renderElement->SetAttribute("xUpperBound",to_string(xUpperBound));
+    renderElement->SetAttribute("yLowerBound",to_string(yLowerBound));
+    renderElement->SetAttribute("yUpperBound",to_string(yUpperBound));
+            
+    if(setViewBoundsByX)
+    {
+        renderElement->SetAttribute("setBoundsBy","x");
+    }
+    else if(setViewBoundsByY)
+    {
+        renderElement->SetAttribute("setBoundsBy","y");
+    }
+        
+    renderElement->SetAttribute("setBoundsRatio",to_string(viewBoundsRatio));
+    renderElement->SetAttribute("setBoundsCenter",to_string(viewBoundsCenter));		
+	
+	
+	doc.SaveFile( fileName );    
+}
+
+void FlameParameters::save_old(const char *fileName)
 {    
 	TiXmlDocument doc;
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -234,6 +301,26 @@ void FlameParameters::initRandom()
 
 
 #ifndef NO_XML_FUNCTIONS
+
+/*void FlameParameters::load2(const char *fileName)
+{
+    setlocale(LC_NUMERIC,"C");
+    
+    functions.clear();
+    
+	TiXmlDocument doc(fileName);
+	if (!doc.LoadFile()) 
+	{
+		throw string("can't open file!");
+	}
+	
+	TiXmlHandle hDoc(&doc);
+	TiXmlElement* xformElem;
+	
+	xformElem=hDoc.FirstChild("flames").FirstChild("flame").Element();
+
+	
+}*/
 
 void FlameParameters::load(const char *fileName)
 {

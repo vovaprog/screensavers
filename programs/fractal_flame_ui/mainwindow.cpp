@@ -24,34 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     scene = new QGraphicsScene;
     ui->mainGraphicsView->setScene(scene);
 
-    /*vector<QString> functionNames;
-
-    functionNames.push_back("sinusoidal");
-    functionNames.push_back("eyefish");
-    functionNames.push_back("spherical");
-    functionNames.push_back("swirl");
-    functionNames.push_back("horseshoe");
-    functionNames.push_back("polar");
-    functionNames.push_back("handkerchief");
-    functionNames.push_back("heart");
-    functionNames.push_back("disk");
-    functionNames.push_back("spiral");
-    functionNames.push_back("hyperbolic");
-    functionNames.push_back("diamond");
-    functionNames.push_back("julia");
-    functionNames.push_back("ex");
-    functionNames.push_back("bent");
-    functionNames.push_back("mirror");
-    functionNames.push_back("power");
-    functionNames.push_back("bubble");
-    functionNames.push_back("cylinder");
-    functionNames.push_back("tangent");
-    functionNames.push_back("noise");
-    functionNames.push_back("blur");
-    functionNames.push_back("gaussian");
-    functionNames.push_back("exponential");
-    functionNames.push_back("cosine");*/
-
     FillFunctionList(ui->listT0Functions);
     FillFunctionList(ui->listT1Functions);
     FillFunctionList(ui->listT2Functions);
@@ -76,15 +48,6 @@ void MainWindow::FillFunctionList(QListWidget *list)
     }
 }
 
-/*shared_ptr<RenderParameters> MainWindow::readRenderParameters()
-{
-    shared_ptr<RenderParameters> rp(new RenderParameters());
-    rp->pictureWidth=ui->spinWidth->value();
-    rp->pictureHeight=ui->spinHeight->value();
-    rp->numberOfIterations=ui->spinIterations->value();
-    return rp;
-}*/
-
 void MainWindow::setFunctionChecked(QListWidget *list, QString s)
 {
     for(int i=0;i<list->count();i++)
@@ -106,35 +69,6 @@ void MainWindow::setFunctionsChecked(QListWidget *list, Function *f)
     for(auto variation : f->variations)
     {
         setFunctionChecked(list, variation.name);
-        /*if(variation == variationSin) setFunctionChecked(list, "sinusoidal");
-        else if(variation == variationFisheye) setFunctionChecked(list, "eyefish");
-        else if(variation == variationSpherical) setFunctionChecked(list, "spherical");
-        else if(variation == variationSwirl) setFunctionChecked(list, "swirl");
-        else if(variation == variationHorseshoe) setFunctionChecked(list, "horseshoe");
-        else if(variation == variationPolar) setFunctionChecked(list, "polar");
-        else if(variation == variationHandkerchief) setFunctionChecked(list, "handkerchief");
-        else if(variation == variationHeart) setFunctionChecked(list, "heart");
-        else if(variation == variationDisk) setFunctionChecked(list, "disk");
-        else if(variation == variationSpiral) setFunctionChecked(list, "spiral");
-        else if(variation == variationHyperbolic) setFunctionChecked(list, "hyperbolic");
-        else if(variation == variationDiamond) setFunctionChecked(list, "diamond");
-        else if(variation == variationJulia) setFunctionChecked(list, "julia");
-        else if(variation == variationEx) setFunctionChecked(list, "ex");
-        else if(variation == variationBent) setFunctionChecked(list, "bent");
-        else if(variation == variationMirror) setFunctionChecked(list, "mirror");
-        else if(variation == variationPower) setFunctionChecked(list, "power");
-        else if(variation == variationBubble) setFunctionChecked(list, "bubble");
-        else if(variation == variationCylinder) setFunctionChecked(list, "cylinder");
-        else if(variation == variationTangent) setFunctionChecked(list, "tangent");
-        else if(variation == variationNoise) setFunctionChecked(list, "noise");
-        else if(variation == variationBlur) setFunctionChecked(list, "blur");
-        else if(variation == variationGaussian) setFunctionChecked(list, "gaussian");
-        else if(variation == variationExponential) setFunctionChecked(list, "exponential");
-        else if(variation == variationCosine) setFunctionChecked(list, "cosine");
-        else
-        {
-            throw string("unknown variation!");
-        }*/
     }
 }
 
@@ -285,32 +219,6 @@ void MainWindow::getFunctionsChecked(QListWidget *list, Function *f)
             {
                 throw string("invalid variation name!");
             }
-
-            /*if(t=="sinusoidal") f->variations.push_back(variationSin);
-            else if(t=="eyefish") f->variations.push_back(variationFisheye);
-            else if(t=="spherical") f->variations.push_back(variationSpherical);
-            else if(t=="swirl") f->variations.push_back(variationSwirl);
-            else if(t=="horseshoe") f->variations.push_back(variationHorseshoe);
-            else if(t=="polar") f->variations.push_back(variationPolar);
-            else if(t=="handkerchief") f->variations.push_back(variationHandkerchief);
-            else if(t=="heart") f->variations.push_back(variationHeart);
-            else if(t=="disk") f->variations.push_back(variationDisk);
-            else if(t=="spiral") f->variations.push_back(variationSpiral);
-            else if(t=="hyperbolic") f->variations.push_back(variationHyperbolic);
-            else if(t=="diamond") f->variations.push_back(variationDiamond);
-            else if(t=="julia") f->variations.push_back(variationJulia);
-            else if(t=="ex") f->variations.push_back(variationEx);
-            else if(t=="bent") f->variations.push_back(variationBent);
-            else if(t=="mirror") f->variations.push_back(variationMirror);
-            else if(t=="power") f->variations.push_back(variationPower);
-            else if(t=="bubble") f->variations.push_back(variationBubble);
-            else if(t=="cylinder") f->variations.push_back(variationCylinder);
-            else if(t=="tangent") f->variations.push_back(variationTangent);
-            else if(t=="noise") f->variations.push_back(variationNoise);
-            else if(t=="blur") f->variations.push_back(variationBlur);
-            else if(t=="gaussian") f->variations.push_back(variationGaussian);
-            else if(t=="exponential") f->variations.push_back(variationExponential);
-            else if(t=="cosine") f->variations.push_back(variationCosine);*/
         }
     }
 }
