@@ -41,4 +41,5 @@ struct Variation{
 std::vector<Variation>& getVariations();
 Variation getVariationByName(const char *name);
 
+#define isNullVariation(v) ((v).name==nullptr || (v).f==nullptr)
 

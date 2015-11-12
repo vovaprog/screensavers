@@ -202,7 +202,7 @@ int main(int argc, char **argv)
 		string mode, fileName;
 		int iterations,numberOfPreviews;
 		bool windowMode;
-		
+
 		{
             options_description desc("program options");
             desc.add_options()
@@ -252,7 +252,13 @@ int main(int argc, char **argv)
         {
             startPreview(numberOfPreviews,1000000);
         }
-#endif        
+#endif      
+        else if(mode=="convert_old")
+        {
+            FlameParameters fp;
+            fp.load_old(fileName.c_str());
+            fp.save((fileName+"_converted.xml").c_str());
+        }
         else
         {
             cout <<"unknown mode!"<<endl;

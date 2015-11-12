@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <string>
 #include <ctime>
-#include <iostream>
 #include <memory>
 #include <locale.h>
 
@@ -42,19 +41,22 @@ inline double FlameParameters::getRandomValue(double start, double end)
 /*
 <flames>
     <flame>
-        <xform r="255" g="255" b="255">
+        <xform>
             <variation type="bubble" />
             <preTransformX x="1" y="1" c="1"/>
             <preTransformY x="1" y="1" c="1"/>
             <postTransformX x="1" y="1" c="1"/>
             <postTransformY x="1" y="1" c="1"/>
+            <color r="255" g="255" b="255"/>
         </xform>
         <renderParameters xLowerBound="1" xUpperBound="1" yLowerBound="1" yUpperBound="1" setBoundsBy="x" setBoundsRatio="1" setBoundsCenter="1" />
     </flame>
-</flames>    
+</flames>
 */
 void FlameParameters::save(const char *fileName)
 {    
+    setlocale(LC_NUMERIC,"C");
+    
 	TiXmlDocument doc;
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
 	doc.LinkEndChild( decl );
@@ -69,12 +71,7 @@ void FlameParameters::save(const char *fileName)
 	{
 		TiXmlElement *xformElement = new TiXmlElement( "xform" );		
 		flameElement->LinkEndChild(xformElement);
-		
-		
-		xformElement->SetAttribute("r",to_string(xf->r));
-		xformElement->SetAttribute("g",to_string(xf->g));
-		xformElement->SetAttribute("b",to_string(xf->b));		
-		
+						
 		
 		for(auto variation : xf->variations)
 		{	
@@ -102,11 +99,18 @@ void FlameParameters::save(const char *fileName)
 		transformElement->SetAttribute("y",to_string(xf->postTransformKoef[0][1]));
 		transformElement->SetAttribute("c",to_string(xf->postTransformKoef[0][2]));
         
-        transformElement = new TiXmlElement( "postTransformX" );		
+        transformElement = new TiXmlElement( "postTransformY" );		
         xformElement->LinkEndChild(transformElement);
 		transformElement->SetAttribute("x",to_string(xf->postTransformKoef[1][0]));
 		transformElement->SetAttribute("y",to_string(xf->postTransformKoef[1][1]));
-		transformElement->SetAttribute("c",to_string(xf->postTransformKoef[1][2]));			
+		transformElement->SetAttribute("c",to_string(xf->postTransformKoef[1][2]));
+		
+		
+		TiXmlElement *colorElement = new TiXmlElement( "color" );
+		xformElement->LinkEndChild(colorElement);
+		colorElement->SetAttribute("r",to_string(xf->r));
+		colorElement->SetAttribute("g",to_string(xf->g));
+		colorElement->SetAttribute("b",to_string(xf->b));				
 	}
 		
     TiXmlElement *renderElement = new TiXmlElement( "renderParameters" );		
@@ -115,6 +119,7 @@ void FlameParameters::save(const char *fileName)
     renderElement->SetAttribute("xUpperBound",to_string(xUpperBound));
     renderElement->SetAttribute("yLowerBound",to_string(yLowerBound));
     renderElement->SetAttribute("yUpperBound",to_string(yUpperBound));
+    renderElement->SetAttribute("colorPower",to_string(colorPower));
             
     if(setViewBoundsByX)
     {
@@ -132,112 +137,12 @@ void FlameParameters::save(const char *fileName)
 	doc.SaveFile( fileName );    
 }
 
-void FlameParameters::save_old(const char *fileName)
-{    
-	TiXmlDocument doc;
-	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
-	doc.LinkEndChild( decl );
-	
-	TiXmlElement *flamesElement = new TiXmlElement( "Flames" );
-	doc.LinkEndChild( flamesElement );
-	
-	TiXmlElement *flameElement = new TiXmlElement( "flame" );
-	flamesElement->LinkEndChild(flameElement);
-
-	for(auto& pFun : functions)
-	{
-		TiXmlElement *xformElement = new TiXmlElement( "xform" );		
-		flameElement->LinkEndChild(xformElement);
-		
-		/*for(auto variation : pFun->variations)
-		{		
-			if(variation == variationSin) xformElement->SetAttribute("sinusoidal","1.0");
-			else if(variation == variationFisheye) xformElement->SetAttribute("eyefish","1.0");
-			else if(variation == variationSpherical) xformElement->SetAttribute("spherical","1.0");
-			else if(variation == variationSwirl) xformElement->SetAttribute("swirl","1.0");						
-			else if(variation == variationHorseshoe) xformElement->SetAttribute("horseshoe","1.0");
-			else if(variation == variationPolar) xformElement->SetAttribute("polar","1.0");
-			else if(variation == variationHandkerchief) xformElement->SetAttribute("handkerchief","1.0");
-			else if(variation == variationHeart) xformElement->SetAttribute("heart","1.0");
-			else if(variation == variationDisk) xformElement->SetAttribute("disk","1.0");
-			else if(variation == variationSpiral) xformElement->SetAttribute("spiral","1.0");
-			else if(variation == variationHyperbolic) xformElement->SetAttribute("hyperbolic","1.0");
-			else if(variation == variationDiamond) xformElement->SetAttribute("diamond","1.0");
-			else if(variation == variationJulia) xformElement->SetAttribute("julia","1.0");
-			else if(variation == variationEx) xformElement->SetAttribute("ex","1.0");
-			else if(variation == variationBent) xformElement->SetAttribute("bent","1.0");
-			else if(variation == variationMirror) xformElement->SetAttribute("mirror","1.0");			
-			else if(variation == variationPower) xformElement->SetAttribute("power","1.0");
-			else if(variation == variationBubble) xformElement->SetAttribute("bubble","1.0");
-			else if(variation == variationCylinder) xformElement->SetAttribute("cylinder","1.0");
-			else if(variation == variationTangent) xformElement->SetAttribute("tangent","1.0");
-			else if(variation == variationNoise) xformElement->SetAttribute("noise","1.0");
-			else if(variation == variationBlur) xformElement->SetAttribute("blur","1.0");
-			else if(variation == variationGaussian) xformElement->SetAttribute("gaussian","1.0");
-			else if(variation == variationExponential) xformElement->SetAttribute("exponential","1.0");
-			else if(variation == variationCosine) xformElement->SetAttribute("cosine","1.0");
-			else
-			{
-				throw string("unknown variation!");
-			}
-		}*/
-			
-		string coefs = to_string(pFun->preTransformKoef[0][0])+" "+to_string(pFun->preTransformKoef[1][0])+" "+
-			to_string(pFun->preTransformKoef[0][1])+" "+to_string(pFun->preTransformKoef[1][1])+" "+
-			to_string(pFun->preTransformKoef[0][2])+" "+to_string(pFun->preTransformKoef[1][2]);
-			
-		xformElement->SetAttribute("coefs",coefs.c_str());
-
-		string post = to_string(pFun->postTransformKoef[0][0])+" "+to_string(pFun->postTransformKoef[1][0])+" "+
-			to_string(pFun->postTransformKoef[0][1])+" "+to_string(pFun->postTransformKoef[1][1])+" "+
-			to_string(pFun->postTransformKoef[0][2])+" "+to_string(pFun->postTransformKoef[1][2]);
-		
-		xformElement->SetAttribute("post",post.c_str());		
-		
-		xformElement->SetAttribute("r",to_string(pFun->r));
-		xformElement->SetAttribute("g",to_string(pFun->g));
-		xformElement->SetAttribute("b",to_string(pFun->b));
-	}
-	
-	doc.SaveFile( fileName );    
-}
 
 #endif
 
 void FlameParameters::initRandom()
 {
     functions.clear();
-    
-    //vector<VariationPointer> variations;
-    /*variations.push_back(variationSin);
-    variations.push_back(variationFisheye);            
-    variations.push_back(variationSpherical);    
-    variations.push_back(variationSwirl);    
-    variations.push_back(variationHorseshoe);    
-    variations.push_back(variationPolar);    
-    variations.push_back(variationHandkerchief);    
-    variations.push_back(variationHeart);    
-    variations.push_back(variationDisk);    
-    variations.push_back(variationSpiral);    
-    variations.push_back(variationHyperbolic);    
-    variations.push_back(variationDiamond);    
-    variations.push_back(variationJulia);    
-    variations.push_back(variationEx);    
-    variations.push_back(variationBent);    
-    variations.push_back(variationMirror);
-    //=======================================
-    variations.push_back(variationPower);
-    variations.push_back(variationBubble);
-    variations.push_back(variationCylinder);
-    variations.push_back(variationTangent);*/
-    //=======================================    
-    //variations.push_back(variationNoise);
-    //variations.push_back(variationBlur);
-    //variations.push_back(variationGaussian);
-    //=======================================
-    //variations.push_back(variationExponential);//-    
-    //variations.push_back(variationCosine);//-
-    
     
     //if(firstTimeInitFunctionsRandom)
     //{        
@@ -249,7 +154,7 @@ void FlameParameters::initRandom()
     
     
     int numberOfFunctions=MIN_NUMBER_OF_FUNCTIONS + rand() % (MAX_NUMBER_OF_FUNCTIONS + 1 - MIN_NUMBER_OF_FUNCTIONS);
-    cout <<"------------"<<endl;
+    
     for(int i=0;i<numberOfFunctions;i++)
     {
         Function *pFun = new Function();
@@ -293,7 +198,6 @@ void FlameParameters::initRandom()
         
         functions.push_back(unique_ptr<Function>(pFun));
     }
-    cout <<"------------"<<endl;
     
     initFunctionProbabilities();    
 }
@@ -301,23 +205,7 @@ void FlameParameters::initRandom()
 
 #ifndef NO_XML_FUNCTIONS
 
-/*
-<flames>
-    <flame>
-        <xform r="255" g="255" b="255">
-            <variation type="bubble" />
-            <preTransformX x="1" y="1" c="1"/>
-            <preTransformY x="1" y="1" c="1"/>
-            <postTransformX x="1" y="1" c="1"/>
-            <postTransformY x="1" y="1" c="1"/>
-        </xform>
-        <renderParameters xLowerBound="1" xUpperBound="1" yLowerBound="1" yUpperBound="1"             
-            colorPower="1" setBoundsBy="x" setBoundsRatio="1" setBoundsCenter="1" />
-    </flame>
-</flames>    
-*/
-
-void FlameParameters::load2(const char *fileName)
+void FlameParameters::load(const char *fileName)
 {
     setlocale(LC_NUMERIC,"C");
     
@@ -340,33 +228,6 @@ void FlameParameters::load2(const char *fileName)
 	    {
 	        Function *pFun=new Function();
 	        
-	        if(flameChild->Attribute("r"))
-            {
-                sscanf(flameChild->Attribute("r"),"%u",&(pFun->r));
-            }
-            else
-            {
-                pFun->r = 150 + rand() % 106;
-            }
-            
-            if(flameChild->Attribute("g"))
-            {
-                sscanf(flameChild->Attribute("g"),"%u",&(pFun->g));
-            }
-            else
-            {         
-                pFun->g = 150 + rand() % 106;
-            }
-            
-            if(flameChild->Attribute("b"))
-            {
-                sscanf(flameChild->Attribute("b"),"%u",&(pFun->b));
-            }
-            else
-            {        
-                pFun->b = 150 + rand() % 106;
-            }		        
-	        
             TiXmlElement* xformChild=flameChild->FirstChildElement();
             
             while(xformChild!=nullptr)
@@ -380,6 +241,10 @@ void FlameParameters::load2(const char *fileName)
                         if(!isNullVariation(v))
                         {
                             pFun->variations.push_back(v);
+                        }
+                        else
+                        {
+                            throw string("unknown variation!");
                         }
                     }
                 }
@@ -407,12 +272,22 @@ void FlameParameters::load2(const char *fileName)
                     sscanf(xformChild->Attribute("y"),"%lf",&(pFun->postTransformKoef[1][1]));
                     sscanf(xformChild->Attribute("c"),"%lf",&(pFun->postTransformKoef[1][2]));                
                 }
+                else if(strcmp(xformChild->Value(),"color")==0)
+                {
+                    sscanf(xformChild->Attribute("r"),"%u",&(pFun->r));
+                    sscanf(xformChild->Attribute("g"),"%u",&(pFun->g));
+                    sscanf(xformChild->Attribute("b"),"%u",&(pFun->b));
+                }
                 
                 xformChild=xformChild->NextSiblingElement();
-            }            
+            }
+            
+            functions.push_back(unique_ptr<Function>(pFun));
 	    }
 	    else if(strcmp(flameChild->Value(),"renderParameters")==0)
 	    {
+	        const char *attributeString;
+	        
 	        attributeString = flameChild->Attribute("xLowerBound");	    
             if(attributeString)
             {
@@ -443,7 +318,7 @@ void FlameParameters::load2(const char *fileName)
                 sscanf(attributeString,"%lf",&colorPower);
             }
 	        
-            attributeString = flameChild->Attribute("setBoundsRation");	    
+            attributeString = flameChild->Attribute("setBoundsRatio");	    
             if(attributeString)
             {
                 sscanf(attributeString,"%lf",&viewBoundsRatio);
@@ -465,7 +340,7 @@ void FlameParameters::load2(const char *fileName)
                 {
                     setViewBoundsByX=true;
                 }
-                else if(strcmp(attributeString,"x")==0)
+                else if(strcmp(attributeString,"y")==0)
                 {
                     setViewBoundsByY=true;
                 }
@@ -476,7 +351,7 @@ void FlameParameters::load2(const char *fileName)
 	}
 }
 
-void FlameParameters::load(const char *fileName)
+void FlameParameters::load_old(const char *fileName)
 {
     setlocale(LC_NUMERIC,"C");
     
@@ -514,32 +389,6 @@ void FlameParameters::load(const char *fileName)
 		        pFun->variations.push_back(v);
 		    }
 		}
-		
-		/*if(xformElem->Attribute("sinusoidal")) pFun->variations.push_back(getVariationByName("sinusoidal"));
-		if(xformElem->Attribute("eyefish")) pFun->variations.push_back(getVariationByName("eyefish"));
-		if(xformElem->Attribute("spherical")) pFun->variations.push_back(getVariationByName("spherical"));
-		if(xformElem->Attribute("swirl")) pFun->variations.push_back(getVariationByName("swirl"));
-		if(xformElem->Attribute("horseshoe")) pFun->variations.push_back(getVariationByName("horseshoe"));
-		if(xformElem->Attribute("polar")) pFun->variations.push_back(getVariationByName("polar"));
-		if(xformElem->Attribute("handkerchief")) pFun->variations.push_back(getVariationByName("handkerchief"));
-		if(xformElem->Attribute("heart")) pFun->variations.push_back(getVariationByName("heart"));
-		if(xformElem->Attribute("disk")) pFun->variations.push_back(getVariationByName("disk"));
-		if(xformElem->Attribute("spiral")) pFun->variations.push_back(getVariationByName("spiral"));
-		if(xformElem->Attribute("hyperbolic")) pFun->variations.push_back(getVariationByName("hyperbolic"));
-		if(xformElem->Attribute("diamond")) pFun->variations.push_back(getVariationByName("diamond"));
-		if(xformElem->Attribute("julia")) pFun->variations.push_back(getVariationByName("julia"));
-		if(xformElem->Attribute("ex")) pFun->variations.push_back(getVariationByName("ex"));
-		if(xformElem->Attribute("bent")) pFun->variations.push_back(getVariationByName("bent"));
-		if(xformElem->Attribute("mirror")) pFun->variations.push_back(getVariationByName(variationMirror);
-		if(xformElem->Attribute("power")) pFun->variations.push_back(getVariationByName(variationPower);
-		if(xformElem->Attribute("bubble")) pFun->variations.push_back(getVariationByName(variationBubble);
-		if(xformElem->Attribute("cylinder")) pFun->variations.push_back(getVariationByName(variationCylinder);
-		if(xformElem->Attribute("tangent")) pFun->variations.push_back(getVariationByName(variationTangent);
-		if(xformElem->Attribute("noise")) pFun->variations.push_back(getVariationByName(variationNoise);
-		if(xformElem->Attribute("blur")) pFun->variations.push_back(getVariationByName(variationBlur);
-		if(xformElem->Attribute("gaussian")) pFun->variations.push_back(getVariationByName(variationGaussian);
-		if(xformElem->Attribute("exponential")) pFun->variations.push_back(getVariationByName(variationExponential);
-		if(xformElem->Attribute("cosine")) pFun->variations.push_back(getVariationByName(variationCosine);*/
 
 		if(xformElem->Attribute("r"))
 		{
