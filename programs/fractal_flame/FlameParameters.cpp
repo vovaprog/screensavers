@@ -52,7 +52,6 @@ inline double FlameParameters::getRandomValue(double start, double end)
         <renderParameters xLowerBound="1" xUpperBound="1" yLowerBound="1" yUpperBound="1" setBoundsBy="x" setBoundsRatio="1" setBoundsCenter="1" />
     </flame>
 </flames>    
-
 */
 void FlameParameters::save(const char *fileName)
 {    
@@ -302,7 +301,23 @@ void FlameParameters::initRandom()
 
 #ifndef NO_XML_FUNCTIONS
 
-/*void FlameParameters::load2(const char *fileName)
+/*
+<flames>
+    <flame>
+        <xform r="255" g="255" b="255">
+            <variation type="bubble" />
+            <preTransformX x="1" y="1" c="1"/>
+            <preTransformY x="1" y="1" c="1"/>
+            <postTransformX x="1" y="1" c="1"/>
+            <postTransformY x="1" y="1" c="1"/>
+        </xform>
+        <renderParameters xLowerBound="1" xUpperBound="1" yLowerBound="1" yUpperBound="1"             
+            colorPower="1" setBoundsBy="x" setBoundsRatio="1" setBoundsCenter="1" />
+    </flame>
+</flames>    
+*/
+
+void FlameParameters::load2(const char *fileName)
 {
     setlocale(LC_NUMERIC,"C");
     
@@ -315,12 +330,151 @@ void FlameParameters::initRandom()
 	}
 	
 	TiXmlHandle hDoc(&doc);
-	TiXmlElement* xformElem;
+	TiXmlElement* flameChild;
 	
-	xformElem=hDoc.FirstChild("flames").FirstChild("flame").Element();
+	flameChild=hDoc.FirstChild("flames").FirstChild("flame").FirstChild().Element();
 
-	
-}*/
+	while(flameChild!=nullptr)
+	{	
+	    if(strcmp(flameChild->Value(),"xform")==0)
+	    {
+	        Function *pFun=new Function();
+	        
+	        if(flameChild->Attribute("r"))
+            {
+                sscanf(flameChild->Attribute("r"),"%u",&(pFun->r));
+            }
+            else
+            {
+                pFun->r = 150 + rand() % 106;
+            }
+            
+            if(flameChild->Attribute("g"))
+            {
+                sscanf(flameChild->Attribute("g"),"%u",&(pFun->g));
+            }
+            else
+            {         
+                pFun->g = 150 + rand() % 106;
+            }
+            
+            if(flameChild->Attribute("b"))
+            {
+                sscanf(flameChild->Attribute("b"),"%u",&(pFun->b));
+            }
+            else
+            {        
+                pFun->b = 150 + rand() % 106;
+            }		        
+	        
+            TiXmlElement* xformChild=flameChild->FirstChildElement();
+            
+            while(xformChild!=nullptr)
+            {
+                if(strcmp(xformChild->Value(),"variation")==0)
+                {
+                    const char* variationName = xformChild->Attribute("type");
+                    if(variationName)
+                    {
+                        Variation v = getVariationByName(variationName);
+                        if(!isNullVariation(v))
+                        {
+                            pFun->variations.push_back(v);
+                        }
+                    }
+                }
+                else if(strcmp(xformChild->Value(),"preTransformX")==0)
+                {
+                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->preTransformKoef[0][0]));
+                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->preTransformKoef[0][1]));
+                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->preTransformKoef[0][2]));                
+                }
+                else if(strcmp(xformChild->Value(),"preTransformY")==0)
+                {
+                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->preTransformKoef[1][0]));
+                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->preTransformKoef[1][1]));
+                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->preTransformKoef[1][2]));                
+                }
+                else if(strcmp(xformChild->Value(),"postTransformX")==0)
+                {
+                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->postTransformKoef[0][0]));
+                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->postTransformKoef[0][1]));
+                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->postTransformKoef[0][2]));                
+                }
+                else if(strcmp(xformChild->Value(),"postTransformY")==0)
+                {
+                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->postTransformKoef[1][0]));
+                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->postTransformKoef[1][1]));
+                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->postTransformKoef[1][2]));                
+                }
+                
+                xformChild=xformChild->NextSiblingElement();
+            }            
+	    }
+	    else if(strcmp(flameChild->Value(),"renderParameters")==0)
+	    {
+	        attributeString = flameChild->Attribute("xLowerBound");	    
+            if(attributeString)
+            {
+                sscanf(attributeString,"%lf",&xLowerBound);
+            }
+    
+            attributeString = flameChild->Attribute("xUpperBound");	    
+            if(attributeString)
+            {
+                sscanf(attributeString,"%lf",&xUpperBound);
+            }
+            
+            attributeString = flameChild->Attribute("yLowerBound");	    
+            if(attributeString)
+            {
+                sscanf(attributeString,"%lf",&yLowerBound);
+            }
+    
+            attributeString = flameChild->Attribute("yUpperBound");	    
+            if(attributeString)
+            {
+                sscanf(attributeString,"%lf",&yUpperBound);
+            }
+            
+            attributeString = flameChild->Attribute("colorPower");	    
+            if(attributeString)
+            {
+                sscanf(attributeString,"%lf",&colorPower);
+            }
+	        
+            attributeString = flameChild->Attribute("setBoundsRation");	    
+            if(attributeString)
+            {
+                sscanf(attributeString,"%lf",&viewBoundsRatio);
+            }	        
+
+            attributeString = flameChild->Attribute("setBoundsCenter");	    
+            if(attributeString)
+            {
+                sscanf(attributeString,"%lf",&viewBoundsCenter);
+            }	        
+
+            setViewBoundsByX=false;
+            setViewBoundsByY=false;
+            
+            attributeString = flameChild->Attribute("setBoundsBy");	    
+            if(attributeString)
+            {
+                if(strcmp(attributeString,"x")==0)
+                {
+                    setViewBoundsByX=true;
+                }
+                else if(strcmp(attributeString,"x")==0)
+                {
+                    setViewBoundsByY=true;
+                }
+            }
+	    }
+	    
+	    flameChild=flameChild->NextSiblingElement();	    
+	}
+}
 
 void FlameParameters::load(const char *fileName)
 {

@@ -7,7 +7,8 @@
 
 class FlameParameters{
 public:    
-    void load(const char *fileName);    
+    void load(const char *fileName);  
+    void load2(const char *fileName);
     void save_old(const char *fileName);
     void save(const char *fileName);
     
