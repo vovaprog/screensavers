@@ -95,6 +95,13 @@
             <property name="fieldGrowthPolicy">
              <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
             </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>iterations fast:</string>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="1">
              <widget class="QSpinBox" name="spinIterationsFast">
               <property name="maximum">
@@ -105,51 +112,10 @@
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label">
-              <property name="text">
-               <string>iterations fast:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_2">
-              <property name="text">
-               <string>width:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="1">
-             <widget class="QSpinBox" name="spinWidth">
-              <property name="maximum">
-               <number>10000</number>
-              </property>
-              <property name="value">
-               <number>800</number>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="0">
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>height:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="3" column="1">
-             <widget class="QSpinBox" name="spinHeight">
-              <property name="maximum">
-               <number>10000</number>
-              </property>
-              <property name="value">
-               <number>800</number>
-              </property>
-             </widget>
-            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_22">
               <property name="text">
-               <string>iterations more:</string>
+               <string>iterations good:</string>
               </property>
              </widget>
             </item>
@@ -313,8 +279,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>348</width>
-               <height>529</height>
+               <width>129</width>
+               <height>56</height>
               </rect>
              </property>
              <attribute name="label">
@@ -778,8 +744,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>348</width>
-               <height>529</height>
+               <width>129</width>
+               <height>56</height>
               </rect>
              </property>
              <attribute name="label">
@@ -1234,8 +1200,8 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>348</width>
-               <height>529</height>
+               <width>129</width>
+               <height>56</height>
               </rect>
              </property>
              <attribute name="label">

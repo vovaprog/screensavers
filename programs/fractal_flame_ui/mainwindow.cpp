@@ -472,11 +472,14 @@ void MainWindow::selectColor(QSpinBox *spinR,QSpinBox *spinG,QSpinBox *spinB,QLi
 
     color = QColorDialog::getColor(color);
 
-    spinR->setValue(color.red());
-    spinG->setValue(color.green());
-    spinB->setValue(color.blue());
+    if(color.isValid())
+    {
+        spinR->setValue(color.red());
+        spinG->setValue(color.green());
+        spinB->setValue(color.blue());
 
-    displayColor(spinR,spinG,spinB,colorDisplay);
+        displayColor(spinR,spinG,spinB,colorDisplay);
+    }
 }
 
 void MainWindow::on_butT0Color_clicked()

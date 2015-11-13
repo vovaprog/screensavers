@@ -180,24 +180,25 @@ void FlameParameters::initRandom()
         pFun->b = 150 + rand() % 106;        
                
         
-        const double KDEV = 0.5;        
+        const double preD = 0.5;
+        const double postD = 0.1;
         
-        pFun->preTransformX_CoefX = 1.0 - getRandomValue(0.0,KDEV);
-        pFun->preTransformX_CoefY = 0.0 + getRandomValue(-KDEV,KDEV);
-        pFun->preTransformX_CoefC = 0.0 + getRandomValue(-KDEV,KDEV);
+        pFun->preTransformX_CoefX = 1.0 - getRandomValue(0.0,preD);
+        pFun->preTransformX_CoefY = 0.0 + getRandomValue(-preD,preD);
+        pFun->preTransformX_CoefC = 0.0 + getRandomValue(-preD,preD);
         
-        pFun->preTransformY_CoefX = 0.0 + getRandomValue(-KDEV,KDEV);
-        pFun->preTransformY_CoefY = 1.0 - getRandomValue(0.0,KDEV);
-        pFun->preTransformY_CoefC = 0.0 + getRandomValue(-KDEV,KDEV);           
+        pFun->preTransformY_CoefX = 0.0 + getRandomValue(-preD,preD);
+        pFun->preTransformY_CoefY = 1.0 - getRandomValue(0.0,preD);
+        pFun->preTransformY_CoefC = 0.0 + getRandomValue(-preD,preD);           
 
         
-        pFun->postTransformX_CoefX = 1.0 - getRandomValue(0.0,KDEV);
-        pFun->postTransformX_CoefY = 0.0 + getRandomValue(-KDEV,KDEV);
-        pFun->postTransformX_CoefC = 0.0 + getRandomValue(-KDEV,KDEV);
+        pFun->postTransformX_CoefX = 1.0 - getRandomValue(0.0,postD);
+        pFun->postTransformX_CoefY = 0.0 + getRandomValue(-postD,postD);
+        pFun->postTransformX_CoefC = 0.0 + getRandomValue(-postD,postD);
         
-        pFun->postTransformY_CoefX = 0.0 + getRandomValue(-KDEV,KDEV);
-        pFun->postTransformY_CoefY = 1.0 - getRandomValue(0.0,KDEV);
-        pFun->postTransformY_CoefC = 0.0 + getRandomValue(-KDEV,KDEV);           
+        pFun->postTransformY_CoefX = 0.0 + getRandomValue(-postD,postD);
+        pFun->postTransformY_CoefY = 1.0 - getRandomValue(0.0,postD);
+        pFun->postTransformY_CoefC = 0.0 + getRandomValue(-postD,postD);           
                 
         
         functions.push_back(unique_ptr<Function>(pFun));
