@@ -74,22 +74,22 @@ void MainWindow::setFunctionsChecked(QListWidget *list, Function *f)
 
 void MainWindow::FlameTransform0ToControls(Function *f)
 {
-    ui->spinT0PreXX->setValue(f->preTransformKoef[0][0]);
-    ui->spinT0PreXY->setValue(f->preTransformKoef[0][1]);
-    ui->spinT0PreXC->setValue(f->preTransformKoef[0][2]);
+    ui->spinT0PreXX->setValue(f->preTransformX_CoefX);
+    ui->spinT0PreXY->setValue(f->preTransformX_CoefY);
+    ui->spinT0PreXC->setValue(f->preTransformX_CoefC);
 
-    ui->spinT0PreYX->setValue(f->preTransformKoef[1][0]);
-    ui->spinT0PreYY->setValue(f->preTransformKoef[1][1]);
-    ui->spinT0PreYC->setValue(f->preTransformKoef[1][2]);
+    ui->spinT0PreYX->setValue(f->preTransformY_CoefX);
+    ui->spinT0PreYY->setValue(f->preTransformY_CoefY);
+    ui->spinT0PreYC->setValue(f->preTransformY_CoefC);
 
 
-    ui->spinT0PostXX->setValue(f->postTransformKoef[0][0]);
-    ui->spinT0PostXY->setValue(f->postTransformKoef[0][1]);
-    ui->spinT0PostXC->setValue(f->postTransformKoef[0][2]);
+    ui->spinT0PostXX->setValue(f->postTransformX_CoefX);
+    ui->spinT0PostXY->setValue(f->postTransformX_CoefY);
+    ui->spinT0PostXC->setValue(f->postTransformX_CoefC);
 
-    ui->spinT0PostYX->setValue(f->postTransformKoef[1][0]);
-    ui->spinT0PostYY->setValue(f->postTransformKoef[1][1]);
-    ui->spinT0PostYC->setValue(f->postTransformKoef[1][2]);
+    ui->spinT0PostYX->setValue(f->postTransformY_CoefX);
+    ui->spinT0PostYY->setValue(f->postTransformY_CoefY);
+    ui->spinT0PostYC->setValue(f->postTransformY_CoefC);
 
     ui->spinT0R->setValue(f->r);
     ui->spinT0G->setValue(f->g);
@@ -101,22 +101,22 @@ void MainWindow::FlameTransform0ToControls(Function *f)
 
 void MainWindow::FlameTransform1ToControls(Function *f)
 {
-    ui->spinT1PreXX->setValue(f->preTransformKoef[0][0]);
-    ui->spinT1PreXY->setValue(f->preTransformKoef[0][1]);
-    ui->spinT1PreXC->setValue(f->preTransformKoef[0][2]);
+    ui->spinT1PreXX->setValue(f->preTransformX_CoefX);
+    ui->spinT1PreXY->setValue(f->preTransformX_CoefY);
+    ui->spinT1PreXC->setValue(f->preTransformX_CoefC);
 
-    ui->spinT1PreYX->setValue(f->preTransformKoef[1][0]);
-    ui->spinT1PreYY->setValue(f->preTransformKoef[1][1]);
-    ui->spinT1PreYC->setValue(f->preTransformKoef[1][2]);
+    ui->spinT1PreYX->setValue(f->preTransformY_CoefX);
+    ui->spinT1PreYY->setValue(f->preTransformY_CoefY);
+    ui->spinT1PreYC->setValue(f->preTransformY_CoefC);
 
 
-    ui->spinT1PostXX->setValue(f->postTransformKoef[0][0]);
-    ui->spinT1PostXY->setValue(f->postTransformKoef[0][1]);
-    ui->spinT1PostXC->setValue(f->postTransformKoef[0][2]);
+    ui->spinT1PostXX->setValue(f->postTransformX_CoefX);
+    ui->spinT1PostXY->setValue(f->postTransformX_CoefY);
+    ui->spinT1PostXC->setValue(f->postTransformX_CoefC);
 
-    ui->spinT1PostYX->setValue(f->postTransformKoef[1][0]);
-    ui->spinT1PostYY->setValue(f->postTransformKoef[1][1]);
-    ui->spinT1PostYC->setValue(f->postTransformKoef[1][2]);
+    ui->spinT1PostYX->setValue(f->postTransformY_CoefX);
+    ui->spinT1PostYY->setValue(f->postTransformY_CoefY);
+    ui->spinT1PostYC->setValue(f->postTransformY_CoefC);
 
     ui->spinT1R->setValue(f->r);
     ui->spinT1G->setValue(f->g);
@@ -127,22 +127,22 @@ void MainWindow::FlameTransform1ToControls(Function *f)
 
 void MainWindow::FlameTransform2ToControls(Function *f)
 {
-    ui->spinT2PreXX->setValue(f->preTransformKoef[0][0]);
-    ui->spinT2PreXY->setValue(f->preTransformKoef[0][1]);
-    ui->spinT2PreXC->setValue(f->preTransformKoef[0][2]);
+    ui->spinT2PreXX->setValue(f->preTransformX_CoefX);
+    ui->spinT2PreXY->setValue(f->preTransformX_CoefY);
+    ui->spinT2PreXC->setValue(f->preTransformX_CoefC);
 
-    ui->spinT2PreYX->setValue(f->preTransformKoef[1][0]);
-    ui->spinT2PreYY->setValue(f->preTransformKoef[1][1]);
-    ui->spinT2PreYC->setValue(f->preTransformKoef[1][2]);
+    ui->spinT2PreYX->setValue(f->preTransformY_CoefX);
+    ui->spinT2PreYY->setValue(f->preTransformY_CoefY);
+    ui->spinT2PreYC->setValue(f->preTransformY_CoefC);
 
 
-    ui->spinT2PostXX->setValue(f->postTransformKoef[0][0]);
-    ui->spinT2PostXY->setValue(f->postTransformKoef[0][1]);
-    ui->spinT2PostXC->setValue(f->postTransformKoef[0][2]);
+    ui->spinT2PostXX->setValue(f->postTransformX_CoefX);
+    ui->spinT2PostXY->setValue(f->postTransformX_CoefY);
+    ui->spinT2PostXC->setValue(f->postTransformX_CoefC);
 
-    ui->spinT2PostYX->setValue(f->postTransformKoef[1][0]);
-    ui->spinT2PostYY->setValue(f->postTransformKoef[1][1]);
-    ui->spinT2PostYC->setValue(f->postTransformKoef[1][2]);
+    ui->spinT2PostYX->setValue(f->postTransformY_CoefX);
+    ui->spinT2PostYY->setValue(f->postTransformY_CoefY);
+    ui->spinT2PostYC->setValue(f->postTransformY_CoefC);
 
     ui->spinT2R->setValue(f->r);
     ui->spinT2G->setValue(f->g);
@@ -226,22 +226,22 @@ void MainWindow::getFunctionsChecked(QListWidget *list, Function *f)
 
 void MainWindow::ReadTransform0FromControls(Function *f)
 {
-    f->preTransformKoef[0][0]=ui->spinT0PreXX->value();
-    f->preTransformKoef[0][1]=ui->spinT0PreXY->value();
-    f->preTransformKoef[0][2]=ui->spinT0PreXC->value();
+    f->preTransformX_CoefX=ui->spinT0PreXX->value();
+    f->preTransformX_CoefY=ui->spinT0PreXY->value();
+    f->preTransformX_CoefC=ui->spinT0PreXC->value();
 
-    f->preTransformKoef[1][0]=ui->spinT0PreYX->value();
-    f->preTransformKoef[1][1]=ui->spinT0PreYY->value();
-    f->preTransformKoef[1][2]=ui->spinT0PreYC->value();
+    f->preTransformY_CoefX=ui->spinT0PreYX->value();
+    f->preTransformY_CoefY=ui->spinT0PreYY->value();
+    f->preTransformY_CoefC=ui->spinT0PreYC->value();
 
 
-    f->postTransformKoef[0][0]=ui->spinT0PostXX->value();
-    f->postTransformKoef[0][1]=ui->spinT0PostXY->value();
-    f->postTransformKoef[0][2]=ui->spinT0PostXC->value();
+    f->postTransformX_CoefX=ui->spinT0PostXX->value();
+    f->postTransformX_CoefY=ui->spinT0PostXY->value();
+    f->postTransformX_CoefC=ui->spinT0PostXC->value();
 
-    f->postTransformKoef[1][0]=ui->spinT0PostYX->value();
-    f->postTransformKoef[1][1]=ui->spinT0PostYY->value();
-    f->postTransformKoef[1][2]=ui->spinT0PostYC->value();
+    f->postTransformY_CoefX=ui->spinT0PostYX->value();
+    f->postTransformY_CoefY=ui->spinT0PostYY->value();
+    f->postTransformY_CoefC=ui->spinT0PostYC->value();
 
     f->r=ui->spinT0R->value();
     f->g=ui->spinT0G->value();
@@ -252,22 +252,22 @@ void MainWindow::ReadTransform0FromControls(Function *f)
 
 void MainWindow::ReadTransform1FromControls(Function *f)
 {
-    f->preTransformKoef[0][0]=ui->spinT1PreXX->value();
-    f->preTransformKoef[0][1]=ui->spinT1PreXY->value();
-    f->preTransformKoef[0][2]=ui->spinT1PreXC->value();
+    f->preTransformX_CoefX=ui->spinT1PreXX->value();
+    f->preTransformX_CoefY=ui->spinT1PreXY->value();
+    f->preTransformX_CoefC=ui->spinT1PreXC->value();
 
-    f->preTransformKoef[1][0]=ui->spinT1PreYX->value();
-    f->preTransformKoef[1][1]=ui->spinT1PreYY->value();
-    f->preTransformKoef[1][2]=ui->spinT1PreYC->value();
+    f->preTransformY_CoefX=ui->spinT1PreYX->value();
+    f->preTransformY_CoefY=ui->spinT1PreYY->value();
+    f->preTransformY_CoefC=ui->spinT1PreYC->value();
 
 
-    f->postTransformKoef[0][0]=ui->spinT1PostXX->value();
-    f->postTransformKoef[0][1]=ui->spinT1PostXY->value();
-    f->postTransformKoef[0][2]=ui->spinT1PostXC->value();
+    f->postTransformX_CoefX=ui->spinT1PostXX->value();
+    f->postTransformX_CoefY=ui->spinT1PostXY->value();
+    f->postTransformX_CoefC=ui->spinT1PostXC->value();
 
-    f->postTransformKoef[1][0]=ui->spinT1PostYX->value();
-    f->postTransformKoef[1][1]=ui->spinT1PostYY->value();
-    f->postTransformKoef[1][2]=ui->spinT1PostYC->value();
+    f->postTransformY_CoefX=ui->spinT1PostYX->value();
+    f->postTransformY_CoefY=ui->spinT1PostYY->value();
+    f->postTransformY_CoefC=ui->spinT1PostYC->value();
 
     f->r=ui->spinT1R->value();
     f->g=ui->spinT1G->value();
@@ -278,22 +278,22 @@ void MainWindow::ReadTransform1FromControls(Function *f)
 
 void MainWindow::ReadTransform2FromControls(Function *f)
 {
-    f->preTransformKoef[0][0]=ui->spinT2PreXX->value();
-    f->preTransformKoef[0][1]=ui->spinT2PreXY->value();
-    f->preTransformKoef[0][2]=ui->spinT2PreXC->value();
+    f->preTransformX_CoefX=ui->spinT2PreXX->value();
+    f->preTransformX_CoefY=ui->spinT2PreXY->value();
+    f->preTransformX_CoefC=ui->spinT2PreXC->value();
 
-    f->preTransformKoef[1][0]=ui->spinT2PreYX->value();
-    f->preTransformKoef[1][1]=ui->spinT2PreYY->value();
-    f->preTransformKoef[1][2]=ui->spinT2PreYC->value();
+    f->preTransformY_CoefX=ui->spinT2PreYX->value();
+    f->preTransformY_CoefY=ui->spinT2PreYY->value();
+    f->preTransformY_CoefC=ui->spinT2PreYC->value();
 
 
-    f->postTransformKoef[0][0]=ui->spinT2PostXX->value();
-    f->postTransformKoef[0][1]=ui->spinT2PostXY->value();
-    f->postTransformKoef[0][2]=ui->spinT2PostXC->value();
+    f->postTransformX_CoefX=ui->spinT2PostXX->value();
+    f->postTransformX_CoefY=ui->spinT2PostXY->value();
+    f->postTransformX_CoefC=ui->spinT2PostXC->value();
 
-    f->postTransformKoef[1][0]=ui->spinT2PostYX->value();
-    f->postTransformKoef[1][1]=ui->spinT2PostYY->value();
-    f->postTransformKoef[1][2]=ui->spinT2PostYC->value();
+    f->postTransformY_CoefX=ui->spinT2PostYX->value();
+    f->postTransformY_CoefY=ui->spinT2PostYY->value();
+    f->postTransformY_CoefC=ui->spinT2PostYC->value();
 
     f->r=ui->spinT2R->value();
     f->g=ui->spinT2G->value();
@@ -340,7 +340,7 @@ void MainWindow::ReadFlameParametersFromControls(shared_ptr<FlameParameters> fp)
     fp->prepare();
 }
 
-void MainWindow::calculateFlame(unsigned int iterations)
+bool MainWindow::calculateFlame(unsigned int iterations)
 {
     shared_ptr<RenderParameters> rp(new RenderParameters());
     rp->pictureWidth = ui->mainGraphicsView->size().width()-4;
@@ -362,6 +362,12 @@ void MainWindow::calculateFlame(unsigned int iterations)
         scene->clear();
         scene->addPixmap(QPixmap::fromImage(img));
         ui->mainGraphicsView->update();
+
+        return true;
+    }
+    else
+    {
+        return false;
     }
 }
 
@@ -388,11 +394,18 @@ void MainWindow::on_butOpenFlame_clicked()
 void MainWindow::on_butRandomFlame_clicked()
 {
     shared_ptr<FlameParameters> fp(new FlameParameters());
-    fp->initRandom();
 
-    FlameParametersToControls(fp);
+    for(int i=0;i<10;i++)
+    {
+        fp->initRandom();
 
-    calculateFlame(ui->spinIterationsFast->value());
+        FlameParametersToControls(fp);
+
+        if(calculateFlame(ui->spinIterationsFast->value()))
+        {
+            break;
+        }
+    }
 }
 
 void MainWindow::on_butCalculateFast_clicked()

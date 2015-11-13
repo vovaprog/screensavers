@@ -6,9 +6,10 @@
 #include "Function.h"
 
 class FlameParameters{
-public:    
-    void load_old(const char *fileName);  
+public:          
     void load(const char *fileName);
+    void load_old(const char *fileName);
+    
     void save(const char *fileName);
     
     void initRandom();
@@ -21,6 +22,8 @@ private:
     void initFunctionProbabilities();
     double getRandom01();
     double getRandomValue(double start, double end);
+    void resetVariables();
+    void prepareLocale();
     
 public:    
     double xLowerBound=-1.0, xUpperBound=1.0;
@@ -30,11 +33,13 @@ public:
     std::vector<std::unique_ptr<Function>> functions;
     
     bool setViewBoundsByX=false, setViewBoundsByY=false;    
-    int totalProbabilityWeight;
+    int totalProbabilityWeight=0;
     
     static const int MIN_NUMBER_OF_FUNCTIONS = 2;
     static const int MAX_NUMBER_OF_FUNCTIONS = 3;
     static const int MIN_NUMBER_OF_VARIATIONS = 1;
-    static const int MAX_NUMBER_OF_VARIATIONS = 3;        
+    static const int MAX_NUMBER_OF_VARIATIONS = 3;
+    
+    static bool initRandomGenerator;
 };
 

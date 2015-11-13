@@ -73,7 +73,7 @@ private:
     void ReadTransform2FromControls(Function *f);
     void getFunctionsChecked(QListWidget *list, Function *f);
 
-    void calculateFlame(unsigned int iterations);
+    bool calculateFlame(unsigned int iterations);
     void selectColor(QSpinBox *spinR,QSpinBox *spinG,QSpinBox *spinB,QLineEdit *colorDisplay);
     void displayColor(QSpinBox *spinR,QSpinBox *spinG,QSpinBox *spinB,QLineEdit *colorDisplay);
 

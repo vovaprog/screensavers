@@ -238,8 +238,11 @@ void FractalFlame::applyFunction(Function *pFun, double &x, double &y)
 {
     double xAccum=0, yAccum=0;
 
-    x=pFun->preTransformKoef[0][0] * x + pFun->preTransformKoef[0][1] * y + pFun->preTransformKoef[0][2];
-    y=pFun->preTransformKoef[1][0] * x + pFun->preTransformKoef[1][1] * y + pFun->preTransformKoef[1][2];            
+    //x=pFun->preTransformKoef[0][0] * x + pFun->preTransformKoef[0][1] * y + pFun->preTransformKoef[0][2];
+    //y=pFun->preTransformKoef[1][0] * x + pFun->preTransformKoef[1][1] * y + pFun->preTransformKoef[1][2];
+    
+    x=pFun->preTransformX_CoefX * x + pFun->preTransformX_CoefY * y + pFun->preTransformX_CoefC;
+    y=pFun->preTransformY_CoefX * x + pFun->preTransformY_CoefY * y + pFun->preTransformY_CoefC;
         
     for(auto fun : pFun->variations)
     {            
@@ -251,8 +254,11 @@ void FractalFlame::applyFunction(Function *pFun, double &x, double &y)
         yAccum += yOut;
     }
     
-    x=pFun->postTransformKoef[0][0] * xAccum + pFun->postTransformKoef[0][1] * yAccum + pFun->postTransformKoef[0][2];
-    y=pFun->postTransformKoef[1][0] * xAccum + pFun->postTransformKoef[1][1] * yAccum + pFun->postTransformKoef[1][2];            
+    //x=pFun->postTransformKoef[0][0] * xAccum + pFun->postTransformKoef[0][1] * yAccum + pFun->postTransformKoef[0][2];
+    //y=pFun->postTransformKoef[1][0] * xAccum + pFun->postTransformKoef[1][1] * yAccum + pFun->postTransformKoef[1][2];
+    
+    x=pFun->postTransformX_CoefX * xAccum + pFun->postTransformX_CoefY * yAccum + pFun->postTransformX_CoefC;
+    y=pFun->postTransformY_CoefX * xAccum + pFun->postTransformY_CoefY * yAccum + pFun->postTransformY_CoefC;
 }
 
 void FractalFlame::cleanBuffers()

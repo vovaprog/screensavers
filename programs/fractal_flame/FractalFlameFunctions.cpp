@@ -55,9 +55,9 @@ void FractalFlame::saveFunctions(const char *fileName,vector<unique_ptr<Function
 		TiXmlElement *xformElement = new TiXmlElement( "xform" );		
 		flameElement->LinkEndChild(xformElement);
 		
-		for(auto variation : pFun->variations)
+		/*for(auto variation : pFun->variations)
 		{		
-			/*if(variation == variationSin) xformElement->SetAttribute("sinusoidal","1.0");
+			if(variation == variationSin) xformElement->SetAttribute("sinusoidal","1.0");
 			else if(variation == variationFisheye) xformElement->SetAttribute("eyefish","1.0");
 			else if(variation == variationSpherical) xformElement->SetAttribute("spherical","1.0");
 			else if(variation == variationSwirl) xformElement->SetAttribute("swirl","1.0");						
@@ -85,10 +85,10 @@ void FractalFlame::saveFunctions(const char *fileName,vector<unique_ptr<Function
 			else
 			{
 				throw string("unknown variation!");
-			}*/
-		}
+			}
+		}*/
 			
-		string coefs = to_string(pFun->preTransformKoef[0][0])+" "+to_string(pFun->preTransformKoef[1][0])+" "+
+		/*string coefs = to_string(pFun->preTransformKoef[0][0])+" "+to_string(pFun->preTransformKoef[1][0])+" "+
 			to_string(pFun->preTransformKoef[0][1])+" "+to_string(pFun->preTransformKoef[1][1])+" "+
 			to_string(pFun->preTransformKoef[0][2])+" "+to_string(pFun->preTransformKoef[1][2]);
 			
@@ -96,9 +96,9 @@ void FractalFlame::saveFunctions(const char *fileName,vector<unique_ptr<Function
 
 		string post = to_string(pFun->postTransformKoef[0][0])+" "+to_string(pFun->postTransformKoef[1][0])+" "+
 			to_string(pFun->postTransformKoef[0][1])+" "+to_string(pFun->postTransformKoef[1][1])+" "+
-			to_string(pFun->postTransformKoef[0][2])+" "+to_string(pFun->postTransformKoef[1][2]);
+			to_string(pFun->postTransformKoef[0][2])+" "+to_string(pFun->postTransformKoef[1][2]);*/
 		
-		xformElement->SetAttribute("post",post.c_str());		
+		//xformElement->SetAttribute("post",post.c_str());		
 		
 		xformElement->SetAttribute("r",to_string(pFun->r));
 		xformElement->SetAttribute("g",to_string(pFun->g));
@@ -174,9 +174,9 @@ void FractalFlame::initFunctionsRandom(vector<unique_ptr<Function>> &functions, 
         pFun->b = 150 + rand() % 106;        
                
         
-        const double KDEV = 0.2;        
+        //const double KDEV = 0.2;        
         
-        pFun->preTransformKoef[0][0]=1.0 - getRandomValue(0.0,KDEV);
+        /*pFun->preTransformKoef[0][0]=1.0 - getRandomValue(0.0,KDEV);
         pFun->preTransformKoef[0][1]=0.0 + getRandomValue(-KDEV,KDEV);
         pFun->preTransformKoef[0][2]=0.0 + getRandomValue(-KDEV,KDEV);
         
@@ -192,7 +192,7 @@ void FractalFlame::initFunctionsRandom(vector<unique_ptr<Function>> &functions, 
         
         pFun->postTransformKoef[1][0]=0.0 + getRandomValue(-KDEV,KDEV);
         pFun->postTransformKoef[1][1]=1.0 - getRandomValue(0.0,KDEV);
-        pFun->postTransformKoef[1][2]=0.0 + getRandomValue(-KDEV,KDEV);           
+        pFun->postTransformKoef[1][2]=0.0 + getRandomValue(-KDEV,KDEV); */          
                 
         
         functions.push_back(unique_ptr<Function>(pFun));
@@ -224,7 +224,7 @@ void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function
 	{
 		Function *pFun=new Function();		
 		
-		sscanf(xformElem->Attribute("coefs"),"%lf %lf %lf %lf %lf %lf",
+		/*sscanf(xformElem->Attribute("coefs"),"%lf %lf %lf %lf %lf %lf",
 			&(pFun->preTransformKoef[0][0]),&(pFun->preTransformKoef[1][0]),
 			&(pFun->preTransformKoef[0][1]),&(pFun->preTransformKoef[1][1]),
 			&(pFun->preTransformKoef[0][2]),&(pFun->preTransformKoef[1][2]));
@@ -232,7 +232,7 @@ void FractalFlame::loadFunctions(const char *fileName,vector<unique_ptr<Function
 		sscanf(xformElem->Attribute("post"),"%lf %lf %lf %lf %lf %lf",
 			&(pFun->postTransformKoef[0][0]),&(pFun->postTransformKoef[1][0]),
 			&(pFun->postTransformKoef[0][1]),&(pFun->postTransformKoef[1][1]),
-			&(pFun->postTransformKoef[0][2]),&(pFun->postTransformKoef[1][2]));
+			&(pFun->postTransformKoef[0][2]),&(pFun->postTransformKoef[1][2]));*/
 		    
 		/*if(xformElem->Attribute("sinusoidal")) pFun->variations.push_back(variationSin);
 		if(xformElem->Attribute("eyefish")) pFun->variations.push_back(variationFisheye);

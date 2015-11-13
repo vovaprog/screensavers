@@ -36,6 +36,11 @@ inline double FlameParameters::getRandomValue(double start, double end)
     return start + getRandom01() * (end - start);
 }
 
+void FlameParameters::prepareLocale()
+{
+    setlocale(LC_NUMERIC,"C");
+}
+
 #ifndef NO_XML_FUNCTIONS
 
 /*
@@ -55,7 +60,7 @@ inline double FlameParameters::getRandomValue(double start, double end)
 */
 void FlameParameters::save(const char *fileName)
 {    
-    setlocale(LC_NUMERIC,"C");
+    prepareLocale();
     
 	TiXmlDocument doc;
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
@@ -83,27 +88,27 @@ void FlameParameters::save(const char *fileName)
 		
         TiXmlElement *transformElement = new TiXmlElement( "preTransformX" );		
         xformElement->LinkEndChild(transformElement);
-		transformElement->SetAttribute("x",to_string(xf->preTransformKoef[0][0]));
-		transformElement->SetAttribute("y",to_string(xf->preTransformKoef[0][1]));
-		transformElement->SetAttribute("c",to_string(xf->preTransformKoef[0][2]));
+		transformElement->SetAttribute("x",to_string(xf->preTransformX_CoefX));
+		transformElement->SetAttribute("y",to_string(xf->preTransformX_CoefY));
+		transformElement->SetAttribute("c",to_string(xf->preTransformX_CoefC));
 
         transformElement = new TiXmlElement( "preTransformY" );		
         xformElement->LinkEndChild(transformElement);
-		transformElement->SetAttribute("x",to_string(xf->preTransformKoef[1][0]));
-		transformElement->SetAttribute("y",to_string(xf->preTransformKoef[1][1]));
-		transformElement->SetAttribute("c",to_string(xf->preTransformKoef[1][2]));
+		transformElement->SetAttribute("x",to_string(xf->preTransformY_CoefX));
+		transformElement->SetAttribute("y",to_string(xf->preTransformY_CoefY));
+		transformElement->SetAttribute("c",to_string(xf->preTransformY_CoefC));
         
         transformElement = new TiXmlElement( "postTransformX" );		
         xformElement->LinkEndChild(transformElement);
-		transformElement->SetAttribute("x",to_string(xf->postTransformKoef[0][0]));
-		transformElement->SetAttribute("y",to_string(xf->postTransformKoef[0][1]));
-		transformElement->SetAttribute("c",to_string(xf->postTransformKoef[0][2]));
+		transformElement->SetAttribute("x",to_string(xf->postTransformX_CoefX));
+		transformElement->SetAttribute("y",to_string(xf->postTransformX_CoefY));
+		transformElement->SetAttribute("c",to_string(xf->postTransformX_CoefC));
         
         transformElement = new TiXmlElement( "postTransformY" );		
         xformElement->LinkEndChild(transformElement);
-		transformElement->SetAttribute("x",to_string(xf->postTransformKoef[1][0]));
-		transformElement->SetAttribute("y",to_string(xf->postTransformKoef[1][1]));
-		transformElement->SetAttribute("c",to_string(xf->postTransformKoef[1][2]));
+		transformElement->SetAttribute("x",to_string(xf->postTransformY_CoefX));
+		transformElement->SetAttribute("y",to_string(xf->postTransformY_CoefY));
+		transformElement->SetAttribute("c",to_string(xf->postTransformY_CoefC));
 		
 		
 		TiXmlElement *colorElement = new TiXmlElement( "color" );
@@ -140,18 +145,20 @@ void FlameParameters::save(const char *fileName)
 
 #endif
 
+bool FlameParameters::initRandomGenerator=true;
+
 void FlameParameters::initRandom()
 {
-    functions.clear();
+    resetVariables();
     
-    //if(firstTimeInitFunctionsRandom)
-    //{        
-        //firstTimeInitFunctionsRandom=false;
-        //srand((unsigned int)time(NULL)); 
-    //}
-
-    vector<Variation> &variations = getVariations();
+    if(initRandomGenerator)
+    {
+        srand(time(NULL));
+        initRandomGenerator = false;
+        cout <<"srand called"<<endl;
+    }
     
+    vector<Variation> &variations = getVariations();    
     
     int numberOfFunctions=MIN_NUMBER_OF_FUNCTIONS + rand() % (MAX_NUMBER_OF_FUNCTIONS + 1 - MIN_NUMBER_OF_FUNCTIONS);
     
@@ -159,15 +166,13 @@ void FlameParameters::initRandom()
     {
         Function *pFun = new Function();
                 
-        int numberOfVariations=MIN_NUMBER_OF_VARIATIONS + rand() % (MAX_NUMBER_OF_VARIATIONS + 1 - MIN_NUMBER_OF_VARIATIONS);
+        int numberOfVariations = MIN_NUMBER_OF_VARIATIONS + rand() % (MAX_NUMBER_OF_VARIATIONS + 1 - MIN_NUMBER_OF_VARIATIONS);
         
         for(int j=0;j<numberOfVariations;j++)
         {        
             int variationIndex = rand() % variations.size();                    
             pFun->variations.push_back(variations[variationIndex]);
-            cout <<variationIndex<<"   ";
         }
-        cout<<endl;
         
                 
         pFun->r = 150 + rand() % 106; 
@@ -175,25 +180,24 @@ void FlameParameters::initRandom()
         pFun->b = 150 + rand() % 106;        
                
         
-        const double KDEV = 0.2;        
+        const double KDEV = 0.3;        
         
-        pFun->preTransformKoef[0][0]=1.0 - getRandomValue(0.0,KDEV);
-        pFun->preTransformKoef[0][1]=0.0 + getRandomValue(-KDEV,KDEV);
-        pFun->preTransformKoef[0][2]=0.0 + getRandomValue(-KDEV,KDEV);
+        pFun->preTransformX_CoefX = 1.0 - getRandomValue(0.0,KDEV);
+        pFun->preTransformX_CoefY = 0.0 + getRandomValue(-KDEV,KDEV);
+        pFun->preTransformX_CoefC = 0.0 + getRandomValue(-KDEV,KDEV);
         
-        pFun->preTransformKoef[1][0]=0.0 + getRandomValue(-KDEV,KDEV);
-        pFun->preTransformKoef[1][1]=1.0 - getRandomValue(0.0,KDEV);
-        pFun->preTransformKoef[1][2]=0.0 + getRandomValue(-KDEV,KDEV);           
+        pFun->preTransformY_CoefX = 0.0 + getRandomValue(-KDEV,KDEV);
+        pFun->preTransformY_CoefY = 1.0 - getRandomValue(0.0,KDEV);
+        pFun->preTransformY_CoefC = 0.0 + getRandomValue(-KDEV,KDEV);           
 
-
         
-        pFun->postTransformKoef[0][0]=1.0 - getRandomValue(0.0,KDEV);
-        pFun->postTransformKoef[0][1]=0.0 + getRandomValue(-KDEV,KDEV);
-        pFun->postTransformKoef[0][2]=0.0 + getRandomValue(-KDEV,KDEV);
+        pFun->postTransformX_CoefX = 1.0 - getRandomValue(0.0,KDEV);
+        pFun->postTransformX_CoefY = 0.0 + getRandomValue(-KDEV,KDEV);
+        pFun->postTransformX_CoefC = 0.0 + getRandomValue(-KDEV,KDEV);
         
-        pFun->postTransformKoef[1][0]=0.0 + getRandomValue(-KDEV,KDEV);
-        pFun->postTransformKoef[1][1]=1.0 - getRandomValue(0.0,KDEV);
-        pFun->postTransformKoef[1][2]=0.0 + getRandomValue(-KDEV,KDEV);           
+        pFun->postTransformY_CoefX = 0.0 + getRandomValue(-KDEV,KDEV);
+        pFun->postTransformY_CoefY = 1.0 - getRandomValue(0.0,KDEV);
+        pFun->postTransformY_CoefC = 0.0 + getRandomValue(-KDEV,KDEV);           
                 
         
         functions.push_back(unique_ptr<Function>(pFun));
@@ -207,7 +211,9 @@ void FlameParameters::initRandom()
 
 void FlameParameters::load(const char *fileName)
 {
-    setlocale(LC_NUMERIC,"C");
+    resetVariables();
+    
+    prepareLocale();
     
     functions.clear();
     
@@ -250,27 +256,27 @@ void FlameParameters::load(const char *fileName)
                 }
                 else if(strcmp(xformChild->Value(),"preTransformX")==0)
                 {
-                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->preTransformKoef[0][0]));
-                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->preTransformKoef[0][1]));
-                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->preTransformKoef[0][2]));                
+                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->preTransformX_CoefX));
+                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->preTransformX_CoefY));
+                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->preTransformX_CoefC));                
                 }
                 else if(strcmp(xformChild->Value(),"preTransformY")==0)
                 {
-                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->preTransformKoef[1][0]));
-                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->preTransformKoef[1][1]));
-                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->preTransformKoef[1][2]));                
+                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->preTransformY_CoefX));
+                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->preTransformY_CoefY));
+                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->preTransformY_CoefC));                
                 }
                 else if(strcmp(xformChild->Value(),"postTransformX")==0)
                 {
-                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->postTransformKoef[0][0]));
-                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->postTransformKoef[0][1]));
-                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->postTransformKoef[0][2]));                
+                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->postTransformX_CoefX));
+                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->postTransformX_CoefY));
+                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->postTransformX_CoefC));                
                 }
                 else if(strcmp(xformChild->Value(),"postTransformY")==0)
                 {
-                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->postTransformKoef[1][0]));
-                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->postTransformKoef[1][1]));
-                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->postTransformKoef[1][2]));                
+                    sscanf(xformChild->Attribute("x"),"%lf",&(pFun->postTransformY_CoefX));
+                    sscanf(xformChild->Attribute("y"),"%lf",&(pFun->postTransformY_CoefY));
+                    sscanf(xformChild->Attribute("c"),"%lf",&(pFun->postTransformY_CoefC));                
                 }
                 else if(strcmp(xformChild->Value(),"color")==0)
                 {
@@ -349,11 +355,15 @@ void FlameParameters::load(const char *fileName)
 	    
 	    flameChild=flameChild->NextSiblingElement();	    
 	}
+	
+	initFunctionProbabilities();
 }
 
 void FlameParameters::load_old(const char *fileName)
 {
-    setlocale(LC_NUMERIC,"C");
+    resetVariables();
+    
+    prepareLocale();
     
     functions.clear();
     
@@ -373,14 +383,14 @@ void FlameParameters::load_old(const char *fileName)
 		Function *pFun=new Function();		
 		
 		sscanf(xformElem->Attribute("coefs"),"%lf %lf %lf %lf %lf %lf",
-			&(pFun->preTransformKoef[0][0]),&(pFun->preTransformKoef[1][0]),
-			&(pFun->preTransformKoef[0][1]),&(pFun->preTransformKoef[1][1]),
-			&(pFun->preTransformKoef[0][2]),&(pFun->preTransformKoef[1][2]));
+			&(pFun->preTransformX_CoefX),&(pFun->preTransformY_CoefX),
+			&(pFun->preTransformX_CoefY),&(pFun->preTransformY_CoefY),
+			&(pFun->preTransformX_CoefC),&(pFun->preTransformY_CoefC));
 		
 		sscanf(xformElem->Attribute("post"),"%lf %lf %lf %lf %lf %lf",
-			&(pFun->postTransformKoef[0][0]),&(pFun->postTransformKoef[1][0]),
-			&(pFun->postTransformKoef[0][1]),&(pFun->postTransformKoef[1][1]),
-			&(pFun->postTransformKoef[0][2]),&(pFun->postTransformKoef[1][2]));
+			&(pFun->postTransformX_CoefX),&(pFun->postTransformY_CoefX),
+			&(pFun->postTransformX_CoefY),&(pFun->postTransformY_CoefY),
+			&(pFun->postTransformX_CoefC),&(pFun->postTransformY_CoefC));
 		
 		for(auto v : getVariations())
 		{
@@ -515,5 +525,23 @@ void FlameParameters::setViewBoundsForPictureSize(int pictureWidth, int pictureH
 void FlameParameters::prepare()
 {
     initFunctionProbabilities();    
+}
+
+void FlameParameters::resetVariables()
+{
+    xLowerBound=-1.0;
+    xUpperBound=1.0;
+    yLowerBound=-1.0;
+    yUpperBound=1.0;
+    
+    viewBoundsRatio=1.0;
+    viewBoundsCenter=0.0;
+    colorPower = 0.5;
+    
+    functions.clear();
+    
+    setViewBoundsByX=false;
+    setViewBoundsByY=false;    
+    totalProbabilityWeight=0;    
 }
 

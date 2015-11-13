@@ -51,7 +51,7 @@ if(MSVC OR MINGW)
 
 else()
 
-    #target_link_libraries(fractal_flame GL GLU glut tinyxml freeimage boost_system boost_filesystem boost_program_options pthread)
+#    target_link_libraries(fractal_flame GL GLU glut tinyxml freeimage boost_system boost_filesystem boost_program_options pthread)
 
 endif()
 
