@@ -180,7 +180,7 @@ void FlameParameters::initRandom()
         pFun->b = 150 + rand() % 106;        
                
         
-        const double KDEV = 0.3;        
+        const double KDEV = 0.5;        
         
         pFun->preTransformX_CoefX = 1.0 - getRandomValue(0.0,KDEV);
         pFun->preTransformX_CoefY = 0.0 + getRandomValue(-KDEV,KDEV);

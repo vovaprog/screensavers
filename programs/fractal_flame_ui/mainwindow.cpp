@@ -27,6 +27,10 @@ MainWindow::MainWindow(QWidget *parent) :
     FillFunctionList(ui->listT0Functions);
     FillFunctionList(ui->listT1Functions);
     FillFunctionList(ui->listT2Functions);
+
+    ui->widgetT0Container->setEnabled(false);
+    ui->widgetT1Container->setEnabled(false);
+    ui->widgetT2Container->setEnabled(false);
 }
 
 MainWindow::~MainWindow()
@@ -169,31 +173,31 @@ void MainWindow::FlameParametersToControls(shared_ptr<FlameParameters> fp)
     if(fp->functions.size()>0)
     {
         FlameTransform0ToControls(fp->functions[0].get());
-        ui->pageT0->setHidden(false);
+        ui->checkUseT0->setChecked(true);
     }
     else
     {
-        ui->pageT0->setHidden(true);
+        ui->checkUseT0->setChecked(false);
     }
 
     if(fp->functions.size()>1)
     {
         FlameTransform1ToControls(fp->functions[1].get());
-        ui->pageT1->setHidden(false);
+        ui->checkUseT1->setChecked(true);
     }
     else
     {
-        ui->pageT1->setHidden(true);
+        ui->checkUseT1->setChecked(false);
     }
 
     if(fp->functions.size()>2)
     {
         FlameTransform2ToControls(fp->functions[2].get());
-        ui->pageT2->setHidden(false);
+        ui->checkUseT2->setChecked(true);
     }
     else
     {
-        ui->pageT2->setHidden(true);
+        ui->checkUseT2->setChecked(false);
     }
 }
 
@@ -211,7 +215,7 @@ void MainWindow::getFunctionsChecked(QListWidget *list, Function *f)
 
             Variation v = getVariationByName(c_str);
 
-            if(v.f!=nullptr)
+            if(!isNullVariation(v))
             {
                 f->variations.push_back(v);
             }
@@ -316,21 +320,21 @@ void MainWindow::ReadFlameParametersFromControls(shared_ptr<FlameParameters> fp)
     fp->viewBoundsRatio = ui->spinSetBoundsRatio->value();
     fp->viewBoundsCenter = ui->spinSetBoundsCenter->value();
 
-    if(!ui->pageT0->isHidden())
+    if(ui->checkUseT0->isChecked())
     {
         Function *f = new Function();
         ReadTransform0FromControls(f);
         fp->functions.push_back(unique_ptr<Function>(f));
     }
 
-    if(!ui->pageT1->isHidden())
+    if(ui->checkUseT1->isChecked())
     {
         Function *f = new Function();
         ReadTransform1FromControls(f);
         fp->functions.push_back(unique_ptr<Function>(f));
     }
 
-    if(!ui->pageT2->isHidden())
+    if(ui->checkUseT2->isChecked())
     {
         Function *f = new Function();
         ReadTransform2FromControls(f);
@@ -412,12 +416,6 @@ void MainWindow::on_butCalculateFast_clicked()
 {
     calculateFlame(ui->spinIterationsFast->value());
 }
-
-void MainWindow::on_butCalculateMore_clicked()
-{
-    calculateFlame(ui->spinIterationsMore->value());
-}
-
 
 void MainWindow::on_butSaveFlame_clicked()
 {
@@ -539,4 +537,9 @@ void MainWindow::on_spinT2G_valueChanged(int arg1)
 void MainWindow::on_spinT2B_valueChanged(int arg1)
 {
     displayColor(ui->spinT2R,ui->spinT2G,ui->spinT2B,ui->colorT2Display);
+}
+
+void MainWindow::on_butCalculateGood_clicked()
+{
+    calculateFlame(ui->spinIterationsMore->value());
 }

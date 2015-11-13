@@ -28,8 +28,6 @@ private slots:
 
     void on_butCalculateFast_clicked();
 
-    void on_butCalculateMore_clicked();
-
     void on_butSaveFlame_clicked();
 
     void on_butT0Color_clicked();
@@ -55,6 +53,8 @@ private slots:
     void on_spinT2G_valueChanged(int arg1);
 
     void on_spinT2B_valueChanged(int arg1);
+
+    void on_butCalculateGood_clicked();
 
 private:
     Ui::MainWindow *ui;
