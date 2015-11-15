@@ -41,7 +41,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_THREAD_POOL")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_XML_FUNCTIONS")
 
 
-add_library(fractal_flame_library ${SOURCE})
+#add_library(fractal_flame_library ${SOURCE})
 add_executable(fractal_flame ${SOURCE})
 
 
