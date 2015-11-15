@@ -7,7 +7,8 @@ set(MYLIB ../../mylib)
 include_directories("." ${MYLIB})
 
 set(SOURCE FractalFlame.cpp FractalFlameAlgorithm.cpp FlameParameters.cpp Variation.cpp  
-           ScreensaverAutomat.cpp FractalThreadController.cpp FractalThreadPoolController.cpp ScreensaverAutomatPool.cpp ${MYLIB}/image_utils.cpp ${MYLIB}/filesystem_utils.cpp ${MYLIB}/small_utils.cpp ${MYLIB}/ThreadPool.cpp main.cpp) 
+           ScreensaverAutomat.cpp FractalThreadController.cpp FractalThreadPoolController.cpp ScreensaverAutomatPool.cpp main.cpp 
+           ${MYLIB}/image_utils.cpp ${MYLIB}/filesystem_utils.cpp ${MYLIB}/small_utils.cpp ${MYLIB}/ThreadPool.cpp) 
 
         
 if(MSVC OR MINGW)
@@ -42,7 +43,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_THREAD_POOL")
 
 
 add_library(fractal_flame_library ${SOURCE})
-#add_executable(fractal_flame ${SOURCE})
+add_executable(fractal_flame ${SOURCE})
 
 
 if(MSVC OR MINGW)
@@ -51,7 +52,7 @@ if(MSVC OR MINGW)
 
 else()
 
-    #target_link_libraries(fractal_flame GL GLU glut tinyxml freeimage boost_system boost_filesystem boost_program_options pthread)
+    target_link_libraries(fractal_flame GL GLU glut tinyxml freeimage boost_system boost_filesystem boost_program_options pthread)
 
 endif()
 
