@@ -12,7 +12,7 @@
 #include <vector>
 
 #include <filesystem_utils.h>
-#include <ImageUtils.h>
+#include <image_utils.h>
 
 using namespace std;
 

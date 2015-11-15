@@ -7,7 +7,9 @@
 #include <QListWidget>
 #include <QSpinBox>
 
-#include <FractalFlame2.h>
+#include <memory>
+
+#include <FractalFlameAlgorithm.h>
 
 namespace Ui {
 class MainWindow;
@@ -72,7 +74,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    void FlameParametersToControls(shared_ptr<FlameParameters> fp);
+    void FlameParametersToControls(std::shared_ptr<FlameParameters> fp);
     void FlameTransform0ToControls(Function *f);
     void FlameTransform1ToControls(Function *f);
     void FlameTransform2ToControls(Function *f);
@@ -80,7 +82,7 @@ private:
     void setFunctionsChecked(QListWidget *list, Function *f);
     void FillFunctionList(QListWidget *list);
 
-    void ReadFlameParametersFromControls(shared_ptr<FlameParameters> fp);
+    void ReadFlameParametersFromControls(std::shared_ptr<FlameParameters> fp);
     void ReadTransform0FromControls(Function *f);
     void ReadTransform1FromControls(Function *f);
     void ReadTransform2FromControls(Function *f);

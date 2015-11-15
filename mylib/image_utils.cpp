@@ -4,7 +4,7 @@
 
 #include <FreeImage.h>
 
-#include "ImageUtils.h"
+#include "image_utils.h"
 
 using namespace std;
 

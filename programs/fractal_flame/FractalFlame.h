@@ -6,7 +6,7 @@
 
 using namespace std;
 
-class FractalFlame2{
+class FractalFlame{
 public:
     
     void render(shared_ptr<RenderParameters> renderParams, const char *fileName);

@@ -1,4 +1,4 @@
-#include "FractalFlame2.h"
+#include "FractalFlameAlgorithm.h"
 
 #include <string>
 #include <string.h>
@@ -220,7 +220,6 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::createOutpu
         points[i].g = (unsigned int)(points[i].g * v);
         points[i].b = (unsigned int)(points[i].b * v);
         
-        //output[i] = (0xff000000 | (points[i].b << 16) | (points[i].g <<8) | points[i].r);
         output[i] = (0xff000000 | (points[i].r << 16) | (points[i].g <<8) | points[i].b);
     }
     
@@ -231,10 +230,8 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::createOutpu
 void FractalFlameAlgorithm::applyFunction(Function *pFun, double &x, double &y)
 {
     double xAccum=0, yAccum=0;
-
-    //x=pFun->preTransformKoef[0][0] * x + pFun->preTransformKoef[0][1] * y + pFun->preTransformKoef[0][2];
-    //y=pFun->preTransformKoef[1][0] * x + pFun->preTransformKoef[1][1] * y + pFun->preTransformKoef[1][2];            
-        
+    
+    
     x=pFun->preTransformX_CoefX * x + pFun->preTransformX_CoefY * y + pFun->preTransformX_CoefC;
     y=pFun->preTransformY_CoefX * x + pFun->preTransformY_CoefY * y + pFun->preTransformY_CoefC;
     
@@ -249,8 +246,6 @@ void FractalFlameAlgorithm::applyFunction(Function *pFun, double &x, double &y)
         yAccum += yOut;
     }
     
-    //x=pFun->postTransformKoef[0][0] * xAccum + pFun->postTransformKoef[0][1] * yAccum + pFun->postTransformKoef[0][2];
-    //y=pFun->postTransformKoef[1][0] * xAccum + pFun->postTransformKoef[1][1] * yAccum + pFun->postTransformKoef[1][2];
     
     x=pFun->postTransformX_CoefX * xAccum + pFun->postTransformX_CoefY * yAccum + pFun->postTransformX_CoefC;
     y=pFun->postTransformY_CoefX * xAccum + pFun->postTransformY_CoefY * yAccum + pFun->postTransformY_CoefC;    

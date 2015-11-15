@@ -143,10 +143,6 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
             threadController.beginCalculateFractal();
             state=AutomatState::TRANSIT_START;
         }
-/*        else if(result==FractalFlameAlgorithm::CalculateFractalResult::TIMEOUT)
-        {
-            state=AutomatState::WAIT_RESULT;
-        }*/
         else if(result==FractalFlameAlgorithm::CalculateFractalResult::BAD_PICTURE)
         {
             threadController.beginCalculateFractal();

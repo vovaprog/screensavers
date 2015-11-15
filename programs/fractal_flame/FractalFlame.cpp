@@ -1,12 +1,12 @@
 #include <string>
 
-#include "FractalFlame2.h"
-#include "ImageUtils.h"
+#include "FractalFlame.h"
+#include "image_utils.h"
 #include "filesystem_utils.h"
 
 using namespace std;
 
-void FractalFlame2::render(shared_ptr<RenderParameters> renderParams, const char *fileName)
+void FractalFlame::render(shared_ptr<RenderParameters> renderParams, const char *fileName)
 {
     algorithm.setRenderParameters(renderParams);
     
@@ -16,18 +16,15 @@ void FractalFlame2::render(shared_ptr<RenderParameters> renderParams, const char
     unsigned int* output = algorithm.calculate(fp);
     
     if(output!=nullptr)
-    {    
-        //ImageUtils imgUtils;
-    
+    {        
         string outputFileName(fileName);
         outputFileName += "_render.png";        
-        
-        //imgUtils.
+                
         saveImage(outputFileName.c_str(), "png", output, renderParams->pictureWidth, renderParams->pictureHeight);
     }
 }
 
-void FractalFlame2::preview(int numberOfPreviews, shared_ptr<RenderParameters> renderParams, shared_ptr<FlameParameters> flameParams)
+void FractalFlame::preview(int numberOfPreviews, shared_ptr<RenderParameters> renderParams, shared_ptr<FlameParameters> flameParams)
 {
     srand((unsigned int)time(NULL));
     
@@ -45,8 +42,6 @@ void FractalFlame2::preview(int numberOfPreviews, shared_ptr<RenderParameters> r
 			break;
 		}
 	}
-
-	//ImageUtils imgUtils;
 	
 	for(int i=0;i<numberOfPreviews;i++)
 	{
@@ -68,7 +63,7 @@ void FractalFlame2::preview(int numberOfPreviews, shared_ptr<RenderParameters> r
             {
                 deleteFile(fileName.c_str());
             }    
-            //imgUtils.
+            
             saveImage(fileName.c_str(), "png", output, renderParams->pictureWidth, renderParams->pictureHeight);		  		    
 		}
 		else
@@ -78,7 +73,7 @@ void FractalFlame2::preview(int numberOfPreviews, shared_ptr<RenderParameters> r
 	}        
 }
 
-void FractalFlame2::screensaverInit(int width, int height)
+void FractalFlame::screensaverInit(int width, int height)
 {
     shared_ptr<RenderParameters> rp(new RenderParameters());
     rp->pictureWidth=width;
@@ -87,7 +82,7 @@ void FractalFlame2::screensaverInit(int width, int height)
     algorithm.setRenderParameters(rp);
 }
 
-FractalFlameAlgorithm::CalculateFractalResult FractalFlame2::screensaver(unsigned int **ppOutput)
+FractalFlameAlgorithm::CalculateFractalResult FractalFlame::screensaver(unsigned int **ppOutput)
 {
     shared_ptr<FlameParameters> flameParams = algorithm.getFlameParameters();
     
@@ -129,7 +124,7 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlame2::screensaver(unsigne
 }
 
 
-void FractalFlame2::setStopFlag()
+void FractalFlame::setStopFlag()
 {
     algorithm.setStopFlag(true);
 }

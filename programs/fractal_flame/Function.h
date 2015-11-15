@@ -11,10 +11,7 @@ public:
     int probabilityUpBorder;
     
     unsigned int r,g,b;
-    
-    //double preTransformKoef[2][3];
-    //double postTransformKoef[2][3];
-    
+
     double preTransformX_CoefX=1.0, preTransformX_CoefY=0.0, preTransformX_CoefC=0.0;
     double preTransformY_CoefX=0.0, preTransformY_CoefY=1.0, preTransformY_CoefC=0.0;
     

@@ -2,12 +2,11 @@
 
 #include <small_utils.h>
 #include "FractalThreadController.h"
-#include "FractalFlame2.h"
 
 using namespace std;
 
 
-FractalThreadController::FractalThreadController(FractalFlame2 *pFractal):pFractal(pFractal)
+FractalThreadController::FractalThreadController(FractalFlame *pFractal):pFractal(pFractal)
 {
     threadStopFlag.store(false);    
 }

@@ -4,7 +4,7 @@
 
 #include <ThreadPool.h>
 
-#include "FractalFlame2.h"
+#include "FractalFlame.h"
 
 class FractalThreadPoolController{    
 public:  
@@ -21,13 +21,13 @@ private:
 
     class FractalPoolData{
     public:    
-        FractalFlame2 *fractal;
+        FractalFlame *fractal;
         FractalFlameAlgorithm::CalculateFractalResult result;
         unsigned int *output=nullptr;
         
         FractalPoolData()
         {
-            fractal=new FractalFlame2();
+            fractal=new FractalFlame();
         }
         
         ~FractalPoolData()

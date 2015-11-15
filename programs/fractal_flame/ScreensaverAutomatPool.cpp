@@ -122,10 +122,6 @@ unsigned int* ScreensaverAutomatPool::handleWaitResult()
         {
             state=AutomatState::TRANSIT_START;
         }
-        /*else if(result==FractalFlameAlgorithm::CalculateFractalResult::TIMEOUT)
-        {
-            state=AutomatState::WAIT_RESULT;
-        }*/
         else if(result==FractalFlameAlgorithm::CalculateFractalResult::BAD_PICTURE)
         {
             startMillis=getMilliseconds();

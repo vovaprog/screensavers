@@ -13,7 +13,7 @@
 #   include "ScreensaverAutomat.h"
 #endif
 
-#include "FractalFlame2.h"
+#include "FractalFlame.h"
 
 using namespace std;
 using namespace boost::program_options;
@@ -56,7 +56,7 @@ static void display()
 
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	glDrawPixels(pictureWidth, pictureHeight, /*GL_RGBA*/ GL_BGRA, GL_UNSIGNED_BYTE, output);
+	glDrawPixels(pictureWidth, pictureHeight, GL_BGRA, GL_UNSIGNED_BYTE, output);
 	
 	glutSwapBuffers();	  
 	
@@ -145,18 +145,8 @@ static void startScreensaver(int argc, char **argv)
 #ifndef NO_IMAGE_FUNCTIONS
 
 static void startRender(const string &fileName, int numberOfIterations)
-{    
-    /*FractalFlame fractal;
-    
-    fractal.init(pictureWidth,pictureHeight);
-    
-    fractal.setNumberOfIterations(numberOfIterations);
-    
-    fractal.setViewBounds(xLowerBound,xUpperBound,yLowerBound,yUpperBound);
-    
-    fractal.render(fileName.c_str());*/
-    
-    FractalFlame2 fractal;
+{        
+    FractalFlame fractal;
     
     shared_ptr<RenderParameters> rp(new RenderParameters());
     rp->pictureWidth=pictureWidth;
@@ -167,18 +157,8 @@ static void startRender(const string &fileName, int numberOfIterations)
 }
 
 static void startPreview(int numberOfPreviews, int numberOfIterations)
-{
-    /*FractalFlame fractal;
-    
-    fractal.init(pictureWidth,pictureHeight);
-    
-    fractal.setNumberOfIterations(600000);
-    
-    fractal.setViewBounds(xLowerBound,xUpperBound,yLowerBound,yUpperBound);
-    
-    fractal.preview(numberOfPreviews);*/
-    
-    FractalFlame2 fractal;
+{    
+    FractalFlame fractal;
 
     shared_ptr<RenderParameters> rp(new RenderParameters());
     rp->pictureWidth=pictureWidth;
