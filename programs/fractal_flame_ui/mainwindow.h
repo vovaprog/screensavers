@@ -21,6 +21,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+protected:
+    void keyPressEvent(QKeyEvent* event);
+
 private slots:
     void on_butOpenFlame_clicked();
 
@@ -56,6 +59,16 @@ private slots:
 
     void on_butCalculateGood_clicked();
 
+    void on_butSetBounds1_clicked();
+
+    void on_butSetBounds2_clicked();
+
+    void on_butSetBounds3_clicked();
+
+    void on_butSetBounds4_clicked();
+
+    void on_comboSetBoundsAxis_currentIndexChanged(const QString &arg1);
+
 private:
     Ui::MainWindow *ui;
 
@@ -76,6 +89,7 @@ private:
     bool calculateFlame(unsigned int iterations);
     void selectColor(QSpinBox *spinR,QSpinBox *spinG,QSpinBox *spinB,QLineEdit *colorDisplay);
     void displayColor(QSpinBox *spinR,QSpinBox *spinG,QSpinBox *spinB,QLineEdit *colorDisplay);
+    void setBoundsValue(double value);
 
     QGraphicsScene * scene;
     FractalFlameAlgorithm fractalAlgo;

@@ -35,11 +35,15 @@ void variationGaussian(double x, double y, double &xOut, double &yOut);//-
 
 struct Variation{
     const char *name;
-    VariationPointer f;    
+    VariationPointer f;
+    
+    inline bool isValid()
+    {
+        return name!=nullptr && f!=nullptr;
+    }
 };
 
 std::vector<Variation>& getVariations();
 Variation getVariationByName(const char *name);
 
-#define isNullVariation(v) ((v).name==nullptr || (v).f==nullptr)
 

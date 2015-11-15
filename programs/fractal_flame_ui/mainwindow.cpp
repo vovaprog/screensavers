@@ -6,6 +6,7 @@
 #include <QPalette>
 #include <QFileDialog>
 #include <QProgressDialog>
+#include <QKeyEvent>
 
 #include <memory>
 #include <vector>
@@ -164,11 +165,21 @@ void MainWindow::FlameParametersToControls(shared_ptr<FlameParameters> fp)
     ui->spinYLowerBound->setValue(fp->yLowerBound);
     ui->spinYUpperBound->setValue(fp->yUpperBound);
 
-    ui->checkSetBoundsByX->setChecked(fp->setViewBoundsByX);
-    ui->checkSetBoundsByY->setChecked(fp->setViewBoundsByY);
+    if(fp->setBoundsAxis==FlameParameters::Axis::x)
+    {
+        ui->comboSetBoundsAxis->setCurrentIndex(1);
+    }
+    else if(fp->setBoundsAxis==FlameParameters::Axis::y)
+    {
+        ui->comboSetBoundsAxis->setCurrentIndex(2);
+    }
+    else
+    {
+        ui->comboSetBoundsAxis->setCurrentIndex(0);
+    }
 
-    ui->spinSetBoundsRatio->setValue(fp->viewBoundsRatio);
-    ui->spinSetBoundsCenter->setValue(fp->viewBoundsCenter);
+    ui->spinSetBoundsRatio->setValue(fp->setBoundsRatio);
+    ui->spinSetBoundsCenter->setValue(fp->setBoundsCenter);
 
     if(fp->functions.size()>0)
     {
@@ -215,7 +226,7 @@ void MainWindow::getFunctionsChecked(QListWidget *list, Function *f)
 
             Variation v = getVariationByName(c_str);
 
-            if(!isNullVariation(v))
+            if(v.isValid())
             {
                 f->variations.push_back(v);
             }
@@ -314,11 +325,21 @@ void MainWindow::ReadFlameParametersFromControls(shared_ptr<FlameParameters> fp)
     fp->yLowerBound=ui->spinYLowerBound->value();
     fp->yUpperBound=ui->spinYUpperBound->value();
 
-    fp->setViewBoundsByX = ui->checkSetBoundsByX->isChecked();
-    fp->setViewBoundsByY = ui->checkSetBoundsByY->isChecked();
+    if(ui->comboSetBoundsAxis->currentText()=="x")
+    {
+        fp->setBoundsAxis=FlameParameters::Axis::x;
+    }
+    else if(ui->comboSetBoundsAxis->currentText()=="y")
+    {
+        fp->setBoundsAxis=FlameParameters::Axis::y;
+    }
+    else
+    {
+        fp->setBoundsAxis=FlameParameters::Axis::none;
+    }
 
-    fp->viewBoundsRatio = ui->spinSetBoundsRatio->value();
-    fp->viewBoundsCenter = ui->spinSetBoundsCenter->value();
+    fp->setBoundsRatio = ui->spinSetBoundsRatio->value();
+    fp->setBoundsCenter = ui->spinSetBoundsCenter->value();
 
     if(ui->checkUseT0->isChecked())
     {
@@ -544,5 +565,72 @@ void MainWindow::on_spinT2B_valueChanged(int arg1)
 
 void MainWindow::on_butCalculateGood_clicked()
 {
-    calculateFlame(ui->spinIterationsMore->value());
+    calculateFlame(ui->spinIterationsGood->value());
 }
+
+void MainWindow::setBoundsValue(double value)
+{
+    ui->spinXLowerBound->setValue(-value);
+    ui->spinXUpperBound->setValue(value);
+    ui->spinYLowerBound->setValue(-value);
+    ui->spinYUpperBound->setValue(value);
+}
+
+void MainWindow::on_butSetBounds1_clicked()
+{
+    setBoundsValue(1.0);
+}
+
+void MainWindow::on_butSetBounds2_clicked()
+{
+    setBoundsValue(2.0);
+}
+
+void MainWindow::on_butSetBounds3_clicked()
+{
+    setBoundsValue(3.0);
+}
+
+void MainWindow::on_butSetBounds4_clicked()
+{
+    setBoundsValue(4.0);
+}
+
+void MainWindow::on_comboSetBoundsAxis_currentIndexChanged(const QString &arg1)
+{
+    if(arg1=="x")
+    {
+        ui->spinXLowerBound->setEnabled(false);
+        ui->spinXUpperBound->setEnabled(false);
+        ui->spinYLowerBound->setEnabled(true);
+        ui->spinYUpperBound->setEnabled(true);
+    }
+    else if(arg1=="y")
+    {
+        ui->spinXLowerBound->setEnabled(true);
+        ui->spinXUpperBound->setEnabled(true);
+        ui->spinYLowerBound->setEnabled(false);
+        ui->spinYUpperBound->setEnabled(false);
+    }
+    else
+    {
+        ui->spinXLowerBound->setEnabled(true);
+        ui->spinXUpperBound->setEnabled(true);
+        ui->spinYLowerBound->setEnabled(true);
+        ui->spinYUpperBound->setEnabled(true);
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* event)
+{
+    if(event->key() == Qt::Key_Q)
+    {
+        calculateFlame(ui->spinIterationsFast->value());
+    }
+    else if(event->key() == Qt::Key_W)
+    {
+        calculateFlame(ui->spinIterationsGood->value());
+    }
+}
+
+

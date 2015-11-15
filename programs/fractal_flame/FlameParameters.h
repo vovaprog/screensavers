@@ -28,11 +28,14 @@ private:
 public:    
     double xLowerBound=-1.0, xUpperBound=1.0;
     double yLowerBound=-1.0, yUpperBound=1.0;
-    double viewBoundsRatio=1.0, viewBoundsCenter=0.0;
+    
     double colorPower = 0.5;
     std::vector<std::unique_ptr<Function>> functions;
+            
+    enum Axis { x=1, y=2, none=0};
+    Axis setBoundsAxis = Axis::x;
+    double setBoundsRatio=1.0, setBoundsCenter=0.0;
     
-    bool setViewBoundsByX=false, setViewBoundsByY=false;    
     int totalProbabilityWeight=0;
     
     static const int MIN_NUMBER_OF_FUNCTIONS = 2;

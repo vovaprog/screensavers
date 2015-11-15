@@ -1,6 +1,6 @@
 #pragma once
 
-#include "FractalFlame.h"
+#include "FractalFlame2.h"
 #include "FractalThreadController.h"
 
 
@@ -49,7 +49,7 @@ private:
     
     int fps;
 
-    FractalFlame fractal;
+    FractalFlame2 fractal;
     FractalThreadController threadController;
     
     const char *saveDirName="./fractals/screensaver";

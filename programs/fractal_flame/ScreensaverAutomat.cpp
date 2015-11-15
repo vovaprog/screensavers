@@ -72,7 +72,7 @@ unsigned int* ScreensaverAutomat::handleFirst()
     output1=new unsigned int[outputSize];
     outputBlend=new unsigned int[outputSize];
     
-    fractal.init(pictureWidth,pictureHeight);
+    fractal.screensaverInit(pictureWidth,pictureHeight);
 
     threadController.beginCalculateFractal();
             
@@ -129,13 +129,13 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
     if(millisPassed>=WAIT_RESULT_MILLIS)
     {
         unsigned int *p;
-        FractalFlame::CalculateFractalResult result = threadController.getResultWithTimeout(&p);
-        if(result==FractalFlame::CalculateFractalResult::SUCCESS)
+        FractalFlameAlgorithm::CalculateFractalResult result = threadController.getResultWithTimeout(&p);
+        if(result==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
         {
             memcpy(output1,p,sizeof(unsigned int) * outputSize);
 
 #ifndef NO_IMAGE_FUNCTIONS            
-            fractal.saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
+//            fractal.saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
 #endif
 
             imageCounter += 1;
@@ -143,11 +143,11 @@ unsigned int* ScreensaverAutomat::handleWaitResult()
             threadController.beginCalculateFractal();
             state=AutomatState::TRANSIT_START;
         }
-        else if(result==FractalFlame::CalculateFractalResult::TIMEOUT)
+/*        else if(result==FractalFlameAlgorithm::CalculateFractalResult::TIMEOUT)
         {
             state=AutomatState::WAIT_RESULT;
-        }
-        else if(result==FractalFlame::CalculateFractalResult::BAD_PICTURE)
+        }*/
+        else if(result==FractalFlameAlgorithm::CalculateFractalResult::BAD_PICTURE)
         {
             threadController.beginCalculateFractal();
             startMillis=getMilliseconds();

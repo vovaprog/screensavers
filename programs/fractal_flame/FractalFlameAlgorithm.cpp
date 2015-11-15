@@ -296,6 +296,7 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::calculateFr
         {
             if(stopFlag.load())
             {
+                cout <<"stop flag. iterations: "<<i<<endl;
                 break;
             }
         }

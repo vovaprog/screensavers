@@ -2,12 +2,12 @@
 
 #include <small_utils.h>
 #include "FractalThreadController.h"
-#include "FractalFlame.h"
+#include "FractalFlame2.h"
 
 using namespace std;
 
 
-FractalThreadController::FractalThreadController(FractalFlame *pFractal):pFractal(pFractal)
+FractalThreadController::FractalThreadController(FractalFlame2 *pFractal):pFractal(pFractal)
 {
     threadStopFlag.store(false);    
 }
@@ -73,17 +73,18 @@ void FractalThreadController::beginCalculateFractal()
 }
 
 
-FractalFlame::CalculateFractalResult FractalThreadController::getResultWithTimeout(unsigned int **ppOutput)
+FractalFlameAlgorithm::CalculateFractalResult FractalThreadController::getResultWithTimeout(unsigned int **ppOutput)
 {    
-    if(semResult.waitMilliseconds(100))
-    {   
+    semResult.wait(); 
+    //if(waitMilliseconds(100))
+    //{   
         *ppOutput=output;
         return result;
-    }
+    /*}
     else
     {
         return FractalFlame::CalculateFractalResult::TIMEOUT;
-    }
+    }*/
 }
 
 

@@ -47,14 +47,14 @@
       <item>
        <widget class="QPushButton" name="butCalculateFast">
         <property name="text">
-         <string>calculate fast</string>
+         <string>calculate fast (q)</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="butCalculateGood">
         <property name="text">
-         <string>calculate good</string>
+         <string>calculate good (w)</string>
         </property>
        </widget>
       </item>
@@ -120,12 +120,12 @@
              </widget>
             </item>
             <item row="1" column="1">
-             <widget class="QSpinBox" name="spinIterationsMore">
+             <widget class="QSpinBox" name="spinIterationsGood">
               <property name="maximum">
                <number>1000000000</number>
               </property>
               <property name="value">
-               <number>15000000</number>
+               <number>10000000</number>
               </property>
              </widget>
             </item>
@@ -156,6 +156,9 @@
               <string>common</string>
              </attribute>
              <layout class="QFormLayout" name="formLayout_2">
+              <property name="fieldGrowthPolicy">
+               <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+              </property>
               <item row="0" column="0">
                <widget class="QLabel" name="label_4">
                 <property name="text">
@@ -173,14 +176,14 @@
                 </property>
                </widget>
               </item>
-              <item row="3" column="0">
+              <item row="1" column="0">
                <widget class="QLabel" name="label_5">
                 <property name="text">
                  <string>x upper bound:</string>
                 </property>
                </widget>
               </item>
-              <item row="3" column="1">
+              <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="spinXUpperBound">
                 <property name="minimum">
                  <double>-100.000000000000000</double>
@@ -190,14 +193,14 @@
                 </property>
                </widget>
               </item>
-              <item row="6" column="0">
+              <item row="2" column="0">
                <widget class="QLabel" name="label_6">
                 <property name="text">
                  <string>y lower bound:</string>
                 </property>
                </widget>
               </item>
-              <item row="6" column="1">
+              <item row="2" column="1">
                <widget class="QDoubleSpinBox" name="spinYLowerBound">
                 <property name="minimum">
                  <double>-100.000000000000000</double>
@@ -207,14 +210,14 @@
                 </property>
                </widget>
               </item>
-              <item row="9" column="0">
+              <item row="3" column="0">
                <widget class="QLabel" name="label_7">
                 <property name="text">
                  <string>y upper bound:</string>
                 </property>
                </widget>
               </item>
-              <item row="9" column="1">
+              <item row="3" column="1">
                <widget class="QDoubleSpinBox" name="spinYUpperBound">
                 <property name="minimum">
                  <double>-100.000000000000000</double>
@@ -224,28 +227,70 @@
                 </property>
                </widget>
               </item>
-              <item row="12" column="0" colspan="2">
-               <widget class="QCheckBox" name="checkSetBoundsByX">
-                <property name="text">
-                 <string>set bounds by x</string>
-                </property>
-               </widget>
+              <item row="5" column="0" colspan="2">
+               <layout class="QHBoxLayout" name="horizontalLayout_3">
+                <item>
+                 <widget class="QPushButton" name="butSetBounds1">
+                  <property name="minimumSize">
+                   <size>
+                    <width>30</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>1.0</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="butSetBounds2">
+                  <property name="minimumSize">
+                   <size>
+                    <width>30</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>2.0</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="butSetBounds3">
+                  <property name="minimumSize">
+                   <size>
+                    <width>30</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>3.0</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="butSetBounds4">
+                  <property name="minimumSize">
+                   <size>
+                    <width>30</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>4.0</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </item>
-              <item row="15" column="0" colspan="2">
-               <widget class="QCheckBox" name="checkSetBoundsByY">
-                <property name="text">
-                 <string>set bounds by y</string>
-                </property>
-               </widget>
-              </item>
-              <item row="19" column="0">
+              <item row="10" column="0">
                <widget class="QLabel" name="label_8">
                 <property name="text">
                  <string>set bounds ratio:</string>
                 </property>
                </widget>
               </item>
-              <item row="19" column="1">
+              <item row="10" column="1">
                <widget class="QDoubleSpinBox" name="spinSetBoundsRatio">
                 <property name="minimum">
                  <double>-100.000000000000000</double>
@@ -255,20 +300,62 @@
                 </property>
                </widget>
               </item>
-              <item row="22" column="1">
+              <item row="11" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>set bounds axis:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="1">
+               <widget class="QComboBox" name="comboSetBoundsAxis">
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>none</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>x</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>y</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="QLabel" name="label_9">
+                <property name="text">
+                 <string>set bounds center:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0" colspan="2">
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>30</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="9" column="1">
                <widget class="QDoubleSpinBox" name="spinSetBoundsCenter">
                 <property name="minimum">
                  <double>-100.000000000000000</double>
                 </property>
                 <property name="maximum">
                  <double>100.000000000000000</double>
-                </property>
-               </widget>
-              </item>
-              <item row="22" column="0">
-               <widget class="QLabel" name="label_9">
-                <property name="text">
-                 <string>set bounds center:</string>
                 </property>
                </widget>
               </item>
@@ -1698,12 +1785,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>97</x>
-     <y>195</y>
+     <x>108</x>
+     <y>140</y>
     </hint>
     <hint type="destinationlabel">
-     <x>156</x>
-     <y>228</y>
+     <x>140</x>
+     <y>156</y>
     </hint>
    </hints>
   </connection>
@@ -1714,12 +1801,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>215</x>
-     <y>226</y>
+     <x>140</x>
+     <y>140</y>
     </hint>
     <hint type="destinationlabel">
-     <x>230</x>
-     <y>262</y>
+     <x>140</x>
+     <y>156</y>
     </hint>
    </hints>
   </connection>
@@ -1730,12 +1817,12 @@
    <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>88</x>
-     <y>256</y>
+     <x>99</x>
+     <y>140</y>
     </hint>
     <hint type="destinationlabel">
-     <x>160</x>
-     <y>290</y>
+     <x>140</x>
+     <y>156</y>
     </hint>
    </hints>
   </connection>

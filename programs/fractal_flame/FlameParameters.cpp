@@ -47,14 +47,14 @@ void FlameParameters::prepareLocale()
 <flames>
     <flame>
         <xform>
-            <variation type="bubble" />
+            <variation name="bubble" />
             <preTransformX x="1" y="1" c="1"/>
             <preTransformY x="1" y="1" c="1"/>
             <postTransformX x="1" y="1" c="1"/>
             <postTransformY x="1" y="1" c="1"/>
             <color r="255" g="255" b="255"/>
         </xform>
-        <renderParameters xLowerBound="1" xUpperBound="1" yLowerBound="1" yUpperBound="1" setBoundsBy="x" setBoundsRatio="1" setBoundsCenter="1" />
+        <renderParameters xLowerBound="1" xUpperBound="1" yLowerBound="1" yUpperBound="1" setBoundsAxis="x" setBoundsRatio="1" setBoundsCenter="1" />
     </flame>
 </flames>
 */
@@ -82,7 +82,7 @@ void FlameParameters::save(const char *fileName)
 		{	
             TiXmlElement *varElement = new TiXmlElement( "variation" );		
             xformElement->LinkEndChild(varElement);
-		    varElement->SetAttribute("type",variation.name);            
+		    varElement->SetAttribute("name",variation.name);            
 		}				
 
 		
@@ -120,23 +120,36 @@ void FlameParameters::save(const char *fileName)
 		
     TiXmlElement *renderElement = new TiXmlElement( "renderParameters" );		
     flameElement->LinkEndChild(renderElement);
-    renderElement->SetAttribute("xLowerBound",to_string(xLowerBound));
-    renderElement->SetAttribute("xUpperBound",to_string(xUpperBound));
-    renderElement->SetAttribute("yLowerBound",to_string(yLowerBound));
-    renderElement->SetAttribute("yUpperBound",to_string(yUpperBound));
+    
     renderElement->SetAttribute("colorPower",to_string(colorPower));
-            
-    if(setViewBoundsByX)
+
+    if(setBoundsAxis == Axis::x)
     {
-        renderElement->SetAttribute("setBoundsBy","x");
+        renderElement->SetAttribute("setBoundsAxis","x");
+        
+        renderElement->SetAttribute("yLowerBound",to_string(yLowerBound));
+        renderElement->SetAttribute("yUpperBound",to_string(yUpperBound));            
     }
-    else if(setViewBoundsByY)
+    else if(setBoundsAxis == Axis::y)
     {
-        renderElement->SetAttribute("setBoundsBy","y");
+        renderElement->SetAttribute("setBoundsAxis","y");
+        
+        renderElement->SetAttribute("xLowerBound",to_string(xLowerBound));
+        renderElement->SetAttribute("xUpperBound",to_string(xUpperBound));        
+    }
+    else
+    {
+        renderElement->SetAttribute("xLowerBound",to_string(xLowerBound));
+        renderElement->SetAttribute("xUpperBound",to_string(xUpperBound));        
+        renderElement->SetAttribute("yLowerBound",to_string(yLowerBound));
+        renderElement->SetAttribute("yUpperBound",to_string(yUpperBound));                    
     }
         
-    renderElement->SetAttribute("setBoundsRatio",to_string(viewBoundsRatio));
-    renderElement->SetAttribute("setBoundsCenter",to_string(viewBoundsCenter));		
+    if(setBoundsAxis == Axis::x || setBoundsAxis == Axis::y)
+    {
+        renderElement->SetAttribute("setBoundsRatio",to_string(setBoundsRatio));
+        renderElement->SetAttribute("setBoundsCenter",to_string(setBoundsCenter));
+    }
 	
 	
 	doc.SaveFile( fileName );    
@@ -155,7 +168,6 @@ void FlameParameters::initRandom()
     {
         srand(time(NULL));
         initRandomGenerator = false;
-        cout <<"srand called"<<endl;
     }
     
     vector<Variation> &variations = getVariations();    
@@ -241,11 +253,11 @@ void FlameParameters::load(const char *fileName)
             {
                 if(strcmp(xformChild->Value(),"variation")==0)
                 {
-                    const char* variationName = xformChild->Attribute("type");
+                    const char* variationName = xformChild->Attribute("name");
                     if(variationName)
                     {
                         Variation v = getVariationByName(variationName);
-                        if(!isNullVariation(v))
+                        if(v.isValid())
                         {
                             pFun->variations.push_back(v);
                         }
@@ -328,28 +340,27 @@ void FlameParameters::load(const char *fileName)
             attributeString = flameChild->Attribute("setBoundsRatio");	    
             if(attributeString)
             {
-                sscanf(attributeString,"%lf",&viewBoundsRatio);
+                sscanf(attributeString,"%lf",&setBoundsRatio);
             }	        
 
             attributeString = flameChild->Attribute("setBoundsCenter");	    
             if(attributeString)
             {
-                sscanf(attributeString,"%lf",&viewBoundsCenter);
+                sscanf(attributeString,"%lf",&setBoundsCenter);
             }	        
-
-            setViewBoundsByX=false;
-            setViewBoundsByY=false;
             
-            attributeString = flameChild->Attribute("setBoundsBy");	    
+            setBoundsAxis = Axis::none;
+            
+            attributeString = flameChild->Attribute("setBoundsAxis");	    
             if(attributeString)
             {
                 if(strcmp(attributeString,"x")==0)
                 {
-                    setViewBoundsByX=true;
+                    setBoundsAxis = Axis::x;
                 }
                 else if(strcmp(attributeString,"y")==0)
                 {
-                    setViewBoundsByY=true;
+                    setBoundsAxis = Axis::y;
                 }
             }
 	    }
@@ -472,35 +483,34 @@ void FlameParameters::load_old(const char *fileName)
 		}
 		
 		
-		setViewBoundsByX = false;
-		setViewBoundsByY = false;
-
+		setBoundsAxis = Axis::none;
+		
 	    attributeString = paramsElem->Attribute("xViewBoundsRatio");	    
 	    if(attributeString)
 		{
-		    sscanf(attributeString,"%lf",&viewBoundsRatio);
+		    sscanf(attributeString,"%lf",&setBoundsRatio);
 		    
             attributeString = paramsElem->Attribute("xViewBoundsCenter");	    
             if(attributeString)
             {
-                sscanf(attributeString,"%lf",&viewBoundsCenter);
+                sscanf(attributeString,"%lf",&setBoundsCenter);
             }		    
 		    
-            setViewBoundsByX = true;
+            setBoundsAxis = Axis::x;
 		}
 
 	    attributeString = paramsElem->Attribute("yViewBoundsRatio");	    
 	    if(attributeString)
 		{
-		    sscanf(attributeString,"%lf",&viewBoundsRatio);
+		    sscanf(attributeString,"%lf",&setBoundsRatio);
 		    
             attributeString = paramsElem->Attribute("yViewBoundsCenter");	    
             if(attributeString)
             {
-                sscanf(attributeString,"%lf",&viewBoundsCenter);
+                sscanf(attributeString,"%lf",&setBoundsCenter);
             }		    
 		    
-            setViewBoundsByY = true;
+            setBoundsAxis = Axis::y;
 		}
 	}
 }
@@ -509,17 +519,17 @@ void FlameParameters::load_old(const char *fileName)
 
 void FlameParameters::setViewBoundsForPictureSize(int pictureWidth, int pictureHeight)
 {
-    if(setViewBoundsByX)
+    if(setBoundsAxis == Axis::x)
     {
-        double xSize = viewBoundsRatio * (yUpperBound-yLowerBound)*((double)pictureWidth / (double)pictureHeight);
-        xLowerBound=viewBoundsCenter - (xSize/2.0);
-        xUpperBound=viewBoundsCenter + (xSize/2.0);            
+        double xSize = setBoundsRatio * (yUpperBound-yLowerBound)*((double)pictureWidth / (double)pictureHeight);
+        xLowerBound=setBoundsCenter - (xSize/2.0);
+        xUpperBound=setBoundsCenter + (xSize/2.0);            
     }
-    else if(setViewBoundsByY)
+    else if(setBoundsAxis == Axis::y)
     {
-        double ySize = viewBoundsRatio * (xUpperBound-xLowerBound)*((double)pictureHeight / (double)pictureWidth);
-        yLowerBound=viewBoundsCenter - (ySize/2.0);
-        yUpperBound=viewBoundsCenter + (ySize/2.0);            
+        double ySize = setBoundsRatio * (xUpperBound-xLowerBound)*((double)pictureHeight / (double)pictureWidth);
+        yLowerBound=setBoundsCenter - (ySize/2.0);
+        yUpperBound=setBoundsCenter + (ySize/2.0);            
     }
 }
 
@@ -535,14 +545,14 @@ void FlameParameters::resetVariables()
     yLowerBound=-1.0;
     yUpperBound=1.0;
     
-    viewBoundsRatio=1.0;
-    viewBoundsCenter=0.0;
     colorPower = 0.5;
     
     functions.clear();
+
+    setBoundsRatio=1.0;
+    setBoundsCenter=0.0;    
+    setBoundsAxis = Axis::x;
     
-    setViewBoundsByX=false;
-    setViewBoundsByY=false;    
     totalProbabilityWeight=0;    
 }
 

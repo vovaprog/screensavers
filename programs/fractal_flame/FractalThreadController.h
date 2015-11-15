@@ -4,19 +4,19 @@
 #include <atomic>
 
 #include "Semaphore.h"
-#include "FractalFlame.h"
+#include "FractalFlame2.h"
 
 using namespace std;
 
 class FractalThreadController{    
 public:  
     
-    FractalThreadController(FractalFlame *pFractal);
+    FractalThreadController(FractalFlame2 *pFractal);
     ~FractalThreadController();
     
     void beginCalculateFractal();
     
-    FractalFlame::CalculateFractalResult getResultWithTimeout(unsigned int **ppOutput);    
+    FractalFlameAlgorithm::CalculateFractalResult getResultWithTimeout(unsigned int **ppOutput);    
 
 private:
     
@@ -29,11 +29,11 @@ private:
     Semaphore semResult, semStartWork;
     
     unsigned int *output=nullptr;
-    FractalFlame::CalculateFractalResult result;
+    FractalFlameAlgorithm::CalculateFractalResult result;
 
     atomic<bool> threadStopFlag;    
     
     unsigned int numberOfIterations;
     
-    FractalFlame *pFractal;    
+    FractalFlame2 *pFractal;    
 };
