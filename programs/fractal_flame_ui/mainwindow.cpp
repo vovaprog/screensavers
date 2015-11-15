@@ -37,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete scene;
 }
 
 void MainWindow::FillFunctionList(QListWidget *list)
@@ -71,7 +72,7 @@ void MainWindow::setFunctionsChecked(QListWidget *list, Function *f)
         list->item(i)->setCheckState(Qt::Unchecked);
     }
 
-    for(auto variation : f->variations)
+    for(auto& variation : f->variations)
     {
         setFunctionChecked(list, variation.name);
     }

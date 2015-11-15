@@ -236,7 +236,7 @@ void FractalFlameAlgorithm::applyFunction(Function *pFun, double &x, double &y)
     y=pFun->preTransformY_CoefX * x + pFun->preTransformY_CoefY * y + pFun->preTransformY_CoefC;
     
     
-    for(auto fun : pFun->variations)
+    for(auto& fun : pFun->variations)
     {            
         double xOut,yOut;
         
