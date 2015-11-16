@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <algorithm>
+#include <iostream>
 
 #include <filesystem_utils.h>
 
@@ -34,13 +35,13 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
     pool=new ThreadPool(numberOfThreads);
     
     
-#ifndef NO_IMAGE_FUNCTIONS    
+/*#ifndef NO_IMAGE_FUNCTIONS    
     if(directoryExists(saveDirName))
     {	
         deleteDirectory(saveDirName);						
     }   
     createDirectory(saveDirName);
-#endif    
+#endif*/    
 }
 
 FractalThreadPoolController::~FractalThreadPoolController()
@@ -72,6 +73,9 @@ void* ThreadFractalFunction(void *dataInput)
 void FractalThreadPoolController::setStopFlag()
 {
     FractalData *fData = calcQueue.front();
+    unsigned long lll=(unsigned long)fData;
+    cout <<"data pointer stop: "<<lll<<endl;
+    
     fData->fractal->setStopFlag();    
 }
 
@@ -79,19 +83,32 @@ FractalFlameAlgorithm::CalculateFractalResult FractalThreadPoolController::getRe
 {    
     FractalData *fData = (FractalData*)pool->getResult();
     
+    unsigned long lll=(unsigned long)fData;
+    cout <<"data pointer result: "<<lll<<endl;
+    cout <<"queue size: "<<calcQueue.size()<<endl;
+    
     FractalFlameAlgorithm::CalculateFractalResult result = fData->result;
     
     if(fData->result == FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
     {
         memcpy(output,fData->output,sizeof(unsigned int) * outputSize);
+        
+        fData->fractal->screensaverSaveFractal(screensaverSaveDirName,screensaverSaveCounter);    
+        screensaverSaveCounter += 1;
+        if(screensaverSaveCounter>=saveNumberOfImages) 
+        {
+            screensaverSaveCounter=0;
+        }        
     }    
 
+    
+    
     
 //#ifndef NO_IMAGE_FUNCTIONS    
 //    fData->fractal->saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
 //#endif    
     
-    imageCounter += 1;
+//    imageCounter += 1;
     
     
     calcQueue.remove(fData);

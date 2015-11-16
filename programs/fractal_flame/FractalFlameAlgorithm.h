@@ -19,7 +19,10 @@ public:
     void setStopFlag(bool value);    
     bool getStopFlag();
     
+    std::shared_ptr<RenderParameters> getRenderParameters();
     std::shared_ptr<FlameParameters> getFlameParameters();
+    
+    unsigned int* getOutput();
     
 private:        
     void convertScreenToMath(double &x, double &y);

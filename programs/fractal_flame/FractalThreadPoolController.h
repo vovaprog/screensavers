@@ -40,11 +40,7 @@ private:
     };    
     
     typedef FractalThreadPoolController::FractalPoolData FractalData;
-    
-    const char *saveDirName="./fractals/screensaver";
-    const int saveNumberOfImages=10;
-    int imageCounter=0;
-    
+        
     ThreadPool *pool;
     
     int numberOfFractals;
@@ -55,4 +51,8 @@ private:
     std::list<FractalPoolData*> calcQueue;
     
     friend void* ThreadFractalFunction(void *dataInput);
+    
+    const char *screensaverSaveDirName="./fractals/screensaver";
+    const int saveNumberOfImages=10;
+    int screensaverSaveCounter=0;
 };

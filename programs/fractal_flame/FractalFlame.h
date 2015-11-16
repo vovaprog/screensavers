@@ -14,12 +14,12 @@ public:
     
     void screensaverInit(int width, int height);
     FractalFlameAlgorithm::CalculateFractalResult screensaver(unsigned int **ppOutput);
-
+    void screensaverSaveFractal(const char* screensaverSaveDirName,int screensaverSaveCounter);
+    
     void setStopFlag();
     
 private:    
     
-    FractalFlameAlgorithm algorithm;
-    
+    FractalFlameAlgorithm algorithm;       
 };
 

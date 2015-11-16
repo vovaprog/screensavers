@@ -1,5 +1,7 @@
 #include <string>
 
+#include <iostream>
+
 #include "FractalFlame.h"
 #include "image_utils.h"
 #include "filesystem_utils.h"
@@ -82,6 +84,42 @@ void FractalFlame::screensaverInit(int width, int height)
     algorithm.setRenderParameters(rp);
 }
 
+void FractalFlame::screensaverSaveFractal(const char* screensaverSaveDirName,int screensaverSaveCounter)
+{
+    shared_ptr<RenderParameters> rp = algorithm.getRenderParameters();
+    shared_ptr<FlameParameters> fp = algorithm.getFlameParameters();
+    unsigned int* output = algorithm.getOutput();
+    
+    if(fp && rp && output)
+    {    
+        string dirName(screensaverSaveDirName);
+        
+		if(!directoryExists(dirName.c_str()))
+		{			
+			createDirectory(dirName.c_str());
+		}        
+        
+        string fileName=dirName+"/fractal_"+to_string(screensaverSaveCounter)+".xml";    
+        if(fileExists(fileName.c_str()))
+        {
+            deleteFile(fileName.c_str());
+        }        
+        fp->save(fileName.c_str());
+        
+        fileName=dirName + "/fractal_"+to_string(screensaverSaveCounter)+".png";
+        if(fileExists(fileName.c_str()))
+        {
+            deleteFile(fileName.c_str());
+        }    
+        
+        saveImage(fileName.c_str(), "png", output, rp->pictureWidth, rp->pictureHeight);
+                
+        unsigned long lll=(unsigned long)this;
+        cout <<"fractal save this pointer: "<<lll<<endl;
+
+    }
+}
+
 FractalFlameAlgorithm::CalculateFractalResult FractalFlame::screensaver(unsigned int **ppOutput)
 {
     shared_ptr<FlameParameters> flameParams = algorithm.getFlameParameters();
@@ -102,7 +140,7 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlame::screensaver(unsigned
 		if(output!=nullptr)
 		{
 		    *ppOutput=output;
-		    		    
+		    
 		    return FractalFlameAlgorithm::CalculateFractalResult::SUCCESS;
 		}
 		else

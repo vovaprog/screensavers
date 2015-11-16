@@ -37,25 +37,14 @@ void FractalThreadController::fractalThreadEntry()
         }
 
         
-                        
-        unsigned int startMillis=getMilliseconds();
-        
         result = pFractal->screensaver(&output);
-        
-        
         
         if(threadStopFlag.load())
         {
             semResult.increment();
             return;    
         }
-                       
-        
-        
-        unsigned int millisPassed = getMilliseconds() - startMillis; 
-        
-        cout <<"calculate time: "<<millisPassed<<endl;
-                       
+                               
         
         semResult.increment();       
     }        
@@ -75,15 +64,9 @@ void FractalThreadController::beginCalculateFractal()
 FractalFlameAlgorithm::CalculateFractalResult FractalThreadController::getResultWithTimeout(unsigned int **ppOutput)
 {    
     semResult.wait(); 
-    //if(waitMilliseconds(100))
-    //{   
-        *ppOutput=output;
-        return result;
-    /*}
-    else
-    {
-        return FractalFlame::CalculateFractalResult::TIMEOUT;
-    }*/
+
+    *ppOutput=output;
+    return result;
 }
 
 

@@ -336,7 +336,18 @@ bool FractalFlameAlgorithm::getStopFlag()
     return stopFlag.load();
 }
 
+std::shared_ptr<RenderParameters> FractalFlameAlgorithm::getRenderParameters()
+{
+    return rp;    
+}
+
 std::shared_ptr<FlameParameters> FractalFlameAlgorithm::getFlameParameters()
 {
     return fp;    
 }
+
+unsigned int* FractalFlameAlgorithm::getOutput()
+{
+    return output.get();
+}
+
