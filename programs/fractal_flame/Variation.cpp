@@ -296,7 +296,7 @@ void variationTangent(double x, double y, double &xOut, double &yOut)
 static vector<Variation> variations; 
 
 
-static void initVariations()
+void initVariations()
 {
     Variation v;
     

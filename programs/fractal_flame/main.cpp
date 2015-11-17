@@ -90,11 +90,12 @@ static void startScreensaver(int argc, char **argv)
     }
 
     
-#ifdef USE_THREAD_POOL
+//#ifdef USE_THREAD_POOL
+    initVariations(); //!!!!!!!!!!!!!!!!
     screensaver=new ScreensaverAutomatPool(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
-#else    
+/*#else    
     screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
-#endif    
+#endif*/    
     
 
     //====================================================================

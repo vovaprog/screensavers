@@ -43,6 +43,7 @@ struct Variation{
     }
 };
 
+void initVariations();
 std::vector<Variation>& getVariations();
 Variation getVariationByName(const char *name);
 
