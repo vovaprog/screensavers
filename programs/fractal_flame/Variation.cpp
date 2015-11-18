@@ -403,15 +403,11 @@ void initVariations()
 
 vector<Variation>& getVariations()
 {
-    if(variations.size()<1) initVariations();
-    
     return variations;
 }
 
 Variation getVariationByName(const char *name)
-{
-    if(variations.size()<1) initVariations();    
-    
+{       
     auto iter = find_if(variations.begin(),variations.end(),[name](const Variation& v)
         {
             return (strcmp(name,v.name)==0);                

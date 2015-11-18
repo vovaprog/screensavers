@@ -5,7 +5,6 @@
 #include <string>
 #include <ctime>
 #include <memory>
-#include <locale.h>
 
 #ifndef NO_XML_FUNCTIONS
 #   include <tinyxml.h>
@@ -36,11 +35,6 @@ inline double FlameParameters::getRandomValue(double start, double end)
     return start + getRandom01() * (end - start);
 }
 
-void FlameParameters::prepareLocale()
-{
-    setlocale(LC_NUMERIC,"C");
-}
-
 #ifndef NO_XML_FUNCTIONS
 
 /*
@@ -60,8 +54,6 @@ void FlameParameters::prepareLocale()
 */
 void FlameParameters::save(const char *fileName)
 {    
-    prepareLocale();
-    
 	TiXmlDocument doc;
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" );
 	doc.LinkEndChild( decl );
@@ -158,18 +150,11 @@ void FlameParameters::save(const char *fileName)
 
 #endif
 
-bool FlameParameters::initRandomGenerator=true;
 
 void FlameParameters::initRandom()
 {
     resetVariables();
-    
-    if(initRandomGenerator)
-    {
-        srand(time(NULL));
-        initRandomGenerator = false;
-    }
-    
+        
     vector<Variation> &variations = getVariations();    
     
     int numberOfFunctions=MIN_NUMBER_OF_FUNCTIONS + rand() % (MAX_NUMBER_OF_FUNCTIONS + 1 - MIN_NUMBER_OF_FUNCTIONS);
@@ -225,9 +210,7 @@ void FlameParameters::initRandom()
 void FlameParameters::load(const char *fileName)
 {
     resetVariables();
-    
-    prepareLocale();
-    
+        
     functions.clear();
     
 	TiXmlDocument doc(fileName);
@@ -374,9 +357,7 @@ void FlameParameters::load(const char *fileName)
 void FlameParameters::load_old(const char *fileName)
 {
     resetVariables();
-    
-    prepareLocale();
-    
+        
     functions.clear();
     
 	TiXmlDocument doc(fileName);

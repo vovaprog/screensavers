@@ -42,7 +42,5 @@ public:
     static const int MAX_NUMBER_OF_FUNCTIONS = 3;
     static const int MIN_NUMBER_OF_VARIATIONS = 1;
     static const int MAX_NUMBER_OF_VARIATIONS = 3;
-    
-    static bool initRandomGenerator;
 };
 

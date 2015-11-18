@@ -17,6 +17,8 @@ public:
 
     void setStopFlag();
     
+    static void initFlameLibrary();
+    
 private:    
     
     FractalFlameAlgorithm algorithm;

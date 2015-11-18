@@ -14,9 +14,10 @@ public:
     enum class CalculateFractalResult { SUCCESS, BAD_PICTURE };    
     
     void setRenderParameters(std::shared_ptr<RenderParameters> renderParams);
-    unsigned int* calculate(std::shared_ptr<FlameParameters> params);
+    //unsigned int* calculate(std::shared_ptr<FlameParameters> params);
+    FractalFlameAlgorithm::CalculateFractalResult calculate(std::shared_ptr<FlameParameters> params, unsigned int **ppOutput);
 
-    void setStopFlag(bool value);    
+    void setStopFlag(bool value);
     bool getStopFlag();
     
     std::shared_ptr<FlameParameters> getFlameParameters();

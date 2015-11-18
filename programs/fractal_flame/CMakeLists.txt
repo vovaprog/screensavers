@@ -33,7 +33,7 @@ else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -pedantic")
 
     if(NOT (CMAKE_BUILD_TYPE STREQUAL Debug OR CMAKE_BUILD_TYPE STREQUAL DEBUG))
-    	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g") #-O3 -march=native")
+    	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3 -march=native")
     endif()
 endif()
 

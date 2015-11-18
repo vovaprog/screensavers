@@ -91,7 +91,7 @@ static void startScreensaver(int argc, char **argv)
 
     
 //#ifdef USE_THREAD_POOL
-    initVariations(); //!!!!!!!!!!!!!!!!
+
     screensaver=new ScreensaverAutomatPool(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
 /*#else    
     screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
@@ -213,6 +213,9 @@ int main(int argc, char **argv)
         }
                 
         isFullScreen = !windowMode;
+        
+        
+        FractalFlame::initFlameLibrary();
         
         if(mode == "screensaver")
         {

@@ -13,9 +13,11 @@ void FractalFlame::render(shared_ptr<RenderParameters> renderParams, const char 
     shared_ptr<FlameParameters> fp(new FlameParameters());
     fp->load(fileName);
     
-    unsigned int* output = algorithm.calculate(fp);
+    unsigned int* output;
     
-    if(output!=nullptr)
+    FractalFlameAlgorithm::CalculateFractalResult result = algorithm.calculate(fp, &output);
+    
+    if(result==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
     {        
         string outputFileName(fileName);
         outputFileName += "_render.png";        
@@ -25,9 +27,7 @@ void FractalFlame::render(shared_ptr<RenderParameters> renderParams, const char 
 }
 
 void FractalFlame::preview(int numberOfPreviews, shared_ptr<RenderParameters> renderParams, shared_ptr<FlameParameters> flameParams)
-{
-    srand((unsigned int)time(NULL));
-    
+{    
     algorithm.setRenderParameters(renderParams);
     
     string dirName;
@@ -47,9 +47,11 @@ void FractalFlame::preview(int numberOfPreviews, shared_ptr<RenderParameters> re
 	{
 	    flameParams->initRandom();
 
-		unsigned int* output = algorithm.calculate(flameParams);
+		unsigned int* output;
+		
+		FractalFlameAlgorithm::CalculateFractalResult result = algorithm.calculate(flameParams, &output);
 	    
-		if(output!=nullptr)
+		if(result==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
 		{
             string fileName=dirName+"/fractal_"+to_string(i)+".xml";    
             if(fileExists(fileName.c_str()))
@@ -95,14 +97,14 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlame::screensaver(unsigned
     algorithm.setStopFlag(false);
     
 	
+    FractalFlameAlgorithm::CalculateFractalResult result;
+    
 	for(int i=0;i<30;i++)
-	{
-	    unsigned int* output = algorithm.calculate(flameParams);
+	{	    
+	    result = algorithm.calculate(flameParams, ppOutput);
 	    
-		if(output!=nullptr)
+		if(result==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
 		{
-		    *ppOutput=output;
-		    		    
 		    return FractalFlameAlgorithm::CalculateFractalResult::SUCCESS;
 		}
 		else
@@ -113,20 +115,25 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlame::screensaver(unsigned
 			}
 			else
 			{
-			    *ppOutput=nullptr;
-			    return FractalFlameAlgorithm::CalculateFractalResult::BAD_PICTURE;
+			    return result;
 			}
 		}
 	}
 	
-	*ppOutput=nullptr;
-	return FractalFlameAlgorithm::CalculateFractalResult::BAD_PICTURE;
+	return result;
 }
 
 
 void FractalFlame::setStopFlag()
 {
     algorithm.setStopFlag(true);
+}
+
+void FractalFlame::initFlameLibrary()
+{
+    srand(time(NULL));
+    setlocale(LC_NUMERIC,"C");
+    initVariations();
 }
 
 

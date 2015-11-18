@@ -2,6 +2,7 @@
 
 #include <string.h>
 #include <algorithm>
+#include <iostream>
 
 #include <filesystem_utils.h>
 
@@ -22,21 +23,16 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
         {
             numberOfThreads = 1;
         }
-    }
+    }        
     
-    numberOfFractals=numberOfThreads;
     outputSize = pictureWidth * pictureHeight;
-    
-    //fractals=new FractalPoolData*[numberOfThreads];
     
     for(int i=0;i<numberOfThreads;++i)
     {
-        //fractals[i]=new FractalData();
         fractals.push_back(unique_ptr<FractalPoolData>(new FractalPoolData()));        
         fractals[i]->fractal.screensaverInit(pictureWidth,pictureHeight);
     }
     
-    //pool=unique_ptr<ThreadPool>(new ThreadPool(numberOfThreads));
     pool=new ThreadPool(numberOfThreads);
     
     
@@ -51,19 +47,12 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
 
 FractalThreadPoolController::~FractalThreadPoolController()
 {
-    for(int i=0;i<numberOfFractals;++i)
+    for(auto& fractal_ptr : fractals)
     {
-        fractals[i]->fractal.setStopFlag();
-    }    
-    
-    delete pool;
-    
-    /*for(int i=0;i<numberOfFractals;++i)
-    {
-        delete fractals[i];
+        fractal_ptr->fractal.setStopFlag();
     }
-    
-    delete[] fractals;*/
+        
+    delete pool;
 }
 
 void* ThreadFractalFunction(void *dataInput)
@@ -86,7 +75,7 @@ FractalFlameAlgorithm::CalculateFractalResult FractalThreadPoolController::getRe
     FractalPoolData *fData = (FractalPoolData*)pool->getResult();
     
     FractalFlameAlgorithm::CalculateFractalResult result = fData->result;
-    
+        
     if(fData->result == FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
     {
         memcpy(output,fData->output,sizeof(unsigned int) * outputSize);
@@ -109,9 +98,6 @@ FractalFlameAlgorithm::CalculateFractalResult FractalThreadPoolController::getRe
 
 void FractalThreadPoolController::startTasks()
 {
-    //for(int i=0;i<fractals.size();++i)
-    //{        
-        //FractalPoolData *fractal = fractals[i].get();
     for(auto& fractal_ptr : fractals)
     {
         FractalPoolData *fractal = fractal_ptr.get();
