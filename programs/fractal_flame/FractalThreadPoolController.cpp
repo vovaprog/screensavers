@@ -25,6 +25,7 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
         }
     }        
     
+    
     outputSize = pictureWidth * pictureHeight;
     
     for(int i=0;i<numberOfThreads;++i)
@@ -35,14 +36,12 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
     
     pool=new ThreadPool(numberOfThreads);
     
-    
-#ifndef NO_IMAGE_FUNCTIONS    
+        
     if(directoryExists(saveDirName))
     {	
         deleteDirectory(saveDirName);						
     }   
-    createDirectory(saveDirName);
-#endif    
+    createDirectory(saveDirName);    
 }
 
 FractalThreadPoolController::~FractalThreadPoolController()
@@ -82,13 +81,11 @@ FractalFlameAlgorithm::CalculateFractalResult FractalThreadPoolController::getRe
     }    
 
     
-//#ifndef NO_IMAGE_FUNCTIONS    
-//    fData->fractal->saveCurrentFractal(saveDirName,imageCounter % saveNumberOfImages);
-//#endif    
-    
+    fData->fractal.screensaverSaveCurrentFractal((string(saveDirName)+"/"+to_string(imageCounter % saveNumberOfImages)).c_str());
+        
     imageCounter += 1;
     
-    
+
     calcQueue.remove(fData);
     
     startTasks();

@@ -101,10 +101,10 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlame::screensaver(unsigned
     
 	for(int i=0;i<30;i++)
 	{	    
-	    result = algorithm.calculate(flameParams, ppOutput);
+	    result = algorithm.calculate(flameParams, ppOutput);	    
 	    
 		if(result==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
-		{
+		{		    
 		    return FractalFlameAlgorithm::CalculateFractalResult::SUCCESS;
 		}
 		else
@@ -123,6 +123,24 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlame::screensaver(unsigned
 	return result;
 }
 
+
+void FractalFlame::screensaverSaveCurrentFractal(const char* fileName)
+{
+    FractalFlameAlgorithm::CalculateFractalResult result = algorithm.getLastResult();
+    
+    if(result == FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
+    {
+        shared_ptr<FlameParameters> fp = algorithm.getFlameParameters();
+        shared_ptr<RenderParameters> rp = algorithm.getRenderParameters();
+        unsigned int *output=algorithm.getOutput();
+        
+        if(output!=nullptr && fp && rp)
+        {
+            saveImage((string(fileName)+".png").c_str(), "png", output, rp->pictureWidth, rp->pictureHeight);
+            fp->save((string(fileName)+".xml").c_str());
+        }
+    }
+}
 
 void FractalFlame::setStopFlag()
 {

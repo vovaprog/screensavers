@@ -309,7 +309,6 @@ void FractalFlameAlgorithm::resetVariables()
 
 
 FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::calculate(std::shared_ptr<FlameParameters> params, unsigned int **ppOutput)
-//unsigned int* FractalFlameAlgorithm::calculate(shared_ptr<FlameParameters> params)
 {
     resetVariables();
     
@@ -317,6 +316,7 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::calculate(s
     fp->setViewBoundsForPictureSize(rp->pictureWidth,rp->pictureHeight);
     
     FractalFlameAlgorithm::CalculateFractalResult result = calculateFractal();
+    lastCalculateResult = result;
     
     if(result==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
     {
@@ -345,3 +345,26 @@ std::shared_ptr<FlameParameters> FractalFlameAlgorithm::getFlameParameters()
 {
     return fp;    
 }
+
+std::shared_ptr<RenderParameters> FractalFlameAlgorithm::getRenderParameters()
+{
+    return rp;    
+}
+
+unsigned int* FractalFlameAlgorithm::getOutput()
+{
+    if(lastCalculateResult==CalculateFractalResult::SUCCESS)
+    {
+        return output.get();
+    }
+    else
+    {
+        return nullptr;
+    }
+}
+
+FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::getLastResult()
+{
+    return lastCalculateResult;
+}
+

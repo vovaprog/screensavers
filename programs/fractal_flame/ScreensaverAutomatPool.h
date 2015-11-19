@@ -31,8 +31,8 @@ private:
     enum class AutomatState{ FIRST,SECOND,SHOW_IDLE,WAIT_RESULT,TRANSIT_START,TRANSIT_PROCESS };    
     
     AutomatState state;
-    const unsigned int TRANSIT_MILLIS = 3 * 1000;
-    const unsigned int SHOW_MILLIS = 5 * 1000;
+    const unsigned int TRANSIT_MILLIS = 1*1000;
+    const unsigned int SHOW_MILLIS = 3*1000;
     const unsigned int WAIT_RESULT_MILLIS = 1 * 1000;
     const unsigned int SECOND_MILLIS = 1 * 1000;
     

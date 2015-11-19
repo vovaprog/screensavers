@@ -11,16 +11,19 @@
 
 class FractalFlameAlgorithm{
 public:
-    enum class CalculateFractalResult { SUCCESS, BAD_PICTURE };    
+    enum class CalculateFractalResult { NONE, SUCCESS, BAD_PICTURE };    
     
     void setRenderParameters(std::shared_ptr<RenderParameters> renderParams);
-    //unsigned int* calculate(std::shared_ptr<FlameParameters> params);
+    
     FractalFlameAlgorithm::CalculateFractalResult calculate(std::shared_ptr<FlameParameters> params, unsigned int **ppOutput);
 
     void setStopFlag(bool value);
     bool getStopFlag();
     
     std::shared_ptr<FlameParameters> getFlameParameters();
+    std::shared_ptr<RenderParameters> getRenderParameters();    
+    unsigned int* getOutput();
+    CalculateFractalResult getLastResult();
     
 private:        
     void convertScreenToMath(double &x, double &y);
@@ -59,6 +62,6 @@ private:
     unsigned int goodPointCounter=0;
     unsigned int badPointCounter=0;
     
-    bool firstTimeInitFunctionsRandom=true;
+    CalculateFractalResult lastCalculateResult = CalculateFractalResult::NONE;
     //=====variables=====    
 };

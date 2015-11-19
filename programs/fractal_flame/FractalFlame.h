@@ -14,14 +14,15 @@ public:
     
     void screensaverInit(int width, int height);
     FractalFlameAlgorithm::CalculateFractalResult screensaver(unsigned int **ppOutput);
-
+    void screensaverSaveCurrentFractal(const char* fileName);
+    
     void setStopFlag();
     
     static void initFlameLibrary();
     
 private:    
     
-    FractalFlameAlgorithm algorithm;
-    
+    FractalFlameAlgorithm algorithm;    
+
 };
 
