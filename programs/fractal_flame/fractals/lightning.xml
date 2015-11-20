@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<flames>
+    <flame>
+        <xform>
+            <variation name="tangent" />
+            <preTransformX x="0.753000" y="0.239000" c="0.483000" />
+            <preTransformY x="-0.369000" y="0.512000" c="0.396000" />
+            <postTransformX x="0.908100" y="-0.028600" c="0.028800" />
+            <postTransformY x="-0.059400" y="0.931200" c="-0.060000" />
+            <color r="255" g="240" b="193" />
+        </xform>
+        <xform>
+            <variation name="julia" />
+            <preTransformX x="0.866500" y="-0.243000" c="0.072000" />
+            <preTransformY x="0.045000" y="0.747500" c="-0.260000" />
+            <postTransformX x="0.953200" y="0.040800" c="0.077200" />
+            <postTransformY x="-0.032600" y="0.975000" c="0.025000" />
+            <color r="251" g="172" b="220" />
+        </xform>
+        <xform>
+            <variation name="spherical" />
+            <variation name="noise" />
+            <preTransformX x="0.905500" y="0.433000" c="0.022000" />
+            <preTransformY x="0.398000" y="0.711500" c="-0.422000" />
+            <postTransformX x="0.941400" y="0.055600" c="-0.017200" />
+            <postTransformY x="-0.010200" y="0.988900" c="-0.058600" />
+            <color r="152" g="174" b="255" />
+        </xform>
+        <renderParameters colorPower="0.500000" setBoundsAxis="x" yLowerBound="-1.400000" yUpperBound="1.400000" setBoundsRatio="1.000000" setBoundsCenter="0.000000" />
+    </flame>
+</flames>

@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<flames>
+    <flame>
+        <xform>
+            <variation name="spherical" />
+            <variation name="cosine" />
+            <preTransformX x="0.661000" y="0.044000" c="-0.177000" />
+            <preTransformY x="0.425000" y="0.641500" c="-0.004000" />
+            <postTransformX x="0.930200" y="-0.067400" c="0.014600" />
+            <postTransformY x="-0.018800" y="0.968100" c="0.010400" />
+            <color r="193" g="255" b="176" />
+        </xform>
+        <xform>
+            <variation name="gaussian" />
+            <preTransformX x="0.630500" y="0.390000" c="0.266000" />
+            <preTransformY x="-0.272000" y="0.876500" c="-0.232000" />
+            <postTransformX x="0.908300" y="0.071200" c="-0.041600" />
+            <postTransformY x="-0.046400" y="0.996600" c="-0.048200" />
+            <color r="199" g="199" b="120" />
+        </xform>
+        <xform>
+            <variation name="spherical" />
+            <variation name="bent" />
+            <variation name="cosine" />
+            <preTransformX x="0.562500" y="-0.236000" c="-0.267000" />
+            <preTransformY x="-0.051000" y="0.988500" c="0.052000" />
+            <postTransformX x="0.964700" y="-0.093400" c="0.005200" />
+            <postTransformY x="0.074000" y="0.943900" c="-0.060600" />
+            <color r="155" g="172" b="240" />
+        </xform>
+        <renderParameters colorPower="0.500000" setBoundsAxis="x" yLowerBound="-2.500000" yUpperBound="2.500000" setBoundsRatio="1.000000" setBoundsCenter="0.000000" />
+    </flame>
+</flames>
