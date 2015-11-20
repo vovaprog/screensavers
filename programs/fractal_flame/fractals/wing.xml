@@ -1,8 +1,24 @@
 <?xml version="1.0" ?>
-<Flames>
+<flames>
     <flame>
-        <xform bubble="1.0" spherical="1.0" horseshoe="1.0" coefs="0.900200 0.016800 0.134800 0.985800 -0.147600 0.010000" post="0.935200 0.140800 -0.080400 0.933400 -0.055600 -0.119200" r="180" g="230" b="255"/>
-        <xform spherical="1.0" coefs="0.915800 0.017600 -0.182800 0.874800 -0.092000 -0.197200" post="0.958000 -0.074800 -0.040800 0.861200 0.054400 -0.084000" r="190" g="255" b="180"/>
-        <renderParameters yLowerBound="-2.4" yUpperBound="1.1" xViewBoundsRatio="0.9" xViewBoundsCenter="-0.75" colorPower="0.5" />
+        <xform>
+            <variation name="spherical" />
+            <variation name="horseshoe" />
+            <variation name="bubble" />
+            <preTransformX x="0.900200" y="0.134800" c="-0.147600" />
+            <preTransformY x="0.016800" y="0.985800" c="0.010000" />
+            <postTransformX x="0.935200" y="-0.080400" c="-0.055600" />
+            <postTransformY x="0.140800" y="0.933400" c="-0.119200" />
+            <color r="180" g="230" b="255" />
+        </xform>
+        <xform>
+            <variation name="spherical" />
+            <preTransformX x="0.915800" y="-0.182800" c="-0.092000" />
+            <preTransformY x="0.017600" y="0.874800" c="-0.197200" />
+            <postTransformX x="0.958000" y="-0.040800" c="0.054400" />
+            <postTransformY x="-0.074800" y="0.861200" c="-0.084000" />
+            <color r="190" g="255" b="180" />
+        </xform>
+        <renderParameters colorPower="0.500000" setBoundsAxis="x" yLowerBound="-2.400000" yUpperBound="1.100000" setBoundsRatio="0.900000" setBoundsCenter="-0.750000" />
     </flame>
-</Flames>
+</flames>

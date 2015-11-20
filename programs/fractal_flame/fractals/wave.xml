@@ -1,9 +1,30 @@
 <?xml version="1.0" ?>
-<Flames>
+<flames>
     <flame>
-        <xform ex="1.0" coefs="0.830200 -0.045200 -0.184400 0.944200 0.073200 0.187600" post="0.901000 -0.160800 -0.131200 0.916200 -0.032000 -0.050000" r="255" g="180" b="170" />
-        <xform swirl="1.0" coefs="0.829600 0.056000 0.143200 0.913200 0.062800 -0.160800" post="0.962600 -0.056800 0.166800 0.805800 -0.153200 0.007200" r="255" g="230" b="164" />
-        <xform heart="1.0" coefs="0.978800 0.181200 -0.049600 0.890400 0.120000 0.028800" post="0.919400 -0.042800 0.187200 0.895400 -0.080000 -0.013600" r="169" g="197" b="255" />
-        <renderParameters xLowerBound="-1.2" xUpperBound="1.2" yViewBoundsRatio="1.0" yViewBoundsCenter="-0.075"/>
+        <xform>
+            <variation name="ex" />
+            <preTransformX x="0.830200" y="-0.184400" c="0.073200" />
+            <preTransformY x="-0.045200" y="0.944200" c="0.187600" />
+            <postTransformX x="0.901000" y="-0.131200" c="-0.032000" />
+            <postTransformY x="-0.160800" y="0.916200" c="-0.050000" />
+            <color r="255" g="180" b="170" />
+        </xform>
+        <xform>
+            <variation name="swirl" />
+            <preTransformX x="0.829600" y="0.143200" c="0.062800" />
+            <preTransformY x="0.056000" y="0.913200" c="-0.160800" />
+            <postTransformX x="0.962600" y="0.166800" c="-0.153200" />
+            <postTransformY x="-0.056800" y="0.805800" c="0.007200" />
+            <color r="255" g="230" b="164" />
+        </xform>
+        <xform>
+            <variation name="heart" />
+            <preTransformX x="0.978800" y="-0.049600" c="0.120000" />
+            <preTransformY x="0.181200" y="0.890400" c="0.028800" />
+            <postTransformX x="0.919400" y="0.187200" c="-0.080000" />
+            <postTransformY x="-0.042800" y="0.895400" c="-0.013600" />
+            <color r="169" g="197" b="255" />
+        </xform>
+        <renderParameters colorPower="0.500000" setBoundsAxis="y" xLowerBound="-1.200000" xUpperBound="1.200000" setBoundsRatio="1.000000" setBoundsCenter="-0.075000" />
     </flame>
-</Flames>
+</flames>

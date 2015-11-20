@@ -1,8 +1,23 @@
 <?xml version="1.0" ?>
-<Flames>
+<flames>
     <flame>
-        <xform disk="1.0" coefs="0.940000 -0.054800 0.093600 0.940800 0.075200 0.042000" post="0.907000 -0.150400 0.102000 0.889000 0.002400 0.068800" r="255" g="110" b="100"/>
-        <xform bent="1.0" polar="1.0" coefs="0.842400 -0.118400 -0.125200 0.954200 0.026400 0.070400" post="0.972600 -0.126000 -0.025200 0.803600 0.121200 -0.032000" r="150" g="255" b="100"/>
-        <renderParameters yLowerBound="-1.1" yUpperBound="0.8" xViewBoundsRatio="1.5" />
+        <xform>
+            <variation name="disk" />
+            <preTransformX x="0.940000" y="0.093600" c="0.075200" />
+            <preTransformY x="-0.054800" y="0.940800" c="0.042000" />
+            <postTransformX x="0.907000" y="0.102000" c="0.002400" />
+            <postTransformY x="-0.150400" y="0.889000" c="0.068800" />
+            <color r="255" g="110" b="100" />
+        </xform>
+        <xform>
+            <variation name="polar" />
+            <variation name="bent" />
+            <preTransformX x="0.842400" y="-0.125200" c="0.026400" />
+            <preTransformY x="-0.118400" y="0.954200" c="0.070400" />
+            <postTransformX x="0.972600" y="-0.025200" c="0.121200" />
+            <postTransformY x="-0.126000" y="0.803600" c="-0.032000" />
+            <color r="150" g="255" b="100" />
+        </xform>
+        <renderParameters colorPower="0.500000" setBoundsAxis="x" yLowerBound="-1.100000" yUpperBound="0.800000" setBoundsRatio="1.500000" setBoundsCenter="0.000000" />
     </flame>
-</Flames>
+</flames>
