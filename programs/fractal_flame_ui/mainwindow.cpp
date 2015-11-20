@@ -11,6 +11,7 @@
 #include <memory>
 #include <vector>
 
+#include <FractalFlame.h>
 #include <filesystem_utils.h>
 #include <image_utils.h>
 
@@ -21,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    FractalFlame::initFlameLibrary();
 
     scene = new QGraphicsScene;
     ui->mainGraphicsView->setScene(scene);
@@ -377,9 +380,10 @@ bool MainWindow::calculateFlame(unsigned int iterations)
     ReadFlameParametersFromControls(fp);
 
     fractalAlgo.setRenderParameters(rp);
-    unsigned int *output = fractalAlgo.calculate(fp);
+    unsigned int *output = nullptr;
+    FractalFlameAlgorithm::CalculateFractalResult result = fractalAlgo.calculate(fp,&output);
 
-    if(output!=nullptr)
+    if(result==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
     {
         QImage img((uchar*)output, rp->pictureWidth, rp->pictureHeight, QImage::Format_RGB32);
 
@@ -421,7 +425,7 @@ void MainWindow::on_butRandomFlame_clicked()
 {
     shared_ptr<FlameParameters> fp(new FlameParameters());
 
-    for(int i=0;i<10;i++)
+    for(int i=0;i<20;i++)
     {
         fp->initRandom();
 
@@ -473,9 +477,10 @@ void MainWindow::on_butSaveFlame_clicked()
     rp->numberOfIterations=ui->spinIterationsFast->value();
 
     fractalAlgo.setRenderParameters(rp);
-    unsigned int *output = fractalAlgo.calculate(fp);
+    unsigned int *output = nullptr;
+    FractalFlameAlgorithm::CalculateFractalResult result = fractalAlgo.calculate(fp, &output);
 
-    if(output!=nullptr)
+    if(result==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
     {
         saveImage((fileName+".png").c_str(), "png", output, rp->pictureWidth, rp->pictureHeight);
     }
@@ -514,33 +519,42 @@ void MainWindow::on_butT1Color_clicked()
     selectColor(ui->spinT1R,ui->spinT1G,ui->spinT1B,ui->colorT1Display);
 }
 
+//macro to suppress unused warning
+#define UNUSED(x) (void)(x)
+
 void MainWindow::on_spinT0R_valueChanged(int arg1)
 {
+    UNUSED(arg1);
     displayColor(ui->spinT0R,ui->spinT0G,ui->spinT0B,ui->colorT0Display);
 }
 
 void MainWindow::on_spinT0G_valueChanged(int arg1)
 {
+    UNUSED(arg1);
     displayColor(ui->spinT0R,ui->spinT0G,ui->spinT0B,ui->colorT0Display);
 }
 
 void MainWindow::on_spinT0B_valueChanged(int arg1)
 {
+    UNUSED(arg1);
     displayColor(ui->spinT0R,ui->spinT0G,ui->spinT0B,ui->colorT0Display);
 }
 
 void MainWindow::on_spinT1R_valueChanged(int arg1)
 {
+    UNUSED(arg1);
     displayColor(ui->spinT1R,ui->spinT1G,ui->spinT1B,ui->colorT1Display);
 }
 
 void MainWindow::on_spinT1G_valueChanged(int arg1)
 {
+    UNUSED(arg1);
     displayColor(ui->spinT1R,ui->spinT1G,ui->spinT1B,ui->colorT1Display);
 }
 
 void MainWindow::on_spinT1B_valueChanged(int arg1)
 {
+    UNUSED(arg1);
     displayColor(ui->spinT1R,ui->spinT1G,ui->spinT1B,ui->colorT1Display);
 }
 
@@ -551,16 +565,19 @@ void MainWindow::on_butT2Color_clicked()
 
 void MainWindow::on_spinT2R_valueChanged(int arg1)
 {
+    UNUSED(arg1);
     displayColor(ui->spinT2R,ui->spinT2G,ui->spinT2B,ui->colorT2Display);
 }
 
 void MainWindow::on_spinT2G_valueChanged(int arg1)
 {
+    UNUSED(arg1);
     displayColor(ui->spinT2R,ui->spinT2G,ui->spinT2B,ui->colorT2Display);
 }
 
 void MainWindow::on_spinT2B_valueChanged(int arg1)
 {
+    UNUSED(arg1);
     displayColor(ui->spinT2R,ui->spinT2G,ui->spinT2B,ui->colorT2Display);
 }
 
@@ -624,13 +641,34 @@ void MainWindow::on_comboSetBoundsAxis_currentIndexChanged(const QString &arg1)
 
 void MainWindow::keyPressEvent(QKeyEvent* event)
 {
-    if(event->key() == Qt::Key_Q)
-    {
+    switch(event->key()){
+    case Qt::Key_Q:
         calculateFlame(ui->spinIterationsFast->value());
-    }
-    else if(event->key() == Qt::Key_W)
-    {
+        break;
+    case Qt::Key_W:
         calculateFlame(ui->spinIterationsGood->value());
+        break;
+    case Qt::Key_R:
+        on_butRandomFlame_clicked();
+        break;
+    case Qt::Key_O:
+        on_butOpenFlame_clicked();
+        break;
+    case Qt::Key_S:
+        on_butSaveFlame_clicked();
+        break;
+    case Qt::Key_1:
+        on_butSetBounds1_clicked();
+        break;
+    case Qt::Key_2:
+        on_butSetBounds2_clicked();
+        break;
+    case Qt::Key_3:
+        on_butSetBounds3_clicked();
+        break;
+    case Qt::Key_4:
+        on_butSetBounds4_clicked();
+        break;
     }
 }
 

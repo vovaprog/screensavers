@@ -298,6 +298,8 @@ static vector<Variation> variations;
 
 void initVariations()
 {
+    variations.clear();
+    
     Variation v;
     
     v.name="sinusoidal";

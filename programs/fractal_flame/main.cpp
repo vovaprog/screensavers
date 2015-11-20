@@ -7,11 +7,8 @@
 
 #include <ConstantFps.h>
 
-#ifdef USE_THREAD_POOL
-#   include "ScreensaverAutomatPool.h" 
-#else
-#   include "ScreensaverAutomat.h"
-#endif
+
+#include "ScreensaverAutomatPool.h" 
 
 #include "FractalFlame.h"
 
@@ -26,11 +23,9 @@ static int window;
 
 static bool isFullScreen=true;
 
-#ifdef USE_THREAD_POOL
+
 static ScreensaverAutomatPool *screensaver;
-#else
-static ScreensaverAutomat *screensaver;
-#endif
+
 
 static ConstantFps constFps(CONSTANT_FPS_VALUE);
 
@@ -90,12 +85,7 @@ static void startScreensaver(int argc, char **argv)
     }
 
     
-//#ifdef USE_THREAD_POOL
-
     screensaver=new ScreensaverAutomatPool(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
-/*#else    
-    screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
-#endif*/    
     
 
     //====================================================================

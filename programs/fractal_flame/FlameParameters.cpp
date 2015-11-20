@@ -521,10 +521,10 @@ void FlameParameters::prepare()
 
 void FlameParameters::resetVariables()
 {
-    xLowerBound=-1.0;
-    xUpperBound=1.0;
-    yLowerBound=-1.0;
-    yUpperBound=1.0;
+    xLowerBound=-DEFAULT_BOUNDS_VALUE;
+    xUpperBound=DEFAULT_BOUNDS_VALUE;
+    yLowerBound=-DEFAULT_BOUNDS_VALUE;
+    yUpperBound=DEFAULT_BOUNDS_VALUE;
     
     colorPower = 0.5;
     

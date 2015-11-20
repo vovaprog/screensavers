@@ -25,7 +25,6 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
         }
     }        
     
-    
     outputSize = pictureWidth * pictureHeight;
     
     for(int i=0;i<numberOfThreads;++i)

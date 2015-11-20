@@ -26,21 +26,21 @@
       <item>
        <widget class="QPushButton" name="butRandomFlame">
         <property name="text">
-         <string>random</string>
+         <string>random (r)</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="butOpenFlame">
         <property name="text">
-         <string>open</string>
+         <string>open (o)</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="butSaveFlame">
         <property name="text">
-         <string>save</string>
+         <string>save (s)</string>
         </property>
        </widget>
       </item>
@@ -148,7 +148,7 @@
               <rect>
                <x>0</x>
                <y>0</y>
-               <width>348</width>
+               <width>378</width>
                <height>529</height>
               </rect>
              </property>

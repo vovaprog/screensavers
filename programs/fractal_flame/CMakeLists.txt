@@ -9,9 +9,7 @@ include_directories("." ${MYLIB})
 set(SOURCE FractalFlame.cpp FractalFlameAlgorithm.cpp FlameParameters.cpp Variation.cpp  
            FractalThreadPoolController.cpp ScreensaverAutomatPool.cpp main.cpp 
            ${MYLIB}/image_utils.cpp ${MYLIB}/filesystem_utils.cpp ${MYLIB}/small_utils.cpp ${MYLIB}/ThreadPool.cpp)
-           
-#ScreensaverAutomat.cpp FractalThreadController.cpp            
-
+                      
         
 if(MSVC OR MINGW)
     set(CPPLIBS "C:/cpplibs")
@@ -38,13 +36,12 @@ else()
 endif()
 
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_THREAD_POOL")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_LOOKUP")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_IMAGE_FUNCTIONS")
 #set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DNO_XML_FUNCTIONS")
 
 
-#add_library(fractal_flame_library ${SOURCE})
+add_library(fractal_flame_library ${SOURCE})
 add_executable(fractal_flame ${SOURCE})
 
 

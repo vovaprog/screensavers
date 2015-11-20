@@ -26,8 +26,9 @@ private:
     void prepareLocale();
     
 public:    
-    double xLowerBound=-1.0, xUpperBound=1.0;
-    double yLowerBound=-1.0, yUpperBound=1.0;
+    const double DEFAULT_BOUNDS_VALUE = 1.5;    
+    double xLowerBound=-DEFAULT_BOUNDS_VALUE, xUpperBound=DEFAULT_BOUNDS_VALUE;
+    double yLowerBound=-DEFAULT_BOUNDS_VALUE, yUpperBound=DEFAULT_BOUNDS_VALUE;
     
     double colorPower = 0.5;
     std::vector<std::unique_ptr<Function>> functions;
