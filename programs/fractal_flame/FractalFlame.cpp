@@ -1,4 +1,5 @@
 #include <string>
+#include <cstdlib>
 
 #include "FractalFlame.h"
 #include "image_utils.h"
