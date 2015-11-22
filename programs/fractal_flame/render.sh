@@ -2,8 +2,10 @@
 
 WIDTH=1680
 HEIGHT=1050
-ITERATIONS=1000000000
+ITERATIONS=2000000000
 FRACFILE="crystal.xml"
+FRACFOLDER="./fractals"
+FRACPROGRAM="./build/fractal_flame"
 
-./build/fractal_flame --mode render --width $WIDTH --height $HEIGHT --iterations $ITERATIONS --input-file ./fractals/$FRACFILE
+$FRACPROGRAM --mode render --width $WIDTH --height $HEIGHT --iterations $ITERATIONS --input-file $FRACFOLDER/$FRACFILE
 
