@@ -49,8 +49,32 @@ static void initColorMap()
 	colorMap = clrMapData.GetColorMap();    
 }
 
+static MovingValue xAngle(0.055,0.001,-5,5,0.055,0.0);
+static MovingValue yAngle(0.045,0.001,-5,5,0.045,0.0);
+static MovingValue zAngle(0.05,0.001,-5,5,0.05,0.0);
+
 static void drawGLScene() 
 {	
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    float w = glutGet( GLUT_WINDOW_WIDTH );
+    float h = glutGet( GLUT_WINDOW_HEIGHT );
+    gluPerspective(60, w / h, 0.1, 300);
+
+    glMatrixMode( GL_MODELVIEW );
+    glLoadIdentity();
+    
+    glTranslatef(0,0,-2);
+    glRotatef(xAngle.step(),1,0,0);
+    glRotatef(yAngle.step(),0,1,0);
+	glRotatef(zAngle.step(),0,0,1);
+
+    
+    
+    
 	setUniform2f(shaderProgram, "c", koefReD.step(), koefImD.step());
 	setUniform1f(shaderProgram, "bound", movingHighBound.step());
 
