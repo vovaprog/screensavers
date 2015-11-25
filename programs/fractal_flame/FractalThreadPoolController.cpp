@@ -11,6 +11,12 @@ using namespace std;
 
 FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pictureHeight,int numberOfThreads /* =0 */)
 {
+#ifdef SCREENSAVER_ONE_THREAD    
+    
+    numberOfThreads = 1;
+
+#else
+
     if(numberOfThreads<=0)
     {
         numberOfThreads=ThreadPool::getNumberOfProcessors();
@@ -23,7 +29,9 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
         {
             numberOfThreads = 1;
         }
-    }        
+    }
+
+#endif    
     
     outputSize = pictureWidth * pictureHeight;
     
