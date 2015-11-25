@@ -6,11 +6,14 @@
 #include "Function.h"
 
 class FlameParameters{
-public:          
+public:    
+    
+#ifndef NO_XML_FUNCTIONS    
     void load(const char *fileName);
     void load_old(const char *fileName);
     
     void save(const char *fileName);
+#endif    
     
     void initRandom();
     

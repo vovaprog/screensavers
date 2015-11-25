@@ -2,18 +2,9 @@
 #include <stdlib.h>
 
 
-#ifdef USE_THREAD_POOL
-
 #include <ScreensaverAutomatPool.h>
 static ScreensaverAutomatPool *screensaver;
 static const int NUMBER_OF_THREADS = 2;
-
-#else
-
-#include <ScreensaverAutomat.h>
-static ScreensaverAutomat *screensaver;
-
-#endif
 
 
 static int pictureWidth, pictureHeight;
@@ -29,11 +20,7 @@ Java_screensavers_fractalflame_FractalFlameView_fractaFlameInit(JNIEnv *env, job
     pictureWidth = PictureWidthParameter;
     pictureHeight = PictureHeightParameter;
     
-#ifdef USE_THREAD_POOL
     screensaver=new ScreensaverAutomatPool(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE,NUMBER_OF_THREADS);
-#else    
-    screensaver=new ScreensaverAutomat(pictureWidth,pictureHeight,CONSTANT_FPS_VALUE);
-#endif            
 }
     
     

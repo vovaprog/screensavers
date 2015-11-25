@@ -2,10 +2,16 @@
 #include <cstdlib>
 
 #include "FractalFlame.h"
-#include "image_utils.h"
-#include "filesystem_utils.h"
+
+#ifndef NO_IMAGE_FUNCTIONS
+#   include "image_utils.h"
+#   include "filesystem_utils.h"
+#endif
 
 using namespace std;
+
+
+#ifndef NO_IMAGE_FUNCTIONS
 
 void FractalFlame::render(shared_ptr<RenderParameters> renderParams, const char *fileName)
 {
@@ -76,6 +82,26 @@ void FractalFlame::preview(int numberOfPreviews, shared_ptr<RenderParameters> re
 	}        
 }
 
+void FractalFlame::screensaverSaveCurrentFractal(const char* fileName)
+{
+    FractalFlameAlgorithm::CalculateFractalResult result = algorithm.getLastResult();
+    
+    if(result == FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
+    {
+        shared_ptr<FlameParameters> fp = algorithm.getFlameParameters();
+        shared_ptr<RenderParameters> rp = algorithm.getRenderParameters();
+        unsigned int *output=algorithm.getOutput();
+        
+        if(output!=nullptr && fp && rp)
+        {
+            saveImage((string(fileName)+".png").c_str(), "png", output, rp->pictureWidth, rp->pictureHeight);
+            fp->save((string(fileName)+".xml").c_str());
+        }
+    }
+}
+
+#endif
+
 void FractalFlame::screensaverInit(int width, int height)
 {
     shared_ptr<RenderParameters> rp(new RenderParameters());
@@ -122,25 +148,6 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlame::screensaver(unsigned
 	}
 	
 	return result;
-}
-
-
-void FractalFlame::screensaverSaveCurrentFractal(const char* fileName)
-{
-    FractalFlameAlgorithm::CalculateFractalResult result = algorithm.getLastResult();
-    
-    if(result == FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
-    {
-        shared_ptr<FlameParameters> fp = algorithm.getFlameParameters();
-        shared_ptr<RenderParameters> rp = algorithm.getRenderParameters();
-        unsigned int *output=algorithm.getOutput();
-        
-        if(output!=nullptr && fp && rp)
-        {
-            saveImage((string(fileName)+".png").c_str(), "png", output, rp->pictureWidth, rp->pictureHeight);
-            fp->save((string(fileName)+".xml").c_str());
-        }
-    }
 }
 
 void FractalFlame::setStopFlag()

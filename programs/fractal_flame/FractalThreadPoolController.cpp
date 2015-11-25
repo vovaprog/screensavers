@@ -35,12 +35,13 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
     
     pool=new ThreadPool(numberOfThreads);
     
-        
+#ifndef NO_IMAGE_FUNCTIONS        
     if(directoryExists(saveDirName))
     {	
         deleteDirectory(saveDirName);						
     }   
-    createDirectory(saveDirName);    
+    createDirectory(saveDirName);
+#endif    
 }
 
 FractalThreadPoolController::~FractalThreadPoolController()
@@ -79,10 +80,12 @@ FractalFlameAlgorithm::CalculateFractalResult FractalThreadPoolController::getRe
         memcpy(output,fData->output,sizeof(unsigned int) * outputSize);
     }    
 
-    
+
+#ifndef NO_IMAGE_FUNCTIONS    
     fData->fractal.screensaverSaveCurrentFractal((string(saveDirName)+"/"+to_string(imageCounter % saveNumberOfImages)).c_str());
         
     imageCounter += 1;
+#endif    
     
 
     calcQueue.remove(fData);

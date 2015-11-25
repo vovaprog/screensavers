@@ -28,9 +28,11 @@ private:
         unsigned int *output=nullptr;        
     };    
         
+#ifndef NO_IMAGE_FUNCTIONS    
     const char *saveDirName="./fractals/screensaver";
     const int saveNumberOfImages=20;
     int imageCounter=0;
+#endif    
     
     //not made auto ptr because must be destroyed before fractals
     ThreadPool *pool;    
