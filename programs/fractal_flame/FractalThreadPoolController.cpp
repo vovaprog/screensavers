@@ -11,12 +11,6 @@ using namespace std;
 
 FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pictureHeight,int numberOfThreads /* =0 */)
 {
-#ifdef SCREENSAVER_ONE_THREAD    
-    
-    numberOfThreads = 1;
-
-#else
-
     if(numberOfThreads<=0)
     {
         numberOfThreads=ThreadPool::getNumberOfProcessors();
@@ -29,9 +23,7 @@ FractalThreadPoolController::FractalThreadPoolController(int pictureWidth,int pi
         {
             numberOfThreads = 1;
         }
-    }
-
-#endif    
+    }    
     
     outputSize = pictureWidth * pictureHeight;
     
@@ -86,9 +78,9 @@ FractalFlameAlgorithm::CalculateFractalResult FractalThreadPoolController::getRe
     if(fData->result == FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
     {
         memcpy(output,fData->output,sizeof(unsigned int) * outputSize);
-    }    
+    } 
 
-
+    
 #ifndef NO_IMAGE_FUNCTIONS    
     fData->fractal.screensaverSaveCurrentFractal((string(saveDirName)+"/"+to_string(imageCounter % saveNumberOfImages)).c_str());
         

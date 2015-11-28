@@ -34,7 +34,7 @@ private:
     CalculateFractalResult plot(double mathX, double mathY, Function *pFun,unsigned int currentIteration);
     void findMinMaxOutput(unsigned int &minOutput,unsigned int &maxOutput);
     unsigned int histAnalysis(unsigned int minCounter,unsigned int maxCounter);
-    CalculateFractalResult createOutput();
+    CalculateFractalResult createOutput(unsigned int numberOfIterations);
     void applyFunction(Function *pFun, double &x, double &y);
     void cleanBuffers();
     CalculateFractalResult calculateFractal();

@@ -132,7 +132,7 @@ static void drawGLScene()
 	    
     glLoadIdentity();
     
-    glTranslatef(0,0,-2.7);
+    glTranslatef(0,0,-2.4);
     glRotatef(xAngle.step(),1,0,0);
     glRotatef(yAngle.step(),0,1,0);
 	glRotatef(zAngle.step(),0,0,1);
@@ -213,7 +213,8 @@ int main(int argc, char **argv)
 	{	
 		return -1;
 	}
-			
+
+    glutFullScreen();
 	
 	glutMainLoop();
 	return 0;

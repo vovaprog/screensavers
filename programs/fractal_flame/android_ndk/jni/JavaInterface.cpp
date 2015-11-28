@@ -3,7 +3,7 @@
 
 
 #include <ScreensaverAutomatPool.h>
-static ScreensaverAutomatPool *screensaver;
+static ScreensaverAutomatPool *screensaver = nullptr;
 static const int NUMBER_OF_THREADS = 2;
 
 
@@ -15,8 +15,19 @@ extern "C"
 {
 
 JNIEXPORT void JNICALL
-Java_screensavers_fractalflame_FractalFlameView_fractaFlameInit(JNIEnv *env, jobject obj, int PictureWidthParameter,int PictureHeightParameter)
+Java_screensavers_fractalflame_FractalFlame_fractaFlameInitLibrary(JNIEnv *env, jobject obj)
 {
+    FractalFlame::initFlameLibrary();
+}
+    
+JNIEXPORT void JNICALL
+Java_screensavers_fractalflame_FractalFlame_fractaFlameInit(JNIEnv *env, jobject obj, int PictureWidthParameter,int PictureHeightParameter)
+{
+    if(screensaver != nullptr)
+    {
+        delete screensaver;
+    }
+    
     pictureWidth = PictureWidthParameter;
     pictureHeight = PictureHeightParameter;
     
@@ -25,7 +36,7 @@ Java_screensavers_fractalflame_FractalFlameView_fractaFlameInit(JNIEnv *env, job
     
     
 JNIEXPORT void JNICALL
-Java_screensavers_fractalflame_FractalFlameView_fractalFlameNextFrame(JNIEnv *env, jobject obj, jintArray arr)
+Java_screensavers_fractalflame_FractalFlame_fractalFlameNextFrame(JNIEnv *env, jobject obj, jintArray arr)
 {
 	unsigned int *output = screensaver->nextFrame();
 	
@@ -37,11 +48,12 @@ Java_screensavers_fractalflame_FractalFlameView_fractalFlameNextFrame(JNIEnv *en
 }
 
 JNIEXPORT void JNICALL
-Java_screensavers_fractalflame_FractalFlameView_fractaFlameDestroy(JNIEnv *env, jobject obj)
+Java_screensavers_fractalflame_FractalFlame_fractaFlameDestroy(JNIEnv *env, jobject obj)
 {
     if(screensaver!=nullptr)
     {
         delete screensaver;
+        screensaver = nullptr;
     }
 }
 

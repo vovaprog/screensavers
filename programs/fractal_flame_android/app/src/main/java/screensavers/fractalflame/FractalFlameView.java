@@ -13,9 +13,6 @@ public class FractalFlameView extends View {
 
     private int pictureWidth, pictureHeight;
 
-    private native void fractaFlameInit(int Width,int Height);
-    private native void fractalFlameNextFrame(int[] Output);
-    private native void fractaFlameDestroy();
 
     private boolean firstInit = true;
 
@@ -39,10 +36,10 @@ public class FractalFlameView extends View {
         }
         else
         {
-            fractaFlameDestroy();
+            FractalFlame.fractaFlameDestroy();
         }
 
-        fractaFlameInit(pictureWidth, pictureHeight);
+        FractalFlame.fractaFlameInit(pictureWidth, pictureHeight);
     }
 
     @Override
@@ -63,7 +60,7 @@ public class FractalFlameView extends View {
             init();
         }
 
-        fractalFlameNextFrame(output);
+        FractalFlame.fractalFlameNextFrame(output);
 
         bmp.setPixels(output, 0, pictureWidth, 0, 0, pictureWidth, pictureHeight);
 

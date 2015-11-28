@@ -185,12 +185,19 @@ unsigned int FractalFlameAlgorithm::histAnalysis(unsigned int minCounter,unsigne
 }
 
 
-FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::createOutput()
+FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::createOutput(unsigned int numberOfIterations)
 {
     unsigned int maxCounter, minCounter;
     findMinMaxOutput(minCounter, maxCounter);
         
-    double maxCounterDivAll = (double)maxCounter / (double)rp->numberOfIterations;
+    if(numberOfIterations==0)
+    {
+    	cout <<"bad picture!"<<endl;
+    	memset(output.get(),0,outputSize * sizeof(unsigned int));
+    	return FractalFlameAlgorithm::CalculateFractalResult::BAD_PICTURE;        
+    }
+    
+    double maxCounterDivAll = (double)maxCounter / (double)numberOfIterations;
     
     if(maxCounter==0 || maxCounter<=minCounter+10 || maxCounterDivAll>=0.5)
     {
@@ -272,7 +279,8 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::calculateFr
     
     getInitialPoint(x,y);
     
-    for(unsigned int i=0;i<rp->numberOfIterations;i++)
+    unsigned int i = 0;
+    for(i=0;i<rp->numberOfIterations;i++)
     {        
         Function* pFun=getRandomFunction();
                 
@@ -297,7 +305,7 @@ FractalFlameAlgorithm::CalculateFractalResult FractalFlameAlgorithm::calculateFr
         }
     }
     
-    return createOutput();
+    return createOutput(i);    
 }
 
 
