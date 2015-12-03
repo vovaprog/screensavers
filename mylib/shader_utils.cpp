@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <GL/gl.h>
 
+#include <filesystem_utils.h>
+
 extern "C" { 
 
 GLhandleARB glCreateShaderObjectARB(GLenum);
@@ -22,27 +24,18 @@ void glUniform2f(GLint location, GLfloat v0, GLfloat v1);
 
 unsigned int setupShader(const char *fileName) 
 {
-	FILE *fp;
-	unsigned int prog, shaderObject, len;
+	unsigned int prog, shaderObject;
 	char *sourceCodeBuf;
 	int success, linked;
 
-	if(!(fp = fopen(fileName, "r"))) 
+	if(!readTextFile(fileName, &sourceCodeBuf))
 	{
-		fprintf(stderr, "failed to open shader file: %s\r\n", fileName);
-		return 0;
-	}
-	fseek(fp, 0, SEEK_END);
-	len = ftell(fp);
-	fseek(fp, 0, SEEK_SET);
-	sourceCodeBuf = (char*)malloc(len + 1);
-
-	len = fread(sourceCodeBuf, 1, len, fp);
-	sourceCodeBuf[len] = 0;
-
+	    return 0;
+	}	
+	
 	shaderObject = glCreateShaderObjectARB(GL_FRAGMENT_SHADER_ARB);
 	glShaderSourceARB(shaderObject, 1, (const char**)&sourceCodeBuf, 0);
-	free(sourceCodeBuf);
+	delete[] sourceCodeBuf;
 
 	glCompileShaderARB(shaderObject);
 	glGetObjectParameterivARB(shaderObject, GL_OBJECT_COMPILE_STATUS_ARB, &success);

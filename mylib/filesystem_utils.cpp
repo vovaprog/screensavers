@@ -1,4 +1,5 @@
 #include <boost/filesystem.hpp>
+#include <cstdio>
 
 using namespace boost::filesystem;
 
@@ -40,3 +41,27 @@ void deleteFile(const char *fileName)
 {
     remove(fileName);
 }
+
+bool readTextFile(const char *fileName, char **output)
+{
+    FILE *fp;
+    
+    if(!(fp = fopen(fileName, "r"))) 
+	{		
+		return false;
+	}
+	
+	fseek(fp, 0, SEEK_END);
+	long int length = ftell(fp);
+	fseek(fp, 0, SEEK_SET);
+	*output = new char[length+1];
+
+	length = fread(*output, 1, length, fp); 
+    
+	(*output)[length] = 0;
+	
+	fclose(fp);
+	
+	return true;
+}
+
