@@ -1,0 +1,211 @@
+<html>
+	<head>
+		<title>julia fractal webgl</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		
+	    <script src="three.min.js"></script>
+		
+		
+		<script id="vertexShader" type="x-shader/x-vertex">
+		
+			varying vec2 pos;
+
+			void main()
+			{
+				gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);                   
+                pos = vec2(position.x,position.y);
+			}
+			
+		</script>
+		
+
+		<script id="fragmentShader" type="x-shader/x-fragment">
+            varying vec2 pos;
+            uniform float koefRe;
+            uniform float koefIm;
+            uniform float zoom;
+						
+            void main() 
+            {
+                vec2 z = vec2(pos.x * zoom, pos.y * zoom);
+            
+                float checkDistanceSquare = 50.0 * 50.0;
+            
+                vec2 c = vec2(koefRe,  koefIm);
+                            
+                const int iterLimit = 160;
+                int iter=iterLimit;
+                for(int i=10; i<iterLimit-1; i++) 
+                {
+                    float x = (z.x * z.x - z.y * z.y) + c.x;
+                    float y = (z.y * z.x + z.x * z.y) + c.y;
+            
+                    if(x * x + y * y > checkDistanceSquare)
+                    {
+                       iter = i;
+                        break;
+                    }
+            
+                    z.x = x;
+                    z.y = y;
+                }
+                
+                float clr=float(iter) / float(iterLimit+1); 
+                if(clr>0.99) clr = 0.99;		
+            
+                gl_FragColor = vec4(clr,clr,clr,1.0);
+            }						
+		</script>
+		
+		
+		<script>
+		
+		    function movingValueInit(normalDValue,
+                            dIncValue,
+                            downBreakBound,
+                            upBreakBound,		
+                            initialDValue,
+                            initialControlledValue)
+            {
+                var mv = {
+                    normalDValue:normalDValue,
+                    dIncValue:dIncValue,
+                    downBreakBound:downBreakBound,
+                    upBreakBound:upBreakBound,			
+                    d:initialDValue,
+                    stateNormal:true,
+                    controlledValue:initialControlledValue
+                };
+                
+                return mv;
+            }
+		        
+            function startUpBreak(mv)
+            {	
+                mv.dInc=-mv.dIncValue;
+                mv.dTarget=-mv.normalDValue;
+                
+                mv.stateNormal=false;
+            }
+
+            function startDownBreak(mv)
+            {
+                mv.dInc=mv.dIncValue;
+                mv.dTarget=mv.normalDValue;
+        
+                mv.stateNormal=false;
+            }
+
+            function dReady(mv)
+            {
+                if((mv.dTarget>0 && mv.d>mv.dTarget) ||
+                    (mv.dTarget<0 && mv.d<mv.dTarget))	
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+		        
+            function movingValueStep(mv)
+            {
+                if(mv.stateNormal)
+                {
+                    if(mv.d>0 && mv.controlledValue>mv.upBreakBound)
+                    {
+                        startUpBreak(mv);
+                    }
+                    else if(mv.d<0 && mv.controlledValue<mv.downBreakBound)
+                    {
+                        startDownBreak(mv);
+                    }
+                }
+                else
+                {
+                    mv.d+=mv.dInc;
+                    
+                    if(dReady(mv))
+                    {
+                        mv.stateNormal=true;
+                    }
+                }
+                
+                mv.controlledValue += mv.d;
+                
+                return mv.controlledValue;
+            }
+        </script>            
+		
+        
+        <script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+			document.body.appendChild(renderer.domElement);
+			
+			
+			var geometry = new THREE.Geometry(); 
+            geometry.vertices.push(new THREE.Vector3(-1.0,  1.0, 0.0)); 
+            geometry.vertices.push(new THREE.Vector3( 1.0,  1.0, 0.0)); 
+            geometry.vertices.push(new THREE.Vector3( 1.0, -1.0, 0.0)); 
+            geometry.vertices.push(new THREE.Vector3(-1.0, -1.0, 0.0)); 
+            geometry.faces.push(new THREE.Face3(1, 0, 2)); 
+            geometry.faces.push(new THREE.Face3(2, 0, 3));			
+			
+			
+			var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    			
+            var koefRe = movingValueInit(0.000113,0.00000323,-0.80,-0.79,0.000113,-0.8);	
+            var koefIm = movingValueInit(0.000099,0.00000245,0.1535,0.158,0.000099,0.156);
+            var zoom = movingValueInit(0.001,0.00001,0.5,1.5,-0.001,1.5);
+						
+			uniforms = {
+                koefIm: {type: "f", value:koefRe.controlledValue},
+                koefRe: {type: "f", value:koefIm.controlledValue},
+                zoom: {type: "f", value:zoom.controlledValue}
+            };
+				
+			var material = new THREE.ShaderMaterial({
+                uniforms: uniforms,
+                vertexShader: document.getElementById('vertexShader').textContent,
+                fragmentShader: document.getElementById('fragmentShader').textContent,
+                side:THREE.DoubleSide
+			});
+			 
+			var square = new THREE.Mesh(geometry, material); 
+			square.position.set(0.0, 0.0, -2.0); 
+						
+			scene.add(square);
+			
+			var xAngle = movingValueInit(0.001,0.00001,-0.1,0.1,0.001,0.0);
+			var yAngle = movingValueInit(0.0012,0.00001,-0.1,0.1,0.0012,0.0);
+			var zAngle = movingValueInit(0.0013,0.00001,-0.1,0.1,0.0013,0.0);
+			
+			var render = function () {
+				requestAnimationFrame(render);
+				
+				uniforms.koefRe.value = movingValueStep(koefRe);
+				uniforms.koefIm.value = movingValueStep(koefIm);
+				uniforms.zoom.value = movingValueStep(zoom);
+				
+				square.rotation.x = movingValueStep(xAngle);
+				square.rotation.y = movingValueStep(yAngle);
+				square.rotation.z = movingValueStep(zAngle);
+
+				renderer.render(scene, camera);
+			};
+
+			render();
+			
+		</script>
+	</body>
+</html>
