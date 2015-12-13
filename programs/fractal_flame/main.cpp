@@ -199,7 +199,7 @@ static int startFortune(string &outputFileName)
     
     if(fractal.screensaverSaveCurrentFractal(outputFileName.c_str())==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
     {
-        return 0;
+        return 0;        
     }
     else
     {

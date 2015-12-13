@@ -13,7 +13,13 @@ a:hover   {color:{{settings['link_color']}}; text-decoration:underline; font-fam
 <tr><td height="30px"></td></tr>
 <tr><td>
 
+{% if data.image_url %}
 <img src="{{data.image_url}}"/>
+{% else %}
+<span style="color:{{settings['link_color']}};">
+try again!
+</span>
+{% endif %}
 
 </td></tr>
 <tr><td height="30px"></td></tr>
@@ -22,8 +28,11 @@ a:hover   {color:{{settings['link_color']}}; text-decoration:underline; font-fam
 <table width="100%">
 <tr>
 
-<td align="center"  width="100%">
-<a href="{{data.next_fortune_link}}">next</a>
+<td align="left"  width="100%">
+<a href="{{data.xml_url}}">xml</a>
+</td>
+<td align="right"  width="100%">
+<a href="{{data.next_flame_link}}">next</a>
 </td>
 
 </tr>
