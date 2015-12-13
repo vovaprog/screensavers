@@ -82,7 +82,7 @@ void FractalFlame::preview(int numberOfPreviews, shared_ptr<RenderParameters> re
 	}        
 }
 
-void FractalFlame::screensaverSaveCurrentFractal(const char* fileName)
+FractalFlameAlgorithm::CalculateFractalResult FractalFlame::screensaverSaveCurrentFractal(const char* fileName)
 {
     FractalFlameAlgorithm::CalculateFractalResult result = algorithm.getLastResult();
     
@@ -98,6 +98,8 @@ void FractalFlame::screensaverSaveCurrentFractal(const char* fileName)
             fp->save((string(fileName)+".xml").c_str());
         }
     }
+    
+    return result;
 }
 
 #endif

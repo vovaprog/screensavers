@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <unistd.h>
 
 #include <GL/freeglut.h>
 
@@ -165,12 +166,53 @@ static void startPreview(int numberOfPreviews, int numberOfIterations)
     fractal.preview(numberOfPreviews,rp,fp);
 }
 
+static void* fortuneThreadFunction(void *dataInput)
+{
+    FractalFlame *fractal = (FractalFlame *)dataInput;
+    
+    unsigned int* output;
+    fractal->screensaver(&output);
+    
+    return nullptr;    
+}
+
+static int startFortune(string &outputFileName)
+{   
+    FractalFlame fractal;
+
+    fractal.screensaverInit(pictureWidth,pictureHeight);
+    
+    ThreadPool pool(1);
+
+    pool.runTask(fortuneThreadFunction,&fractal);
+
+    sleep(3);
+    
+    fractal.setStopFlag();
+    
+    pool.getResult();
+    
+    if(outputFileName.size() < 1)
+    {
+        outputFileName = "./fortune";
+    }
+    
+    if(fractal.screensaverSaveCurrentFractal(outputFileName.c_str())==FractalFlameAlgorithm::CalculateFractalResult::SUCCESS)
+    {
+        return 0;
+    }
+    else
+    {
+        return -1;
+    }    
+}
+
 #endif
 
 int main(int argc, char **argv)
 {
 	try{	    
-		string mode, fileName;
+		string mode, fileName, outputFileName;
 		int iterations,numberOfPreviews;
 		bool windowMode;
 
@@ -188,7 +230,8 @@ int main(int argc, char **argv)
                 ("x-lower-bound",value(&xLowerBound)->default_value(-1.0),"x lower bound")
                 ("x-upper-bound",value(&xUpperBound)->default_value(1.0),"x upper bound")
                 ("y-lower-bound",value(&yLowerBound)->default_value(-1.0),"y lower bound")
-                ("y-upper-bound",value(&yUpperBound)->default_value(1.0),"y upper bound")                
+                ("y-upper-bound",value(&yUpperBound)->default_value(1.0),"y upper bound")
+                ("output-file",value(&outputFileName),"output file name")
                 ;
             
             variables_map vm;
@@ -232,6 +275,10 @@ int main(int argc, char **argv)
             FlameParameters fp;
             fp.load_old(fileName.c_str());
             fp.save((fileName+"_converted.xml").c_str());
+        }
+        else if(mode=="fortune")
+        {
+            return startFortune(outputFileName);
         }
         else
         {

@@ -14,7 +14,7 @@ public:
     void render(shared_ptr<RenderParameters> renderParams, const char *fileName);
     void preview(int numberOfPreviews, shared_ptr<RenderParameters> renderParams, shared_ptr<FlameParameters> flameParams);
     
-    void screensaverSaveCurrentFractal(const char* fileName);
+    FractalFlameAlgorithm::CalculateFractalResult screensaverSaveCurrentFractal(const char* fileName);
     
 #endif    
     
