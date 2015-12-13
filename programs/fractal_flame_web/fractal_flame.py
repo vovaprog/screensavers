@@ -53,7 +53,7 @@ def flame_fortune():
     }
 
 
-@app.route("/flame")
+@app.route("/")
 def flame_page():
     flame_data = flame_fortune()
     
