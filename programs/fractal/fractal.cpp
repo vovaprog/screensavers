@@ -1,5 +1,6 @@
 #include <cmath>
 #include <ctime>
+#include <atomic>
 
 #include <omp.h>
 
@@ -172,6 +173,42 @@ static void calculateFractal()
 			}
 		}
 	}
+	
+	/*atomic_int index(0);	
+	int picWidthDiv4 = pictureWidth / 4;
+	int picWidthMulPicHeight = pictureWidth*pictureHeight;
+		
+#pragma omp parallel for num_threads(NumberOfThreads)	
+	for(int threadIndex=0;threadIndex<NumberOfThreads;++threadIndex)
+	{	
+	    while(true)
+	    {
+            int ind = index.fetch_add(1, memory_order_relaxed);
+            
+            if(ind >= (pictureHeight / 2) * picWidthDiv4)
+            {
+                break;
+            }
+            
+            int i = ind / picWidthDiv4;
+            int j = ind % picWidthDiv4;
+            
+            float ResultIters[4];
+            
+            Vec4f vim=imList[i];
+            Vec4f vre=reList[j] + reBubbleList[j] * vim;
+            
+            iterFunJuliaSimd(vre,vim,ResultIters);
+            
+            for (int q = 0; q < 4; q++)
+            {
+                int iter = (int)ResultIters[q];
+                iter = colorMap[iter];
+                output[i*pictureWidth+j*4+q] = iter;
+                output[picWidthMulPicHeight - i*pictureWidth-j*4-q - 1] = iter;
+            }				
+        }
+	}	*/
 }
 
 unsigned int* fractalStep()

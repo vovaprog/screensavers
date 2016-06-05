@@ -13,7 +13,7 @@ COMMAND=g++ -O3 -fopenmp -mstackrealign \
 		
 else
 
-COMMAND=g++ -O3 -fopenmp -Wall -mstackrealign \
+COMMAND=g++ -std=c++11 -O3 -fopenmp -Wall -mstackrealign \
 		-march=native \
 		-I. -I$(MYLIB) -I$(EXTERNAL)/vectorclass \
 		./main.cpp ./fractal.cpp $(MYLIB)/fps.cpp $(MYLIB)/ColorMap.cpp \
