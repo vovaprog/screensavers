@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<flames>
+    <flame>
+        <xform>
+            <variation name="eyefish" />
+            <variation name="mirror" />
+            <preTransformX x="0.736500" y="-0.165000" c="-0.196000" />
+            <preTransformY x="0.102000" y="0.692000" c="-0.438000" />
+            <postTransformX x="0.906800" y="-0.024400" c="0.046600" />
+            <postTransformY x="0.046800" y="0.992000" c="0.075800" />
+            <color r="157" g="222" b="200" />
+        </xform>
+        <xform>
+            <variation name="eyefish" />
+            <variation name="polar" />
+            <variation name="noise" />
+            <preTransformX x="0.579000" y="0.089000" c="0.146000" />
+            <preTransformY x="0.078000" y="0.528500" c="-0.074000" />
+            <postTransformX x="0.953000" y="0.047000" c="0.030800" />
+            <postTransformY x="-0.077800" y="0.985600" c="-0.036800" />
+            <color r="251" g="204" b="182" />
+        </xform>
+        <xform>
+            <variation name="horseshoe" />
+            <preTransformX x="0.982500" y="-0.327000" c="0.325000" />
+            <preTransformY x="0.269000" y="0.870500" c="0.406000" />
+            <postTransformX x="0.935200" y="-0.078000" c="-0.012400" />
+            <postTransformY x="0.049000" y="0.976200" c="-0.018000" />
+            <color r="173" g="225" b="227" />
+        </xform>
+        <renderParameters colorPower="0.500000" xLowerBound="-3.600000" xUpperBound="4.200000" yLowerBound="-4.000000" yUpperBound="3.400000" />
+    </flame>
+</flames>
