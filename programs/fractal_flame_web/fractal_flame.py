@@ -52,8 +52,11 @@ def flame_fortune():
         "next_flame_link" : settings["application_url"]
     }
 
+root_url = settings["route_url"]
+if root_url == "":
+    root_url = "/"
 
-@app.route("/")
+@app.route(root_url)
 def flame_page():
     flame_data = flame_fortune()
     

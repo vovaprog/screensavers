@@ -1,6 +1,8 @@
 
 settings={
     "application_url" : "/flame",
+    "route_url": "/flame",
+
     "fractal_flame_program" : "./fractal_flame",
     
     "data_folder" : "./data",
