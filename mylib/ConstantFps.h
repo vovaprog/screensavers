@@ -1,6 +1,6 @@
 #pragma once
 
-#ifdef __linux__
+#ifdef __unix__
 #   include <unistd.h>
 #   include <sys/time.h>
 #else
@@ -31,7 +31,7 @@ public:
 private:
     unsigned int getMilliseconds()
     {
-#ifdef __linux__
+#ifdef __unix__
         struct timeval tv;
         gettimeofday(&tv, 0);
         return (unsigned int)((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
@@ -76,7 +76,7 @@ public:
 
         if (sleep > 0)
         {
-#ifdef __linux__
+#ifdef __unix__
             usleep(sleep * 1000);
 #else
             Sleep(sleep);

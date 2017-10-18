@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 
-#include <GL/freeglut.h>
+#include <GL/glut.h>
 
 #define GLM_FORCE_RADIANS
 #include <glm/vec3.hpp>
@@ -10,6 +10,14 @@
 
 #include <ColorMap.h>
 #include <ConstantFps.h>
+
+#ifdef __EMSCRIPTEN__
+void lookAt(GLdouble eyex, GLdouble eyey, GLdouble eyez,
+            GLdouble centerx, GLdouble centery, GLdouble centerz,
+            GLdouble upx, GLdouble upy, GLdouble upz);
+#else
+#    define lookAt gluLookAt
+#endif
 
 using namespace std;
 using namespace glm;
@@ -359,7 +367,7 @@ void display()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    gluLookAt
+    lookAt
     (
         //eye
         xFunction(t), yFunction(t), zFunction(t),
@@ -417,8 +425,6 @@ static void keyPressed(unsigned char key, int x, int y)
     if (key == ESCAPE)
     {
         glutDestroyWindow(window);
-
-        glutLeaveMainLoop();
     }
 }
 
