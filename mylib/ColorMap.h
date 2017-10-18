@@ -6,69 +6,70 @@ using namespace std;
 
 struct ColorMapPoint
 {
-	float r, g, b;
-	int Index;
-	float dr, dg, db;
-	int CurrentColorVariantIndex;
+    float r, g, b;
+    int Index;
+    float dr, dg, db;
+    int CurrentColorVariantIndex;
 
-	void SetColor(unsigned int Color);
+    void SetColor(unsigned int Color);
 };
 
 
-class ColorMapData{
+class ColorMapData
+{
 private:
-	ColorMapPoint *Points;
-	unsigned int *Map;
+    ColorMapPoint *Points;
+    unsigned int *Map;
 
-	int ColorMapSize;
-	int NumberOfPoints;
+    int ColorMapSize;
+    int NumberOfPoints;
 
-	int ChangeMapSteps;
-	int CurrentChangeMapStep;	
+    int ChangeMapSteps;
+    int CurrentChangeMapStep;
 
-	bool CheckMixedColorVariants;
-	bool UseBlackColor;
-	
+    bool CheckMixedColorVariants;
+    bool UseBlackColor;
+
 public:
-	ColorMapData()
-	{
-		Points=0;
-		Map=0;
-		CurrentChangeMapStep=0;		
-		CheckMixedColorVariants=false;
-		UseBlackColor=true;
-	}
+    ColorMapData()
+    {
+        Points = 0;
+        Map = 0;
+        CurrentChangeMapStep = 0;
+        CheckMixedColorVariants = false;
+        UseBlackColor = true;
+    }
 
-	~ColorMapData();
+    ~ColorMapData();
 
-	void InitColorMap(int ColorMapSizeParameter, int NumberOfPointsParameter,int ChangeMapSteps);
+    void InitColorMap(int ColorMapSizeParameter, int NumberOfPointsParameter, int ChangeMapSteps);
 
-	void InitColorMap(int ColorMapSizeParameter,vector<ColorMapPoint> &PointParameters);
+    void InitColorMap(int ColorMapSizeParameter, vector<ColorMapPoint> &PointParameters);
 
-	void InitColorMap(int ColorMapSizeParameter,vector<ColorMapPoint> &PointParameters,int ChangeMapStepsParameter);
+    void InitColorMap(int ColorMapSizeParameter, vector<ColorMapPoint> &PointParameters, int ChangeMapStepsParameter);
 
-	unsigned int* GetColorMap();
+    unsigned int* GetColorMap();
 
-	void ColorMapStep();
-	
-	void SetCheckMixedColorVariants(bool check)
-	{
-		CheckMixedColorVariants=check;
-	}
-	
-	void SetUseBlackColor(bool use)
-	{
-		UseBlackColor=use;	
-	}
-	
+    void ColorMapStep();
+
+    void SetCheckMixedColorVariants(bool check)
+    {
+        CheckMixedColorVariants = check;
+    }
+
+    void SetUseBlackColor(bool use)
+    {
+        UseBlackColor = use;
+    }
+
 private:
-	static bool InitColorVariantsExecuted;
-	static void InitColorVariants();
-	
-	void InitColorPoints();
-	void CreateColorMap();
-	void PointColorsStep();
-	void SetNextPointTargets();
-	void SetNextPointTarget(int PointIndex);
+    static bool InitColorVariantsExecuted;
+    static void InitColorVariants();
+
+    void InitColorPoints();
+    void CreateColorMap();
+    void PointColorsStep();
+    void SetNextPointTargets();
+    void SetNextPointTarget(int PointIndex);
 
 };
