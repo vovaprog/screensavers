@@ -12,6 +12,7 @@
 #include <ConstantFps.h>
 
 #ifdef __EMSCRIPTEN__
+// gluLookAt does not work in emscripten.
 void lookAt(GLdouble eyex, GLdouble eyey, GLdouble eyez,
             GLdouble centerx, GLdouble centery, GLdouble centerz,
             GLdouble upx, GLdouble upy, GLdouble upz);
@@ -19,8 +20,7 @@ void lookAt(GLdouble eyex, GLdouble eyey, GLdouble eyez,
 #    define lookAt gluLookAt
 #endif
 
-using namespace std;
-using namespace glm;
+using glm::vec3;
 
 #define COLOR_MAP_SIZE 120
 #define CONSTANT_FPS_VALUE 35
@@ -45,8 +45,8 @@ static int startupCounter = 0;
 class joint
 {
 public:
-    vector<vec3> ps;
-    vector<int> colors;
+    std::vector<vec3> ps;
+    std::vector<int> colors;
 
     joint(vec3 &p1, vec3 &p2, vec3 &p3, int numberOfPoints)
     {
@@ -58,7 +58,7 @@ public:
 
         vec3 vup = vec3(0, 1.0, 0);
 
-        vec3 vhelp = rotate<float>(v, PI / 8.0, vup);
+        vec3 vhelp = glm::rotate<float>(v, PI / 8.0, vup);
 
         vec3 vround = normalize(cross(v, vhelp));
         vround = vround * TUBE_RADIUS;
@@ -69,7 +69,7 @@ public:
         {
             if (i > 0)
             {
-                vround = rotate<float>(vround, angle, v);
+                vround = glm::rotate<float>(vround, angle, v);
             }
 
             ps.push_back(p2 + vround);
@@ -78,30 +78,28 @@ public:
     }
 };
 
-static vector<joint> joints;
+static std::vector<joint> joints;
 
-float xFunction(float t)
+inline float xFunction(float t)
 {
     return PATH_RADIUS * sin(2 * t);
 }
 
-float yFunction(float t)
+inline float yFunction(float t)
 {
     return (PATH_RADIUS / 2.0) * cos(3 * t);
 }
 
-float zFunction(float t)
+inline float zFunction(float t)
 {
     return PATH_RADIUS * sin(t);
 }
 
 void createTube()
 {
-    float t = 0;
+    const float tubeStep = 0.015;
 
-    float tubeStep = 0.015;
-
-    for (int i = 0;; i++)
+    for (float t = 0.0; t <= PI * 2; t += tubeStep)
     {
         vec3 p1(xFunction(t), yFunction(t), zFunction(t));
 
@@ -112,13 +110,6 @@ void createTube()
         joint j = joint(p1, p2, p3, 16);
 
         joints.push_back(j);
-
-        t += tubeStep;
-
-        if (t > PI * 2)
-        {
-            break;
-        }
     }
 }
 
