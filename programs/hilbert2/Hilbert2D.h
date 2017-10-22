@@ -4,6 +4,7 @@
 #include <Matrix.h>
 
 #include <iostream>
+#include <vector>
 
 
 class Hilbert2D
@@ -22,11 +23,6 @@ public:
     void calc(int order, CalcMode argMode)
     {
         mode = argMode;
-
-        if (mode == CalcMode::Plane)
-        {
-            preparePlane(order);
-        }
 
         int intRotClock[2][2] =
         {
@@ -48,7 +44,18 @@ public:
         Matrix<2, 1> startInc(intStartInc);
         Matrix<2, 1> startPoint(intStartPoint);
 
+        if (mode == CalcMode::Plane)
+        {
+            preparePlane(order);
+        }
+        else
+        {
+            prepareLines(startPoint);
+        }
+
         hilbert(startPoint, startInc, notRotClock, rotClock, order);
+
+        lines.push_back(std::make_pair(startPoint.m[0][0], startPoint.m[1][0]));
     }
 
     void printPlane() const
@@ -63,12 +70,53 @@ public:
         }
     }
 
+    void printLines() const
+    {
+        for (auto &p : lines)
+        {
+            std::cout << p.first << " : " << p.second << std::endl;
+        }
+    }
+
+    const std::vector<std::pair<int, int>>& getLines()
+    {
+        return lines;
+    }
+
+
+    static int calcSize(int order)
+    {
+        int size = 1;
+
+        for (int i = 0; i < order; ++i)
+        {
+            size = size * 2 + 1;
+        }
+
+        return size;
+    }
 
 private:
 
     void drawPoint(const Matrix<2, 1> &p)
     {
-        plane[p.m[1][0]][p.m[0][0]] = true;
+        if (mode == CalcMode::Plane)
+        {
+            plane[p.m[1][0]][p.m[0][0]] = true;
+        }
+        else
+        {
+            if (prevPoint1.m[0][0] >= 0 && prevPoint2.m[0][0] >= 0)
+            {
+                if (prevPoint2 - prevPoint1 != p - prevPoint2)
+                {
+                    lines.push_back(std::make_pair(prevPoint2.m[0][0], prevPoint2.m[1][0]));
+                }
+            }
+
+            prevPoint1 = prevPoint2;
+            prevPoint2 = p;
+        }
     }
 
     void hilbert(Matrix<2, 1> &p, Matrix<2, 1> inc, const Matrix<2, 2> &rot1, const Matrix<2, 2> &rot2, int order)
@@ -106,18 +154,11 @@ private:
     }
 
 
-private:
-
     void preparePlane(int order)
     {
         deletePlane();
 
-        int size = 1;
-
-        for (int i = 0; i < order; ++i)
-        {
-            size = size * 2 + 1;
-        }
+        int size = calcSize(order);
 
         plane = new bool*[size];
         for (int i = 0; i < size; ++i)
@@ -132,6 +173,17 @@ private:
 
         planeSize = size;
     }
+
+
+    void prepareLines(const Matrix<2, 1> &startPoint)
+    {
+        prevPoint1.m[0][0] = -1;
+        prevPoint2.m[0][0] = -1;
+
+        lines.clear();
+        lines.push_back(std::make_pair(startPoint.m[0][0], startPoint.m[1][0]));
+    }
+
 
     void deletePlane()
     {
@@ -154,6 +206,10 @@ private:
 
     bool **plane = nullptr;
     int planeSize = 0;
+
+    Matrix<2, 1> prevPoint1, prevPoint2;
+
+    std::vector<std::pair<int, int>> lines;
 };
 
 #endif

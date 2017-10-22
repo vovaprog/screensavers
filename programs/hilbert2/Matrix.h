@@ -40,6 +40,42 @@ struct Matrix
         return *this;
     }
 
+    Matrix<RowCount, ColCount> operator - (const Matrix<RowCount, ColCount> &mat) const
+    {
+        Matrix<RowCount, ColCount> res;
+
+        for (int i = 0; i < RowCount; ++i)
+        {
+            for (int j = 0; j < ColCount; ++j)
+            {
+                res.m[i][j] = m[i][j] - mat.m[i][j];
+            }
+        }
+        return res;
+    }
+
+    bool operator == (const Matrix<RowCount, ColCount> &mat) const
+    {
+        Matrix<RowCount, ColCount> res;
+
+        for (int i = 0; i < RowCount; ++i)
+        {
+            for (int j = 0; j < ColCount; ++j)
+            {
+                if (m[i][j] != mat.m[i][j])
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    bool operator != (const Matrix<RowCount, ColCount> &mat) const
+    {
+        return !(*this == mat);
+    }
+
     void print() const
     {
         std::cout << "==========" << std::endl;
