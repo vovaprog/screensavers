@@ -5,35 +5,49 @@
 #include <GL/glut.h>
 
 #include <Hilbert2D.h>
+#include <Hilbert3D.h>
 #include <ConstantFps.h>
 
+namespace
+{
+
+const int ConstantFpsValue = 35;
+ConstantFps constFps(ConstantFpsValue);
+int startupCounter = 0;
+int window;
+
+const int Hilbert3DOrder = 4;
 
 Hilbert2D hilbert;
-static const int ConstantFpsValue = 35;
-static ConstantFps constFps(ConstantFpsValue);
-static int startupCounter = 0;
-static int window;
+Hilbert3D hilbert3D;
+
+double ang = 0.0;
+
+}
 
 
 void createHilbert()
 {
     hilbert.calc(6, Hilbert2D::CalcMode::Lines);
+    hilbert3D.calc(Hilbert3DOrder);
 }
 
 
 void drawHilbert()
 {
-    int hilbertSize = Hilbert2D::calcSize(6);
-
-    glTranslatef(-hilbertSize / 2, -hilbertSize / 3, -hilbertSize);
-    glRotatef(-45, 1, 0, 0);
+    glTranslatef(0, 0, -60);
     glColor3f(0.0, 1.0, 0.0);
-    
+    glRotatef(ang, 0, 1, 0);
+    ang += 0.5;
+
+    float trans = Hilbert3D::calcSize(Hilbert3DOrder) / 2.0;
+    glTranslatef(-trans, -trans, trans);
+
     glBegin(GL_LINE_STRIP);
 
-    for (auto &p : hilbert.getLines())
+    for (auto &p : hilbert3D.getLines())
     {
-        glVertex3f(p.first, p.second, 0.0);
+        glVertex3f(std::get<0>(p), std::get<1>(p), std::get<2>(p));
     }
 
     glEnd();

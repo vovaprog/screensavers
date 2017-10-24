@@ -78,7 +78,7 @@ public:
         }
     }
 
-    const std::vector<std::pair<int, int>>& getLines()
+    const std::vector<std::pair<int, int>>& getLines() const
     {
         return lines;
     }
