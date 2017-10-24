@@ -47,7 +47,7 @@ static void init_gl(int width, int height)
 	start_fps_counter(&fpsc);
 	
 	ph2d=new hilbert2d_gl(7,60);
-	ph3d=new hilbert3d_gl(2,16);
+	ph3d=new hilbert3d_gl(4,16);
 	
 }
 

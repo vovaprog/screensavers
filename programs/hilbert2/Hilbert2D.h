@@ -24,25 +24,14 @@ public:
     {
         mode = argMode;
 
-        int intRotClock[2][2] =
+        Matrix<2, 2> rot
         {
             { 0, -1 },
             { 1,  0 }
         };
 
-        int intRotNotClock[2][2] =
-        {
-            {  0, 1 },
-            { -1, 0 }
-        };
-
-        int intStartInc[2][1] = { { 0 }, { 1 } };
-        int intStartPoint[2][1] = { { 0 }, { 0 } };
-
-        Matrix<2, 2> rotClock(intRotClock);
-        Matrix<2, 2> notRotClock(intRotNotClock);
-        Matrix<2, 1> startInc(intStartInc);
-        Matrix<2, 1> startPoint(intStartPoint);
+        Matrix<2, 1> startInc { { 0 }, { 1 } };
+        Matrix<2, 1> startPoint { { 0 }, { 0 } };
 
         if (mode == CalcMode::Plane)
         {
@@ -53,7 +42,7 @@ public:
             prepareLines(startPoint);
         }
 
-        hilbert(startPoint, startInc, notRotClock, rotClock, order);
+        hilbert(startPoint, startInc, rot.transpose(), order);
 
         lines.push_back(std::make_pair(startPoint.m[0][0], startPoint.m[1][0]));
     }
@@ -119,7 +108,7 @@ private:
         }
     }
 
-    void hilbert(Matrix<2, 1> &p, Matrix<2, 1> inc, const Matrix<2, 2> &rot1, const Matrix<2, 2> &rot2, int order)
+    void hilbert(Matrix<2, 1> &p, Matrix<2, 1> inc, const Matrix<2, 2> &rot, int order)
     {
         if (order == 0)
         {
@@ -127,29 +116,29 @@ private:
         }
         else
         {
-            hilbert(p, rotate(inc, rot1), rot2, rot1, order - 1);
+            hilbert(p, rot * inc, rot.transpose(), order - 1);
 
             p += inc;
             drawPoint(p);
             p += inc;
 
-            hilbert(p, inc, rot1, rot2, order - 1);
+            hilbert(p, inc, rot, order - 1);
 
-            Matrix<2, 1> inc2 = rotate(inc, rot1);
-
-            p += inc2;
-            drawPoint(p);
-            p += inc2;
-
-            hilbert(p, inc, rot1, rot2, order - 1);
-
-            inc2 = rotate(inc2, rot1);
+            Matrix<2, 1> inc2 = rot * inc;
 
             p += inc2;
             drawPoint(p);
             p += inc2;
 
-            hilbert(p, rotate(inc2, rot1), rot2, rot1, order - 1);
+            hilbert(p, inc, rot, order - 1);
+
+            inc2 = rot * inc2;
+
+            p += inc2;
+            drawPoint(p);
+            p += inc2;
+
+            hilbert(p, rot * inc2, rot.transpose(), order - 1);
         }
     }
 

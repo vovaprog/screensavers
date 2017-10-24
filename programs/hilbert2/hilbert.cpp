@@ -10,47 +10,80 @@
 
 namespace
 {
-
 const int ConstantFpsValue = 35;
 ConstantFps constFps(ConstantFpsValue);
 int startupCounter = 0;
 int window;
 
+const int Hilbert2DOrder = 6;
 const int Hilbert3DOrder = 4;
+const double Hilbert2DSizeDiv2 = Hilbert2D::calcSize(Hilbert2DOrder) / 2.0;
+const double Hilbert3DSizeDiv2 = Hilbert3D::calcSize(Hilbert3DOrder) / 2.0;
+const double hilbert2DScale = 1.2 * static_cast<double>(Hilbert3D::calcSize(Hilbert3DOrder)) / static_cast<double>(Hilbert2D::calcSize(Hilbert2DOrder));
 
-Hilbert2D hilbert;
+Hilbert2D hilbert2D;
 Hilbert3D hilbert3D;
 
-double ang = 0.0;
-
+double cubeAngle = 0.0;
 }
 
 
 void createHilbert()
 {
-    hilbert.calc(6, Hilbert2D::CalcMode::Lines);
+    hilbert2D.calc(Hilbert2DOrder, Hilbert2D::CalcMode::Lines);
     hilbert3D.calc(Hilbert3DOrder);
+}
+
+
+void drawWall(int movX, int movY)
+{
+    glPushMatrix();
+
+    glTranslatef(-Hilbert3DSizeDiv2 * 2.2 * movX, -Hilbert3DSizeDiv2 * 2.2 * movY, -60);
+    if (movX != 0)
+    {
+        glRotatef(90, 0, 1, 0);
+    }
+    else
+    {
+        glRotatef(90, 1, 0, 0);
+    }
+
+    glColor3f(0.0, 0.0, 0.8);
+
+    glBegin(GL_LINE_STRIP);
+
+    for (auto &p : hilbert2D.getLines())
+    {
+        glVertex3f((p.first - Hilbert2DSizeDiv2) * hilbert2DScale, (p.second - Hilbert2DSizeDiv2) * hilbert2DScale, 0.0);
+    }
+
+    glEnd();
+
+    glPopMatrix();
 }
 
 
 void drawHilbert()
 {
-    glTranslatef(0, 0, -60);
-    glColor3f(0.0, 1.0, 0.0);
-    glRotatef(ang, 0, 1, 0);
-    ang += 0.5;
+    glPushMatrix();
 
-    float trans = Hilbert3D::calcSize(Hilbert3DOrder) / 2.0;
-    glTranslatef(-trans, -trans, trans);
+    glTranslatef(0, 0, -60);
+    glRotatef(cubeAngle, 0, 1, 0);
+    cubeAngle += 0.5;
+
+    glColor3f(0.0, 1.0, 0.0);
 
     glBegin(GL_LINE_STRIP);
 
     for (auto &p : hilbert3D.getLines())
     {
-        glVertex3f(std::get<0>(p), std::get<1>(p), std::get<2>(p));
+        glVertex3f(std::get<0>(p) - Hilbert3DSizeDiv2, std::get<1>(p) - Hilbert3DSizeDiv2, std::get<2>(p) + Hilbert3DSizeDiv2);
     }
 
     glEnd();
+
+    glPopMatrix();
 }
 
 
@@ -69,6 +102,8 @@ void display()
     glLoadIdentity();
 
     drawHilbert();
+    drawWall(1, 0);
+    drawWall(-1, 0);
 
     if (startupCounter < 0)
     {

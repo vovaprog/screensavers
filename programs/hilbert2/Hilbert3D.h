@@ -29,6 +29,12 @@ public:
     }
 
 
+    const std::vector<std::tuple<int, int, int>>& getLines() const
+    {
+        return lines;
+    }
+
+
     static int calcSize(int order)
     {
         int size = 1;
@@ -39,12 +45,6 @@ public:
         }
 
         return size;
-    }
-
-
-    const std::vector<std::tuple<int, int, int>>& getLines() const
-    {
-        return lines;
     }
 
 
@@ -59,7 +59,11 @@ public:
 
 private:
 
-    void hilbert(Matrix<3, 1> &p, Matrix<3, 3> rot, int order, bool turn)
+    // rot - current cube matrix.
+    // to rotate it in cube local coordinates - multiply it by needed rotation matrix.
+    // transpose matrix method changes rotation angle sign.
+    // direction specifies in which direction we move in cube.
+    void hilbert(Matrix<3, 1> &p, Matrix<3, 3> rot, int order, bool direction)
     {
         if (order == 0)
         {
@@ -71,97 +75,97 @@ private:
             Matrix<3, 1> inc2 = rot * baseInc2;
             Matrix<3, 1> inc3 = rot * baseInc3;
 
-            if (turn)
+            if (direction)
             {
-                hilbert(p, rot * rotY, order - 1, !turn);
+                hilbert(p, rot * rotY, order - 1, !direction);
 
                 p += inc1;
                 drawPoint(p);
                 p += inc1;
 
-                hilbert(p, rot * rotZ.transpose(), order - 1, !turn);
+                hilbert(p, rot * rotZ.transpose(), order - 1, !direction);
 
                 p += inc2;
                 drawPoint(p);
                 p += inc2;
 
-                hilbert(p, mul(rot, rotZ.transpose()), order - 1, !turn);
+                hilbert(p, rot * rotZ.transpose(), order - 1, !direction);
 
                 p -= inc1;
                 drawPoint(p);
                 p -= inc1;
 
-                hilbert(p, mul(mul(rot, rotX), rotX), order - 1, turn);
+                hilbert(p, rot * rotX * rotX, order - 1, direction);
 
                 p += inc3;
                 drawPoint(p);
                 p += inc3;
 
-                hilbert(p, mul(mul(rot, rotX), rotX), order - 1, turn);
+                hilbert(p, rot * rotX * rotX, order - 1, direction);
 
                 p += inc1;
                 drawPoint(p);
                 p += inc1;
 
-                hilbert(p, mul(rot, rotZ), order - 1, !turn);
+                hilbert(p, rot * rotZ, order - 1, !direction);
 
                 p -= inc2;
                 drawPoint(p);
                 p -= inc2;
 
-                hilbert(p, mul(rot, rotZ), order - 1, !turn);
+                hilbert(p, rot * rotZ, order - 1, !direction);
 
                 p -= inc1;
                 drawPoint(p);
                 p -= inc1;
 
-                hilbert(p, mul(rot, rotY.transpose()), order - 1, !turn);
+                hilbert(p, rot * rotY.transpose(), order - 1, !direction);
             }
             else
             {
-                hilbert(p, mul(rot, rotY.transpose()), order - 1, !turn);
+                hilbert(p, rot * rotY.transpose(), order - 1, !direction);
 
                 p += inc1;
                 drawPoint(p);
                 p += inc1;
 
-                hilbert(p, mul(rot, rotZ), order - 1, !turn);
+                hilbert(p, rot * rotZ, order - 1, !direction);
 
                 p += inc2;
                 drawPoint(p);
                 p += inc2;
 
-                hilbert(p, mul(rot, rotZ), order - 1, !turn);
+                hilbert(p, rot * rotZ, order - 1, !direction);
 
                 p -= inc1;
                 drawPoint(p);
                 p -= inc1;
 
-                hilbert(p, mul(mul(rot, rotX), rotX), order - 1, turn);
+                hilbert(p, rot * rotX * rotX, order - 1, direction);
 
                 p -= inc3;
                 drawPoint(p);
                 p -= inc3;
 
-                hilbert(p, mul(mul(rot, rotX), rotX), order - 1, turn);
+                hilbert(p, rot * rotX * rotX, order - 1, direction);
 
                 p += inc1;
                 drawPoint(p);
                 p += inc1;
 
-                hilbert(p, mul(rot, rotZ.transpose()), order - 1, !turn);
+                hilbert(p, rot * rotZ.transpose(), order - 1, !direction);
 
                 p -= inc2;
                 drawPoint(p);
                 p -= inc2;
 
-                hilbert(p, mul(rot, rotZ.transpose()), order - 1, !turn);
+                hilbert(p, rot * rotZ.transpose(), order - 1, !direction);
 
                 p -= inc1;
                 drawPoint(p);
                 p -= inc1;
 
-                hilbert(p, mul(rot, rotY), order - 1, !turn);
+                hilbert(p, rot * rotY, order - 1, !direction);
             }
         }
     }
