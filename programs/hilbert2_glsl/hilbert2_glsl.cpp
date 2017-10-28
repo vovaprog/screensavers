@@ -75,6 +75,7 @@ const char* const fragmentShaderSource = R"shader(
 #version 150
 
 in vec4 pointPosition;
+out vec4 outColor;
 
 uniform vec3 color;
 
@@ -97,7 +98,7 @@ void main(void)
         k = (end - z) / (end - start);
     }
 
-    gl_FragColor = vec4(color.x * k, color.y * k, color.z * k, 1.0);
+    outColor = vec4(color.x * k, color.y * k, color.z * k, 1.0);
 }
 )shader";
 

@@ -130,7 +130,7 @@ static void drawGLScene()
     
 	//=============================================
 	    
-    glLoadIdentity();
+/*    glLoadIdentity();
     
     glTranslatef(0,0,-2.4);
     glRotatef(xAngle.step(),1,0,0);
@@ -154,7 +154,7 @@ static void drawGLScene()
 	glVertex2f(1, 1);
 	glTexCoord2f(0, 1);
 	glVertex2f(-1, 1);
-	glEnd();
+	glEnd();*/
 	
 	//=============================================
 	
